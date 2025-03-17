@@ -9,6 +9,7 @@ import org.aldo.beautycenter.security.customAnnotation.ValidServiceId;
 import org.aldo.beautycenter.service.interfaces.ServiceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,18 +30,21 @@ public class ServiceController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> createService(@Valid @RequestBody CreateServiceDto createServiceDto) {
         serviceService.addService(createServiceDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> updateService(@Valid @RequestBody UpdateServiceDto updateServiceDto) {
         serviceService.updateService(updateServiceDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> deleteService(@ValidServiceId @RequestParam String serviceId) {
         serviceService.deleteService(serviceId);
         return ResponseEntity.status(HttpStatus.OK).build();
