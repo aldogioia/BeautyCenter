@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.sercice.Implemetation;
+package org.aldo.beautycenter.service.implemetations;
 
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.UserDao;

@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.data.enumerator;
+package org.aldo.beautycenter.data.enumerators;
 
 public enum Role {
     ROLE_ADMIN,

@@ -2,7 +2,7 @@ package org.aldo.beautycenter.security.logging;
 
 import io.micrometer.common.lang.NonNullApi;
 import lombok.RequiredArgsConstructor;
-import org.aldo.beautycenter.sercice.Implemetation.UserDetailsServiceImpl;
+import org.aldo.beautycenter.service.implemetations.UserDetailsServiceImpl;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 
