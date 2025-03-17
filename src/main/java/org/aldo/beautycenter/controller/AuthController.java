@@ -1,0 +1,42 @@
+package org.aldo.beautycenter.controller;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.aldo.beautycenter.data.dto.CreateUserDto;
+import org.aldo.beautycenter.service.interfaces.AuthService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "*")
+@RequiredArgsConstructor
+public class AuthController {
+    private final AuthService authService;
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<HttpStatus> login(
+            @RequestParam("username") String username,
+            @RequestParam("password") String password,
+            HttpServletResponse response
+    ) {
+        String Token = authService.login(username, password);
+        response.addHeader(HttpHeaders.AUTHORIZATION,"Bearer " + Token);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<HttpStatus> register(CreateUserDto createUserDto) {
+        authService.register(createUserDto);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<HttpStatus> logout(HttpServletRequest request) {
+        authService.logout(request);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+}
