@@ -1,0 +1,11 @@
+package org.aldo.beautycenter.data.dto;
+
+import lombok.Data;
+
+@Data
+public  class ServiceDto {
+    private String id;
+    private String name;
+    private Double price;
+    private Double duration;
+}
