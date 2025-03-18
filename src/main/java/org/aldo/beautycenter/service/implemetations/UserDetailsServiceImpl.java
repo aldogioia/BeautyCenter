@@ -1,7 +1,7 @@
 package org.aldo.beautycenter.service.implemetations;
 
 import lombok.RequiredArgsConstructor;
-import org.aldo.beautycenter.data.dao.UserDao;
+import org.aldo.beautycenter.data.dao.CustomerDao;
 import org.aldo.beautycenter.data.entities.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,11 +16,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserDao userDao;
+    private final CustomerDao customerDao;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userDao.findByEmail(email)
+        User user = customerDao.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
