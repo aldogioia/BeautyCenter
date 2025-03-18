@@ -1,16 +1,14 @@
 package org.aldo.beautycenter.data.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@DiscriminatorValue("operator")
+@DiscriminatorValue("admin")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Operator extends User {
-    @Column(name = "img_url", nullable = false)
-    private String imgUrl;
+public class Admin extends User {
+
 }

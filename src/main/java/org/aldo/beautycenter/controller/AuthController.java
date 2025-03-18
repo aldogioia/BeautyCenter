@@ -3,7 +3,7 @@ package org.aldo.beautycenter.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.aldo.beautycenter.data.dto.CreateUserDto;
+import org.aldo.beautycenter.data.dto.CreateCustomerDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.service.interfaces.AuthService;
 import org.springframework.http.HttpHeaders;
@@ -31,8 +31,8 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<HttpStatus> register(CreateUserDto createUserDto) {
-        authService.register(createUserDto);
+    public ResponseEntity<HttpStatus> register(CreateCustomerDto createCustomerDto) {
+        authService.register(createCustomerDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

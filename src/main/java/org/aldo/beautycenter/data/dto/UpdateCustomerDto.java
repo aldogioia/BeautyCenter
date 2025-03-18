@@ -6,7 +6,7 @@ import lombok.Data;
 import org.aldo.beautycenter.security.customAnnotation.ValidUserId;
 
 @Data
-public class UpdateUserDto {
+public class UpdateCustomerDto {
     @ValidUserId
     private String id;
     @NotNull
