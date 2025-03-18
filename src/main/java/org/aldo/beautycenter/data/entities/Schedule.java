@@ -4,43 +4,46 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.aldo.beautycenter.security.logging.Auditable;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "prenotation")
 @Data
+@Table(name = "schedule")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
-public class Booking extends Auditable {
+public class Schedule extends Auditable {
     @Id
     @UuidGenerator
     private String id;
 
+    @ManyToOne
+    @JoinColumn(name = "operator_id", nullable = false)
+    @ToString.Exclude
+    private Operator operator;
+
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Column(name = "time", nullable = false)
-    private LocalTime time;
+    @Column(name = "day", nullable = false)
+    private DayOfWeek day;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "service_id", nullable = false)
-    private Service service;
+    @Column(name = "morning_start_time")
+    private LocalTime morningStartTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "morning_end_time")
+    private LocalTime morningEndTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "operator_id", nullable = false)
-    private Operator operator;
+    @Column(name = "afternoon_start_time")
+    private LocalTime afternoonStartTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
-    private Room room;
+    @Column(name = "afternoon_end_time")
+    private LocalTime afternoonEndTime;
 }
