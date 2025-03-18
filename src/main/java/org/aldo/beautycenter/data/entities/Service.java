@@ -10,7 +10,9 @@ import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "service")
@@ -36,11 +38,11 @@ public class Service extends Auditable {
     @ToString.Exclude
     private List<Booking> bookings;
 
-//    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    @ToString.Exclude
-//    private List<Room> rooms;
-//
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<RoomService> roomServices;
+
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
-    private List<Operator> operators;
+    private List<OperatorService> operatorServices;
 }
