@@ -3,6 +3,7 @@ package org.aldo.beautycenter.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.CreateServiceDto;
+import org.aldo.beautycenter.data.dto.OperatorDto;
 import org.aldo.beautycenter.data.dto.ServiceDto;
 import org.aldo.beautycenter.data.dto.UpdateServiceDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RateLimit(permitsPerSecond = 10)
 @RestController
-@RequestMapping("/api/v1/booking")
+@RequestMapping("/api/v1/service")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @Validated
@@ -29,6 +30,12 @@ public class ServiceController {
     public ResponseEntity<List<ServiceDto>> getAllServices() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(serviceService.getAllServices());
+    }
+
+    @GetMapping("/operators")
+    public ResponseEntity<List<OperatorDto>> getServicesByOperator(@ValidServiceId @RequestParam String serviceId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(serviceService.getOperatorsByService(serviceId));
     }
 
     @PostMapping

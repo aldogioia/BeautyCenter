@@ -24,6 +24,12 @@ public class BookingServiceImpl implements BookingService {
                 .map(booking -> modelMapper.map(booking, BookingDto.class))
                 .toList();
     }
+
+    @Override
+    public List<Booking> getBookingsByDate(LocalDate date) {
+        return bookingDao.findAllByDate(date);
+    }
+
     @Override
     public void addBooking(BookingDto bookingDto) {
         bookingDao.save(modelMapper.map(bookingDto, Booking.class));
