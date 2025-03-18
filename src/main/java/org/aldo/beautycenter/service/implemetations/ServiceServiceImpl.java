@@ -3,6 +3,7 @@ package org.aldo.beautycenter.service.implemetations;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.CreateServiceDto;
+import org.aldo.beautycenter.data.dto.OperatorDto;
 import org.aldo.beautycenter.data.dto.ServiceDto;
 import org.aldo.beautycenter.data.dto.UpdateServiceDto;
 import org.aldo.beautycenter.service.interfaces.ServiceService;
@@ -21,6 +22,17 @@ public class ServiceServiceImpl implements ServiceService {
         return serviceDao.findAll()
                 .stream()
                 .map(service -> modelMapper.map(service, ServiceDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<OperatorDto> getOperatorsByService(String serviceId) {
+        org.aldo.beautycenter.data.entities.Service service = serviceDao
+                .findById(serviceId).orElseThrow(() -> new RuntimeException("Service not found"));
+
+        return service.getOperators()
+                .stream()
+                .map(operator -> modelMapper.map(operator, OperatorDto.class))
                 .toList();
     }
 
