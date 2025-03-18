@@ -30,9 +30,9 @@ public class ServiceServiceImpl implements ServiceService {
         org.aldo.beautycenter.data.entities.Service service = serviceDao
                 .findById(serviceId).orElseThrow(() -> new RuntimeException("Service not found"));
 
-        return service.getOperators()
+        return service.getOperatorServices()
                 .stream()
-                .map(operator -> modelMapper.map(operator, OperatorDto.class))
+                .map(operatorService-> modelMapper.map(operatorService.getOperator(), OperatorDto.class))
                 .toList();
     }
 
