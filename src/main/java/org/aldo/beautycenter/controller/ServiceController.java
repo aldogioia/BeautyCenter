@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.CreateServiceDto;
 import org.aldo.beautycenter.data.dto.ServiceDto;
 import org.aldo.beautycenter.data.dto.UpdateServiceDto;
+import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.ValidServiceId;
 import org.aldo.beautycenter.service.interfaces.ServiceService;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RateLimit(permitsPerSecond = 10)
 @RestController
 @RequestMapping("/api/v1/booking")
 @CrossOrigin(origins = "*")
