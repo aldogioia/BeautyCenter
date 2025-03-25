@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.aldo.beautycenter.security.customAnnotation.ValidServiceId;
 
-import java.time.LocalTime;
-
 @Data
 public class UpdateServiceDto {
     @ValidServiceId
@@ -19,5 +17,5 @@ public class UpdateServiceDto {
     @Min(1)
     private Double price;
     @NotNull
-    private LocalTime duration;
+    private Long duration;
 }

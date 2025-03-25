@@ -21,7 +21,7 @@ public class RateLimitingAspect {
     @Around("@within(org.springframework.web.bind.annotation.RestController)")
     public Object limitRequestRate(ProceedingJoinPoint joinPoint) throws Throwable {
         Method method= ((MethodSignature) joinPoint.getSignature()).getMethod();
-        RateLimit rateLimited = method.getAnnotation(RateLimit.class);  // Se l'annotazione è presente sul metodo, usa quella altrimenti, cerca l'annotazione sulla classe
+        RateLimit rateLimited = method.getAnnotation(RateLimit.class);
         if (rateLimited == null) {
             rateLimited = joinPoint.getTarget().getClass().getAnnotation(RateLimit.class);
         }

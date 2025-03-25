@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OperatorServiceDao extends JpaRepository<OperatorService, String> {
+
 }
