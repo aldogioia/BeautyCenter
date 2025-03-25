@@ -43,10 +43,15 @@ public class OperatorServiceImpl implements OperatorService {
             LocalTime slotStart = time;
             LocalTime slotEnd = time.plusMinutes(duration);
 
-            boolean isAvailable = operatorBookings.stream().noneMatch(booking -> isOverlapping(booking.getTime(), slotStart, slotEnd)) &&
-                    roomBookings.stream().noneMatch(booking -> isOverlapping(booking.getTime(), slotStart, slotEnd));
+            boolean isOperatorAvailable = operatorBookings
+                    .stream()
+                    .noneMatch(booking -> isOverlapping(booking.getTime().plusMinutes(booking.getService().getDuration()), slotStart, slotEnd));
 
-            if (isAvailable) slots.add(time);
+            boolean isRoomAvailable =  roomBookings
+                    .stream()
+                    .noneMatch(booking -> isOverlapping(booking.getTime().plusMinutes(booking.getService().getDuration()), slotStart, slotEnd));
+
+            if (isOperatorAvailable && isRoomAvailable) slots.add(time);
         }
         return slots;
     }
