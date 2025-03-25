@@ -9,7 +9,6 @@ import org.aldo.beautycenter.security.logging.Auditable;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -23,6 +22,9 @@ public class Service extends Auditable {
     @UuidGenerator
     private String id;
 
+    @Column(name="img_url")
+    private String imgUrl;
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -30,7 +32,7 @@ public class Service extends Auditable {
     private Double price;
 
     @Column(name = "duration", nullable = false)
-    private LocalTime duration;
+    private Long duration;
 
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude

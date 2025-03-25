@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Constraint(validatedBy = ServiceIdValidator.class)
-@Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
+@Target({ElementType.TYPE_USE, ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidServiceId {
     String message() default "Invalid Service Id";

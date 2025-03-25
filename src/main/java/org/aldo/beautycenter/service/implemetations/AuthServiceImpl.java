@@ -17,7 +17,7 @@ public class AuthServiceImpl implements AuthService {
     private final CustomerService customerService;
     private final AuthenticationManager authenticationManager;
     @Override
-    public String login(String email, String password) {
+    public String login(String email, String password) { //capire se fare un end-point apposito per admin e operator
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password));
 

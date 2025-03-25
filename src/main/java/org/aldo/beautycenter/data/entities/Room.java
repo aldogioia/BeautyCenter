@@ -9,9 +9,7 @@ import org.aldo.beautycenter.security.logging.Auditable;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -23,6 +21,9 @@ public class Room extends Auditable {
     @Id
     @UuidGenerator
     private String id;
+
+    @Column(name = "name")
+    private String name;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
