@@ -44,6 +44,7 @@ public class OperatorServiceImpl implements OperatorService {
                 .map(s -> (Schedule) s)
                 .orElseGet(() -> standardScheduleDao.findByOperatorIdAndDay(operatorId, date.getDayOfWeek()));
 
+        //TODO verificare che l'operatore non sia assente
         List<LocalTime> availableTimes = new ArrayList<>();
         availableTimes.addAll(getAvailableSlots(schedule.getMorningStart(), schedule.getMorningEnd(), service.getDuration(), operatorBookings, roomBookings));
         availableTimes.addAll(getAvailableSlots(schedule.getAfternoonStart(), schedule.getAfternoonEnd(), service.getDuration(), operatorBookings, roomBookings));

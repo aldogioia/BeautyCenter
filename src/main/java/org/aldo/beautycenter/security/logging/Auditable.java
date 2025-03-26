@@ -2,8 +2,6 @@ package org.aldo.beautycenter.security.logging;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -26,10 +24,10 @@ public abstract class Auditable {
     private String lastModifiedBy;
 
     @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate createdDate;
 
     @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate lastModifiedDate;
 }

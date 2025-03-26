@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@DiscriminatorValue("schedule")
+@DiscriminatorValue("standard_schedule")
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class StandardSchedule  extends Schedule{
