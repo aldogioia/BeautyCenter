@@ -8,6 +8,7 @@ import org.aldo.beautycenter.data.dto.UpdateOperatorDto;
 import org.aldo.beautycenter.data.entities.Booking;
 import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.entities.Schedule;
+import org.aldo.beautycenter.data.entities.ScheduleException;
 import org.aldo.beautycenter.service.interfaces.OperatorService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -44,8 +45,9 @@ public class OperatorServiceImpl implements OperatorService {
                 .map(s -> (Schedule) s)
                 .orElseGet(() -> standardScheduleDao.findByOperatorIdAndDay(operatorId, date.getDayOfWeek()));
 
-        //TODO verificare che l'operatore non sia assente
         List<LocalTime> availableTimes = new ArrayList<>();
+        if(schedule instanceof ScheduleException && ((ScheduleException) schedule).isAbsent()) return availableTimes;
+
         availableTimes.addAll(getAvailableSlots(schedule.getMorningStart(), schedule.getMorningEnd(), service.getDuration(), operatorBookings, roomBookings));
         availableTimes.addAll(getAvailableSlots(schedule.getAfternoonStart(), schedule.getAfternoonEnd(), service.getDuration(), operatorBookings, roomBookings));
 
