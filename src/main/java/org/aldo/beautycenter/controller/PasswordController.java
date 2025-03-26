@@ -17,7 +17,13 @@ import org.springframework.web.bind.annotation.*;
 public class PasswordController {
     private final PasswordService passwordService;
 
-    @PostMapping
+    @PostMapping("/request-reset")
+    public ResponseEntity<HttpStatus> requestResetPassword(@RequestParam String email) {
+        passwordService.requestChangePassword(email);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/reset")
     public ResponseEntity<HttpStatus> resetPassword(@RequestParam String token, @RequestParam String password) { // todo add @Pattern(regexp = "^[a-zA-Z0-9]{8,}$") this is an example of regex
         passwordService.changePassword(token, password);
         return ResponseEntity.status(HttpStatus.OK).build();

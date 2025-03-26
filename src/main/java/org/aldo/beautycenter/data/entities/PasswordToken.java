@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "password_token")
@@ -20,7 +20,7 @@ public class PasswordToken {
     private String token;
 
     @Column(name = "expiration_date", nullable = false)
-    private LocalDate expirationDate;
+    private Date expirationDate;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)

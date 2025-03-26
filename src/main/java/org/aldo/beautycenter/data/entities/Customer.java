@@ -13,7 +13,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Customer extends User {
 
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number", unique = true)
     private Number phoneNumber;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
