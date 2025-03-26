@@ -17,8 +17,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void createCustomer(CreateCustomerDto createCustomerDto) {
-        Customer customer = modelMapper.map(createCustomerDto, Customer.class);
-        customerDao.save(customer);
+        customerDao.save(modelMapper.map(createCustomerDto, Customer.class));
     }
 
     @Override

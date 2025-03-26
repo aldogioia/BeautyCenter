@@ -7,8 +7,13 @@ import org.aldo.beautycenter.data.entities.PasswordToken;
 import org.aldo.beautycenter.data.entities.User;
 import org.aldo.beautycenter.service.interfaces.EmailService;
 import org.aldo.beautycenter.service.interfaces.PasswordService;
+import org.aldo.beautycenter.utils.PasswordTokenGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -17,10 +22,14 @@ public class PasswordServiceImpl implements PasswordService {
     private final PasswordEncoder passwordEncoder;
     private final PasswordTokenDao passwordTokenDao;
     private final EmailService emailService;
+    private static final String BASE_URL = "http://localhost:8080";
 
     @Override
     public void requestChangePassword(String email) {
-        //TODO
+        User user = userDao.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        passwordTokenDao.findByUser(user).ifPresent(passwordTokenDao::delete);
+        sendResetPasswordEmail(user);
     }
 
     @Override
@@ -31,5 +40,28 @@ public class PasswordServiceImpl implements PasswordService {
         user.setPassword(passwordEncoder.encode(newPassword));
 
         userDao.save(user);
+    }
+
+    private void sendResetPasswordEmail(User user) {
+        Instant issued = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+        String token = PasswordTokenGenerator.generateToken();
+
+        PasswordToken passwordToken = new PasswordToken();
+        passwordToken.setToken(token);
+        passwordToken.setExpirationDate(Date.from(issued.plus(5, ChronoUnit.MINUTES)));
+        passwordToken.setUser(user);
+
+        passwordTokenDao.save(passwordToken);
+
+        try {
+            emailService.sendEmail(
+                    user.getName(),
+                    user.getSurname(),
+                    user.getEmail(),
+                    BASE_URL + "/set-password?token=" + token
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Email not sent" + e);
+        }
     }
 }

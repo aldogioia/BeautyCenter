@@ -24,10 +24,8 @@ public abstract class Auditable {
     private String lastModifiedBy;
 
     @CreatedDate
-    //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate createdDate;
 
     @LastModifiedDate
-    //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate lastModifiedDate;
 }
