@@ -15,9 +15,13 @@ public class Operator extends User {
     @Column(name = "img_url", nullable = false)
     private String imgUrl;
 
-    @OneToMany(mappedBy = "operator", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    @OneToMany(mappedBy = "operator", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    @ToString.Exclude
+//    private List<OperatorService> operatorServices;
+
+    @ManyToMany(mappedBy = "operator", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
     @ToString.Exclude
-    private List<OperatorService> operatorServices;
+    private List<Service> services;
 
     @OneToMany(mappedBy = "operator", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Schedule> schedules;
