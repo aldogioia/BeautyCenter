@@ -42,11 +42,11 @@ public class Service extends Auditable {
     @ToString.Exclude
     private List<RoomService> roomServices;
 
-    @ManyToMany(mappedBy = "service", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<Operator> operators;
-
-//    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    @ToString.Exclude
-//    private List<OperatorService> operatorServices;
+//    private List<Operator> operators;
+
+    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<OperatorService> operatorServices;
 }

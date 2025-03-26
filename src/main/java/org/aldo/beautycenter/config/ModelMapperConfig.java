@@ -20,19 +20,19 @@ public class ModelMapperConfig {
         ModelMapper modelMapper = new ModelMapper();
 
         //custom mappings here
-        modelMapper.addMappings(new PropertyMap<CreateOperatorDto, Operator>() {
-            @Override
-            protected void configure() {
-                map().setServices(serviceDao.findAllById(source.getServices()));
-            }
-        });
-
-        modelMapper.addMappings(new PropertyMap<UpdateOperatorDto, Operator>() {
-            @Override
-            protected void configure() {
-                map().setServices(serviceDao.findAllById(source.getServices()));
-            }
-        });
+//        modelMapper.addMappings(new PropertyMap<CreateOperatorDto, Operator>() {
+//            @Override
+//            protected void configure() {
+//                map().setServices(serviceDao.findAllById(source.getServices()));
+//            }
+//        });
+//
+//        modelMapper.addMappings(new PropertyMap<UpdateOperatorDto, Operator>() {
+//            @Override
+//            protected void configure() {
+//                map().setServices(serviceDao.findAllById(source.getServices()));
+//            }
+//        });
 
         modelMapper.getConfiguration()
                 .setFieldMatchingEnabled(true)

@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import java.time.LocalDate;
 
 @Entity
-@DiscriminatorValue("schedule")
+@DiscriminatorValue("schedule_exception")
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ScheduleException extends Schedule{
