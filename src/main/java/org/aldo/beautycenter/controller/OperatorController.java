@@ -51,7 +51,7 @@ public class OperatorController {
     public ResponseEntity<HttpStatus> createOperator(@Valid @RequestBody CreateOperatorDto createOperatorDto) {
         operatorService.createOperator(createOperatorDto);
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .build();
     }
 
@@ -60,7 +60,7 @@ public class OperatorController {
     public ResponseEntity<HttpStatus> updateOperator(@Valid @RequestBody UpdateOperatorDto updateOperatorDto) {
         operatorService.updateOperator(updateOperatorDto);
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.NO_CONTENT)
                 .build();
     }
 
@@ -69,7 +69,7 @@ public class OperatorController {
     public ResponseEntity<HttpStatus> deleteOperator(@ValidOperatorId @RequestParam String operatorId) {
         operatorService.deleteOperator(operatorId);
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.NO_CONTENT)
                 .build();
     }
 }

@@ -18,8 +18,16 @@ public class BookingServiceImpl implements BookingService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<BookingDto> getUserBookings(String userId, LocalDate date) {
+    public List<BookingDto> getCustomerBookingsInDate(String userId, LocalDate date) {
         return bookingDao.findAllByUser_IdAndDateIsBefore(userId, date)
+                .stream()
+                .map(booking -> modelMapper.map(booking, BookingDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<BookingDto> getOperatorBookingsInDate(String userId, LocalDate date) {
+        return bookingDao.findAllByDateAndOperator_Id(date, userId)
                 .stream()
                 .map(booking -> modelMapper.map(booking, BookingDto.class))
                 .toList();

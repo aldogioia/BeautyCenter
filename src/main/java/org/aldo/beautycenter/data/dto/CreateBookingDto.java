@@ -4,7 +4,7 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidServiceId;
-import org.aldo.beautycenter.security.customAnnotation.annotation.ValidUserId;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidCustomerId;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,6 +21,6 @@ public class CreateBookingDto {
     @ValidServiceId
     private String serviceId;
 
-    @ValidUserId
+    @ValidCustomerId
     private String userId;
 }

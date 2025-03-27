@@ -6,5 +6,5 @@ import org.aldo.beautycenter.data.dto.CreateCustomerDto;
 public interface AuthService {
     String signIn(String email, String password);
     void signUp(CreateCustomerDto createCustomerDto);
-    void logout(HttpServletRequest request);
+    void signOut(HttpServletRequest request);
 }

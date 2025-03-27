@@ -5,11 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.aldo.beautycenter.security.customAnnotation.annotation.NotAlreadyUsed;
-import org.aldo.beautycenter.security.customAnnotation.annotation.ValidUserId;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidCustomerId;
 
 @Data
 public class UpdateCustomerDto {
-    @ValidUserId
+    @ValidCustomerId
     private String id;
 
     @NotBlank(message = "Il campo telefono non può essere vuoto")

@@ -4,10 +4,10 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.CustomerDao;
-import org.aldo.beautycenter.security.customAnnotation.annotation.ValidUserId;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidCustomerId;
 
 @RequiredArgsConstructor
-public class UserIdValidator implements ConstraintValidator<ValidUserId, String> {
+public class CustomerIdValidator implements ConstraintValidator<ValidCustomerId, String> {
     private final CustomerDao customerDao;
 
     @Override

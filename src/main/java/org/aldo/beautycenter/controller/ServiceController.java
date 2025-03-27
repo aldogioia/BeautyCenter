@@ -28,13 +28,15 @@ public class ServiceController {
 
     @GetMapping("/all")
     public ResponseEntity<List<ServiceDto>> getAllServices() {
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(serviceService.getAllServices());
     }
 
     @GetMapping("/operators")
     public ResponseEntity<List<OperatorDto>> getServicesByOperator(@ValidServiceId @RequestParam String serviceId) {
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(serviceService.getOperatorsByService(serviceId));
     }
 
@@ -42,20 +44,26 @@ public class ServiceController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> createService(@Valid @RequestBody CreateServiceDto createServiceDto) {
         serviceService.addService(createServiceDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 
     @PatchMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> updateService(@Valid @RequestBody UpdateServiceDto updateServiceDto) {
         serviceService.updateService(updateServiceDto);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> deleteService(@ValidServiceId @RequestParam String serviceId) {
         serviceService.deleteService(serviceId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }
