@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidUserId {
-    String message() default "Invalid User Id";
+    String message() default "Id dell'utente non valido";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

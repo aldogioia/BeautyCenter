@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.aldo.beautycenter.data.dto.CreateCustomerDto;
 
 public interface AuthService {
-    String login(String email, String password);
-    void register(CreateCustomerDto createCustomerDto);
+    String signIn(String email, String password);
+    void signUp(CreateCustomerDto createCustomerDto);
     void logout(HttpServletRequest request);
 }

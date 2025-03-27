@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidRoomId {
-    String message() default "Invalid Room Id";
+    String message() default "Id della stanza non valido";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

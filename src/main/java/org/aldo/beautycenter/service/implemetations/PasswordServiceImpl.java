@@ -1,10 +1,12 @@
 package org.aldo.beautycenter.service.implemetations;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.PasswordTokenDao;
 import org.aldo.beautycenter.data.dao.UserDao;
 import org.aldo.beautycenter.data.entities.PasswordToken;
 import org.aldo.beautycenter.data.entities.User;
+import org.aldo.beautycenter.security.exception.customException.EmailNotSentException;
 import org.aldo.beautycenter.service.interfaces.EmailService;
 import org.aldo.beautycenter.service.interfaces.PasswordService;
 import org.aldo.beautycenter.utils.PasswordTokenGenerator;
@@ -27,7 +29,7 @@ public class PasswordServiceImpl implements PasswordService {
     @Override
     public void requestChangePassword(String email) {
         User user = userDao.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         passwordTokenDao.findByUser(user).ifPresent(passwordTokenDao::delete);
         sendResetPasswordEmail(user);
     }
@@ -61,7 +63,7 @@ public class PasswordServiceImpl implements PasswordService {
                     BASE_URL + "/set-password?token=" + token
             );
         } catch (Exception e) {
-            throw new RuntimeException("Email not sent" + e);
+            throw new EmailNotSentException("Error while sending email");
         }
     }
 }

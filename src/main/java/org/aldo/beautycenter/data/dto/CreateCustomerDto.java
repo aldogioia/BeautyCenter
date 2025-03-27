@@ -5,20 +5,26 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.aldo.beautycenter.security.customAnnotation.NotAlreadyUsed;
 
 @Data
 public class CreateCustomerDto {
-    @NotBlank
-    @Size(min = 3, max = 50)
+    @NotBlank(message = "Il campo nome non può essere vuoto")
+    @Size(min = 3, max = 50, message = "Il campo nome deve essere compreso tra 3 e 50 caratteri")
     private String name;
-    @NotBlank
-    @Size(min = 3, max = 50)
+
+    @NotBlank(message = "Il campo cognome non può essere vuoto")
+    @Size(min = 3, max = 50, message = "Il campo cognome deve essere compreso tra 3 e 50 caratteri")
     private String surname;
-    @NotBlank
-    @Pattern(regexp = "") //todo add regex
-    private String phoneNumber;
-    @Email
+
+    @NotBlank(message = "Il campo telefono non può essere vuoto")
+    @Pattern(regexp = "^\\+?39?\\s?\\d{2,4}[\\s.-]?\\d{6,10}$", message = "Inserire un numero di telefono valido")
+    private Number phoneNumber;
+
+    @Email(message = "Inserire un indirizzo email valido")
+    @NotAlreadyUsed
     private String email;
-    @Pattern(regexp = "") //todo add regex
+
+    @Pattern(regexp = "", message = "") //todo add regex and message
     private String password;
 }

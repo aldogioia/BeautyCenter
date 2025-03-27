@@ -7,6 +7,7 @@ import org.aldo.beautycenter.data.dto.OperatorDto;
 import org.aldo.beautycenter.data.dto.UpdateOperatorDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.ValidOperatorId;
+import org.aldo.beautycenter.security.customAnnotation.ValidServiceId;
 import org.aldo.beautycenter.service.interfaces.OperatorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class OperatorController {
     public ResponseEntity<List<LocalTime>> getAvailableHours(
             @ValidOperatorId @RequestParam String operatorId,
             @RequestParam LocalDate date,
-            @RequestParam String serviceId
+            @ValidServiceId @RequestParam String serviceId
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
