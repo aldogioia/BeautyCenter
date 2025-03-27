@@ -25,7 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto getCustomerById(String id) {
         Customer customer = customerDao.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Cliente non trovato"));
 
         return modelMapper.map(customer, CustomerDto.class);
     }

@@ -4,8 +4,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-import org.aldo.beautycenter.security.customAnnotation.NotAlreadyUsed;
-import org.aldo.beautycenter.security.customAnnotation.ValidUserId;
+import org.aldo.beautycenter.security.customAnnotation.annotation.NotAlreadyUsed;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidUserId;
 
 @Data
 public class UpdateCustomerDto {

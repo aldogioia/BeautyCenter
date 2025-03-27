@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.aldo.beautycenter.security.customAnnotation.ValidServiceId;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidServiceId;
 
 @Data
 public class UpdateServiceDto {

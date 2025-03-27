@@ -1,7 +1,8 @@
-package org.aldo.beautycenter.security.customAnnotation;
+package org.aldo.beautycenter.security.customAnnotation.annotation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+import org.aldo.beautycenter.security.customAnnotation.validator.RoomIdValidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -29,7 +29,7 @@ public class PasswordServiceImpl implements PasswordService {
     @Override
     public void requestChangePassword(String email) {
         User user = userDao.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Utenete non trovato"));
         passwordTokenDao.findByUser(user).ifPresent(passwordTokenDao::delete);
         sendResetPasswordEmail(user);
     }

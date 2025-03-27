@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.aldo.beautycenter.security.customAnnotation.NotAlreadyUsed;
+import org.aldo.beautycenter.security.customAnnotation.annotation.NotAlreadyUsed;
 
 @Data
 public class CreateCustomerDto {
