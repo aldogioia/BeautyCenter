@@ -4,8 +4,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.aldo.beautycenter.security.customAnnotation.NotAlreadyUsed;
-import org.aldo.beautycenter.security.customAnnotation.ValidServiceId;
+import org.aldo.beautycenter.security.customAnnotation.annotation.NotAlreadyUsed;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidServiceId;
 
 import java.util.List;
 

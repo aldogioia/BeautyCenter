@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
                 new UsernamePasswordAuthenticationToken(email, password));
 
         return jwtHandler.generateToken(userDao.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User not found")));
+                .orElseThrow(() -> new EntityNotFoundException("Utente non trovato")));
     }
 
     @Override

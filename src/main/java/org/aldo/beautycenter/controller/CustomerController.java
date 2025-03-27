@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.CustomerDto;
 import org.aldo.beautycenter.data.dto.UpdateCustomerDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
-import org.aldo.beautycenter.security.customAnnotation.ValidUserId;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidUserId;
 import org.aldo.beautycenter.service.interfaces.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

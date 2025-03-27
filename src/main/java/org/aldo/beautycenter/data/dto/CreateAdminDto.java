@@ -2,7 +2,7 @@ package org.aldo.beautycenter.data.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.aldo.beautycenter.security.customAnnotation.NotAlreadyUsed;
+import org.aldo.beautycenter.security.customAnnotation.annotation.NotAlreadyUsed;
 
 @Data
 public class CreateAdminDto {

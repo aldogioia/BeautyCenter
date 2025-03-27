@@ -3,8 +3,8 @@ package org.aldo.beautycenter.data.dto;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.aldo.beautycenter.security.customAnnotation.ValidServiceId;
-import org.aldo.beautycenter.security.customAnnotation.ValidUserId;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidServiceId;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidUserId;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
