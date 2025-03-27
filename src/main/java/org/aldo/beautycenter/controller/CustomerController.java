@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.CustomerDto;
 import org.aldo.beautycenter.data.dto.UpdateCustomerDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
-import org.aldo.beautycenter.security.customAnnotation.annotation.ValidUserId;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidCustomerId;
 import org.aldo.beautycenter.service.interfaces.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +23,11 @@ public class CustomerController {
     private final CustomerService customerService;
     @PatchMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or authentication.principal.id == #updateCustomerDto.id")
-    public void updateUser(@Valid @RequestBody UpdateCustomerDto updateCustomerDto) {
+    public ResponseEntity<HttpStatus> updateUser(@Valid @RequestBody UpdateCustomerDto updateCustomerDto) {
         customerService.updateCustomer(updateCustomerDto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 
     @GetMapping
@@ -36,7 +39,10 @@ public class CustomerController {
 
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deleteUser(@ValidUserId @RequestParam String id) {
+    public ResponseEntity<HttpStatus> deleteUser(@ValidCustomerId @RequestParam String id) {
         customerService.deleteCustomer(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }

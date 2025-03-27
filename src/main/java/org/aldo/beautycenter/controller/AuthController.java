@@ -28,7 +28,9 @@ public class AuthController {
     ) {
         String Token = authService.signIn(email, password);
         response.addHeader(HttpHeaders.AUTHORIZATION,"Bearer " + Token);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @PostMapping("/sign-up")
@@ -36,12 +38,16 @@ public class AuthController {
             @Valid @RequestBody CreateCustomerDto createCustomerDto
     ) {
         authService.signUp(createCustomerDto);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/sign-out")
     public ResponseEntity<HttpStatus> logout(HttpServletRequest request) {
-        authService.logout(request);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        authService.signOut(request);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }

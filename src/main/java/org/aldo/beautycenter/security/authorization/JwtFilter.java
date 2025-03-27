@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.security.authentication.JwtHandler;
+import org.aldo.beautycenter.service.interfaces.BlacklistService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,12 +23,13 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtHandler jwtHandler;
+    private final BlacklistService blacklistService;
     private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = jwtHandler.getJwtFromRequest(request);
-        if (!jwt.equals("invalid") && jwtHandler.isValidToken(jwt) ) { //todo insert: && !invalidTokenService.isTokenInvalidated(jwt)
+        if (!jwt.equals("invalid") && jwtHandler.isValidToken(jwt) && !blacklistService.isTokenBlacklisted(jwt) ) {
             String email = jwtHandler.getEmailFromToken(jwt);
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
