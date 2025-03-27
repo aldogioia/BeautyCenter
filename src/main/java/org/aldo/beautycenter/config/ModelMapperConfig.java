@@ -1,7 +1,6 @@
 package org.aldo.beautycenter.config;
 
 import lombok.RequiredArgsConstructor;
-import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.CreateAdminDto;
 import org.aldo.beautycenter.data.dto.CreateCustomerDto;
 import org.aldo.beautycenter.data.dto.CreateOperatorDto;
@@ -9,27 +8,24 @@ import org.aldo.beautycenter.data.entities.Admin;
 import org.aldo.beautycenter.data.entities.Customer;
 import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.enumerators.Role;
+import org.modelmapper.Converter;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
 public class ModelMapperConfig {
-    private final ServiceDao serviceDao;
-//    private final PasswordEncoder passwordEncoder;
+//    private final ServiceDao serviceDao;
+    private final PasswordEncoder passwordEncoder;
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
-//        Converter<String, String> passwordConverter = new Converter<String, String>() {
-//            @Override
-//            public String convert(MappingContext<String, String> context) {
-//                return passwordEncoder.encode(context.getSource());
-//            }
-//        };
+        Converter<String, String> passwordConverter = context -> passwordEncoder.encode(context.getSource());
 
         //custom mappings here
 //        modelMapper.addMappings(new PropertyMap<CreateOperatorDto, Operator>() {
@@ -50,7 +46,7 @@ public class ModelMapperConfig {
             @Override
             protected void configure() {
                 map().setRole(Role.ROLE_ADMIN);
-//                using(passwordConverter).map(source.getPassword(), destination.getPassword());
+                using(passwordConverter).map(source.getPassword(), destination.getPassword());
             }
         });
 
@@ -65,6 +61,7 @@ public class ModelMapperConfig {
             @Override
             protected void configure() {
                 map().setRole(Role.ROLE_CUSTOMER);
+                using(passwordConverter).map(source.getPassword(), destination.getPassword());
             }
         });
 

@@ -11,13 +11,16 @@ import java.time.LocalTime;
 
 @Data
 public class CreateBookingDto {
-    @NotNull
-    @FutureOrPresent
+    @NotNull(message = "La data non può essere nulla")
+    @FutureOrPresent(message = "La data non può essere nel passato")
     private LocalDate date;
-    @NotNull
+
+    @NotNull(message = "L'ora non può essere nulla")
     private LocalTime time;
+
     @ValidServiceId
     private String serviceId;
+
     @ValidUserId
     private String userId;
 }

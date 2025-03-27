@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE_USE, ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidServiceId {
-    String message() default "Invalid Service Id";
+    String message() default "Id del servizio non valido";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

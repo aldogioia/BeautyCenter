@@ -8,6 +8,7 @@ import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.entities.User;
+import org.aldo.beautycenter.security.exception.customException.TokenException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public class JwtHandler {
         try {
             jwsObject.sign(new MACSigner(secret.getBytes()));
         } catch (Exception e) {
-            throw new RuntimeException("Error while generating token", e);
+            throw new TokenException("Error while generating token");
         }
 
         return jwsObject.serialize();
@@ -70,7 +71,7 @@ public class JwtHandler {
             SignedJWT signedJWT = SignedJWT.parse(token);
             return signedJWT.getJWTClaimsSet().getSubject();
         } catch (Exception e) {
-            throw new RuntimeException("Invalid token");
+            throw new TokenException("Invalid token");
         }
     }
 
@@ -79,7 +80,7 @@ public class JwtHandler {
             SignedJWT signedJWT = SignedJWT.parse(token);
             return signedJWT.getJWTClaimsSet().getExpirationTime();
         } catch (Exception e) {
-            throw new RuntimeException("Invalid token");
+            throw new TokenException("Invalid token");
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.aldo.beautycenter.service.implemetations;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.CreateServiceDto;
@@ -28,7 +29,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public List<OperatorDto> getOperatorsByService(String serviceId) {
         org.aldo.beautycenter.data.entities.Service service = serviceDao
-                .findById(serviceId).orElseThrow(() -> new RuntimeException("Service not found"));
+                .findById(serviceId).orElseThrow(() -> new EntityNotFoundException("Service not found"));
 
         return service.getOperatorServices()
                 .stream()
@@ -44,7 +45,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public void updateService(UpdateServiceDto updateServiceDto) {
         org.aldo.beautycenter.data.entities.Service service = serviceDao
-                .findById(updateServiceDto.getId()).orElseThrow(() -> new RuntimeException("Service not found"));
+                .findById(updateServiceDto.getId()).orElseThrow(() -> new EntityNotFoundException("Service not found"));
 
         service.setName(updateServiceDto.getName());
         service.setPrice(updateServiceDto.getPrice());

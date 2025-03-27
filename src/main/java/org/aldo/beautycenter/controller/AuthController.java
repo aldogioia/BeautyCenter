@@ -2,6 +2,7 @@ package org.aldo.beautycenter.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.CreateCustomerDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
@@ -21,18 +22,20 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     public ResponseEntity<HttpStatus> login(
-            @RequestParam("username") String username,
+            @RequestParam("email") String email,
             @RequestParam("password") String password,
             HttpServletResponse response
     ) {
-        String Token = authService.login(username, password);
+        String Token = authService.signIn(email, password);
         response.addHeader(HttpHeaders.AUTHORIZATION,"Bearer " + Token);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<HttpStatus> register(CreateCustomerDto createCustomerDto) {
-        authService.register(createCustomerDto);
+    public ResponseEntity<HttpStatus> register(
+            @Valid @RequestBody CreateCustomerDto createCustomerDto
+    ) {
+        authService.signUp(createCustomerDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

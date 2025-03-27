@@ -1,7 +1,9 @@
 package org.aldo.beautycenter.service.implemetations;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.aldo.beautycenter.data.dao.UserDao;
 import org.aldo.beautycenter.data.dto.CreateCustomerDto;
 import org.aldo.beautycenter.security.authentication.JwtHandler;
 import org.aldo.beautycenter.service.interfaces.AuthService;
@@ -14,18 +16,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final JwtHandler jwtHandler;
+    private final UserDao userDao;
     private final CustomerService customerService;
     private final AuthenticationManager authenticationManager;
     @Override
-    public String login(String email, String password) { //capire se fare un end-point apposito per admin e operator
+    public String signIn(String email, String password) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password));
 
-        return jwtHandler.generateToken(customerService.getCustomerByEmail(email));
+        return jwtHandler.generateToken(userDao.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User not found")));
     }
 
     @Override
-    public void register(CreateCustomerDto createCustomerDto) {
+    public void signUp(CreateCustomerDto createCustomerDto) {
         customerService.createCustomer(createCustomerDto);
     }
 

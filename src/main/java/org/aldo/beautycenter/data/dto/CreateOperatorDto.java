@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.aldo.beautycenter.security.customAnnotation.NotAlreadyUsed;
 import org.aldo.beautycenter.security.customAnnotation.ValidServiceId;
 
 import java.util.List;
@@ -12,17 +13,18 @@ import java.util.List;
 public class CreateOperatorDto {
     @NotBlank
     @Size(min = 3, max = 50)
-    private String img_url;
+    private String img_url; //todo mettere l'immagine
 
-    @NotBlank
-    @Size(min = 3, max = 50)
+    @NotBlank(message = "Il campo nome non può essere vuoto")
+    @Size(min = 3, max = 50, message = "Il nome deve essere compreso tra 3 e 50 caratteri")
     private String name;
 
-    @NotBlank
-    @Size(min = 3, max = 50)
+    @NotBlank(message = "Il campo cognome non può essere vuoto")
+    @Size(min = 3, max = 50, message = "Il cognome deve essere compreso tra 3 e 50 caratteri")
     private String surname;
 
-    @Email
+    @Email(message = "Inserisci un indirizzo email valido")
+    @NotAlreadyUsed
     private String email;
 
     private List<@ValidServiceId String> services;
