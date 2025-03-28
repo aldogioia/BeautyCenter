@@ -3,7 +3,6 @@ package org.aldo.beautycenter.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.CreateServiceDto;
-import org.aldo.beautycenter.data.dto.OperatorDto;
 import org.aldo.beautycenter.data.dto.ServiceDto;
 import org.aldo.beautycenter.data.dto.UpdateServiceDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
@@ -33,16 +32,10 @@ public class ServiceController {
                 .body(serviceService.getAllServices());
     }
 
-    @GetMapping("/operators")
-    public ResponseEntity<List<OperatorDto>> getServicesByOperator(@ValidServiceId @RequestParam String serviceId) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(serviceService.getOperatorsByService(serviceId));
-    }
-
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> createService(@Valid @RequestBody CreateServiceDto createServiceDto) {
+        System.out.println(createServiceDto);
         serviceService.addService(createServiceDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

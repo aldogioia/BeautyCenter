@@ -7,7 +7,7 @@ import org.aldo.beautycenter.data.dto.UpdateRoomDto;
 import java.util.List;
 
 public interface RoomService {
-    List<RoomDto> getAllRooms(String roomId);
+    List<RoomDto> getAllRooms();
 
     void createRoom(CreateRoomDto createRoomDto);
 

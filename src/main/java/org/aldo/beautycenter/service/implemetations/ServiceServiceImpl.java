@@ -4,7 +4,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.CreateServiceDto;
-import org.aldo.beautycenter.data.dto.OperatorDto;
 import org.aldo.beautycenter.data.dto.ServiceDto;
 import org.aldo.beautycenter.data.dto.UpdateServiceDto;
 import org.aldo.beautycenter.service.interfaces.ServiceService;
@@ -27,18 +26,8 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public List<OperatorDto> getOperatorsByService(String serviceId) {
-        org.aldo.beautycenter.data.entities.Service service = serviceDao
-                .findById(serviceId).orElseThrow(() -> new EntityNotFoundException("Service not found"));
-
-        return service.getOperatorServices()
-                .stream()
-                .map(operatorService-> modelMapper.map(operatorService.getOperator(), OperatorDto.class))
-                .toList();
-    }
-
-    @Override
     public void addService(CreateServiceDto createServiceDto) {
+        System.out.println(createServiceDto);
         serviceDao.save(modelMapper.map(createServiceDto, org.aldo.beautycenter.data.entities.Service.class));
     }
 
