@@ -2,14 +2,10 @@ package org.aldo.beautycenter.data.dto;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class OperatorDto {
+public class SummaryOperatorDto {
     private String id;
     private String name;
     private String surname;
-    private String email;
     private String imgUrl;
-    private List<SummaryServiceDto> services;
 }

@@ -19,10 +19,6 @@ public class Operator extends User {
     @ToString.Exclude
     private List<OperatorService> operatorServices;
 
-//    @ManyToMany(mappedBy = "operators", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
-//    @ToString.Exclude
-//    private List<Service> services;
-
     @OneToMany(mappedBy = "operator", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Schedule> schedules;
 }

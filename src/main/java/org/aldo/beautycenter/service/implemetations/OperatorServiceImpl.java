@@ -1,9 +1,11 @@
 package org.aldo.beautycenter.service.implemetations;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.*;
 import org.aldo.beautycenter.data.dto.CreateOperatorDto;
 import org.aldo.beautycenter.data.dto.OperatorDto;
+import org.aldo.beautycenter.data.dto.SummaryServiceDto;
 import org.aldo.beautycenter.data.dto.UpdateOperatorDto;
 import org.aldo.beautycenter.data.entities.Booking;
 import org.aldo.beautycenter.data.entities.Operator;
@@ -22,18 +24,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OperatorServiceImpl implements OperatorService {
     private final OperatorDao operatorDao;
-    private final StandardScheduleDao standardScheduleDao;
-    private final ScheduleExceptionDao scheduleExceptionDao;
     private final BookingDao bookingDao;
     private final ServiceDao serviceDao;
+    private final OperatorServiceDao operatorServiceDao;
+    private final StandardScheduleDao standardScheduleDao;
+    private final ScheduleExceptionDao scheduleExceptionDao;
     private final ModelMapper modelMapper;
 
     @Override
     public List<OperatorDto> getAllOperators() {
         return operatorDao.findAll()
                 .stream()
-                .map(operator -> modelMapper.map(operator, OperatorDto.class))
-                .toList();
+                .map(operator -> {
+                    OperatorDto operatorDto = modelMapper.map(operator, OperatorDto.class);
+                    operatorDto.setServices(
+                            operator.getOperatorServices().stream()
+                                    .map(operatorService -> modelMapper.map(operatorService.getService(), SummaryServiceDto.class))
+                                    .toList()
+                    );
+                    return operatorDto;
+                }).toList();
     }
 
     @Override
@@ -55,8 +65,18 @@ public class OperatorServiceImpl implements OperatorService {
     }
 
     @Override
+    @Transactional
     public void createOperator(CreateOperatorDto createOperatorDto) {
-        operatorDao.save(modelMapper.map(createOperatorDto, Operator.class));
+        Operator operator = modelMapper.map(createOperatorDto, Operator.class);
+        operatorDao.save(operator);
+
+        createOperatorDto.getServices()
+                .forEach(serviceId -> {
+                    org.aldo.beautycenter.data.entities.OperatorService operatorService = new org.aldo.beautycenter.data.entities.OperatorService();
+                    operatorService.setOperator(operator);
+                    operatorService.setService(serviceDao.getReferenceById(serviceId));
+                    operatorServiceDao.save(operatorService);
+                });
     }
 
     @Override
