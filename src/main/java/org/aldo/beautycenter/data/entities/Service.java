@@ -22,7 +22,7 @@ public class Service extends Auditable {
     @UuidGenerator
     private String id;
 
-    @Column(name="img_url")
+    @Column(name="img_url", nullable = false)
     private String imgUrl;
 
     @Column(name = "name", nullable = false)

@@ -13,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RateLimit(permitsPerSecond = 10)
 @RestController
 @RequestMapping("/api/v1/customer")
@@ -21,6 +23,20 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class CustomerController {
     private final CustomerService customerService;
+
+    @GetMapping("/all")
+    public ResponseEntity<List<CustomerDto>> getAllCustomers() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(customerService.getAllCustomers());
+    }
+
+//    @GetMapping("/one")
+//    public ResponseEntity<CustomerDto> getCustomer(@RequestParam String id) {
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(customerService.getCustomerById(id));
+//    }
     @PatchMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or authentication.principal.id == #updateCustomerDto.id")
     public ResponseEntity<HttpStatus> updateUser(@Valid @RequestBody UpdateCustomerDto updateCustomerDto) {
@@ -28,13 +44,6 @@ public class CustomerController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
-    }
-
-    @GetMapping
-    public ResponseEntity<CustomerDto> getCustomer(@RequestParam String id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(customerService.getCustomerById(id));
     }
 
     @DeleteMapping

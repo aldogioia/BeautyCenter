@@ -5,12 +5,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidMultipartExtension;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidServiceId;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UpdateServiceDto {
+    @NotNull(message = "Il campo id è obbligatorio")
     @ValidServiceId
     private String id;
+
+    @ValidMultipartExtension
+    private MultipartFile image;
 
     @NotBlank(message = "Il campo name è obbligatorio")
     @Size(min = 1, max = 50, message = "Il campo name deve essere compreso tra 1 e 50 caratteri")

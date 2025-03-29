@@ -12,6 +12,8 @@ import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.entities.Schedule;
 import org.aldo.beautycenter.data.entities.ScheduleException;
 import org.aldo.beautycenter.service.interfaces.OperatorService;
+import org.aldo.beautycenter.service.interfaces.S3Service;
+import org.aldo.beautycenter.utils.Constants;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ public class OperatorServiceImpl implements OperatorService {
     private final OperatorDao operatorDao;
     private final BookingDao bookingDao;
     private final ServiceDao serviceDao;
+    private final S3Service s3Service;
     private final OperatorServiceDao operatorServiceDao;
     private final StandardScheduleDao standardScheduleDao;
     private final ScheduleExceptionDao scheduleExceptionDao;
@@ -80,8 +83,20 @@ public class OperatorServiceImpl implements OperatorService {
     }
 
     @Override
+    @Transactional
     public void updateOperator(UpdateOperatorDto updateOperatorDto) {
-        operatorDao.save(modelMapper.map(updateOperatorDto, Operator.class));
+        Operator operator = modelMapper.map(updateOperatorDto, Operator.class);
+        if (updateOperatorDto.getImage() != null) //todo da capire se la mando sempre
+            operator.setImgUrl(s3Service.uploadFile(updateOperatorDto.getImage(), Constants.OPERATOR_FOLDER, operator.getName()));
+        operatorDao.save(operator);
+
+        updateOperatorDto.getServices()
+                .forEach(serviceId -> {
+                    org.aldo.beautycenter.data.entities.OperatorService operatorService = new org.aldo.beautycenter.data.entities.OperatorService();
+                    operatorService.setOperator(operator);
+                    operatorService.setService(serviceDao.getReferenceById(serviceId));
+                    operatorServiceDao.save(operatorService);
+                });
     }
 
     @Override
