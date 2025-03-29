@@ -32,19 +32,18 @@ public class ServiceController {
                 .body(serviceService.getAllServices());
     }
 
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data"})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpStatus> createService(@Valid @RequestBody CreateServiceDto createServiceDto) {
-        System.out.println(createServiceDto);
+    public ResponseEntity<HttpStatus> createService(@Valid @ModelAttribute CreateServiceDto createServiceDto) {
         serviceService.addService(createServiceDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
     }
 
-    @PatchMapping
+    @PatchMapping(consumes = {"multipart/form-data"})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpStatus> updateService(@Valid @RequestBody UpdateServiceDto updateServiceDto) {
+    public ResponseEntity<HttpStatus> updateService(@Valid @ModelAttribute UpdateServiceDto updateServiceDto) {
         serviceService.updateService(updateServiceDto);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

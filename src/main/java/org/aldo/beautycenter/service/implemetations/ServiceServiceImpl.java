@@ -1,12 +1,13 @@
 package org.aldo.beautycenter.service.implemetations;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.CreateServiceDto;
 import org.aldo.beautycenter.data.dto.ServiceDto;
 import org.aldo.beautycenter.data.dto.UpdateServiceDto;
+import org.aldo.beautycenter.service.interfaces.S3Service;
 import org.aldo.beautycenter.service.interfaces.ServiceService;
+import org.aldo.beautycenter.utils.Constants;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ServiceServiceImpl implements ServiceService {
     private final ServiceDao serviceDao;
+    private final S3Service s3Service;
     private final ModelMapper modelMapper;
     @Override
     public List<ServiceDto> getAllServices() {
@@ -27,19 +29,16 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public void addService(CreateServiceDto createServiceDto) {
-        System.out.println(createServiceDto);
-        serviceDao.save(modelMapper.map(createServiceDto, org.aldo.beautycenter.data.entities.Service.class));
+        org.aldo.beautycenter.data.entities.Service service = modelMapper.map(createServiceDto, org.aldo.beautycenter.data.entities.Service.class);
+        service.setImgUrl(s3Service.uploadFile(createServiceDto.getImage(), Constants.SERVICE_FOLDER, createServiceDto.getName()));
+        serviceDao.save(service);
     }
 
     @Override
     public void updateService(UpdateServiceDto updateServiceDto) {
-        org.aldo.beautycenter.data.entities.Service service = serviceDao
-                .findById(updateServiceDto.getId()).orElseThrow(() -> new EntityNotFoundException("Service not found"));
-
-        service.setName(updateServiceDto.getName());
-        service.setPrice(updateServiceDto.getPrice());
-        service.setDuration(updateServiceDto.getDuration());
-
+        org.aldo.beautycenter.data.entities.Service service =modelMapper.map(updateServiceDto, org.aldo.beautycenter.data.entities.Service.class);
+        if (updateServiceDto.getImage() != null) //todo da capire se può essere null
+            s3Service.uploadFile(updateServiceDto.getImage(), Constants.SERVICE_FOLDER, service.getName());
         serviceDao.save(service);
     }
 

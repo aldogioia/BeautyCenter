@@ -2,6 +2,7 @@ package org.aldo.beautycenter.data.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.aldo.beautycenter.security.customAnnotation.annotation.NotAlreadyUsed;
@@ -9,6 +10,7 @@ import org.aldo.beautycenter.security.customAnnotation.annotation.ValidCustomerI
 
 @Data
 public class UpdateCustomerDto {
+    @NotNull(message = "Il campo id è obbligatorio")
     @ValidCustomerId
     private String id;
 

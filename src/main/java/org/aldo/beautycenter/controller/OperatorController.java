@@ -47,8 +47,8 @@ public class OperatorController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<HttpStatus> createOperator(@Valid @RequestBody CreateOperatorDto createOperatorDto) {
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<HttpStatus> createOperator(@Valid @ModelAttribute CreateOperatorDto createOperatorDto) {
         operatorService.createOperator(createOperatorDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -56,8 +56,8 @@ public class OperatorController {
     }
 
     @PreAuthorize("hasRole('ADMIN') or authentication.principal.id == #updateOperatorDto.id")
-    @PatchMapping
-    public ResponseEntity<HttpStatus> updateOperator(@Valid @RequestBody UpdateOperatorDto updateOperatorDto) {
+    @PatchMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<HttpStatus> updateOperator(@Valid @ModelAttribute UpdateOperatorDto updateOperatorDto) {
         operatorService.updateOperator(updateOperatorDto);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
