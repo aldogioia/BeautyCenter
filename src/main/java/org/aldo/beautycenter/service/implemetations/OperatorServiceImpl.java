@@ -11,6 +11,7 @@ import org.aldo.beautycenter.data.entities.Booking;
 import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.entities.Schedule;
 import org.aldo.beautycenter.data.entities.ScheduleException;
+import org.aldo.beautycenter.security.exception.customException.EmailAlreadyUsed;
 import org.aldo.beautycenter.service.interfaces.OperatorService;
 import org.aldo.beautycenter.service.interfaces.S3Service;
 import org.aldo.beautycenter.utils.Constants;
@@ -28,8 +29,8 @@ public class OperatorServiceImpl implements OperatorService {
     private final OperatorDao operatorDao;
     private final BookingDao bookingDao;
     private final ServiceDao serviceDao;
+    private final UserDao userDao;
     private final S3Service s3Service;
-    private final OperatorServiceDao operatorServiceDao;
     private final StandardScheduleDao standardScheduleDao;
     private final ScheduleExceptionDao scheduleExceptionDao;
     private final ModelMapper modelMapper;
@@ -41,9 +42,8 @@ public class OperatorServiceImpl implements OperatorService {
                 .map(operator -> {
                     OperatorDto operatorDto = modelMapper.map(operator, OperatorDto.class);
                     operatorDto.setServices(
-                            operator.getOperatorServices().stream()
-                                    .map(operatorService -> modelMapper.map(operatorService.getService(), SummaryServiceDto.class))
-                                    .toList()
+                            operator.getServices().stream()
+                                    .map(service -> modelMapper.map(service, SummaryServiceDto.class)).toList()
                     );
                     return operatorDto;
                 }).toList();
@@ -53,7 +53,7 @@ public class OperatorServiceImpl implements OperatorService {
     public List<LocalTime> getAvailableHours(String operatorId, LocalDate date, String serviceId) {
         org.aldo.beautycenter.data.entities.Service service = serviceDao.getReferenceById(serviceId);
         List<Booking> operatorBookings = bookingDao.findAllByDateAndOperator_Id(date, operatorId);
-        List<Booking> roomBookings = bookingDao.findAllByRoom_RoomServices_Service_Id(serviceId);
+        List<Booking> roomBookings = bookingDao.findAllByRoom_Services_Id(serviceId);
         Schedule schedule = scheduleExceptionDao.findByOperatorIdAndDate(operatorId, date)
                 .map(s -> (Schedule) s)
                 .orElseGet(() -> standardScheduleDao.findByOperatorIdAndDay(operatorId, date.getDayOfWeek()));
@@ -71,32 +71,43 @@ public class OperatorServiceImpl implements OperatorService {
     @Transactional
     public void createOperator(CreateOperatorDto createOperatorDto) {
         Operator operator = modelMapper.map(createOperatorDto, Operator.class);
+        operator.setImgUrl(s3Service.uploadFile(createOperatorDto.getImage(), Constants.OPERATOR_FOLDER, createOperatorDto.getName()));
+        operator.setServices(serviceDao.findAllById(createOperatorDto.getServices()));
         operatorDao.save(operator);
 
-        createOperatorDto.getServices()
-                .forEach(serviceId -> {
-                    org.aldo.beautycenter.data.entities.OperatorService operatorService = new org.aldo.beautycenter.data.entities.OperatorService();
-                    operatorService.setOperator(operator);
-                    operatorService.setService(serviceDao.getReferenceById(serviceId));
-                    operatorServiceDao.save(operatorService);
-                });
+//        createOperatorDto.getServices()
+//                .forEach(serviceId -> {
+//                    org.aldo.beautycenter.data.entities.OperatorService operatorService = new org.aldo.beautycenter.data.entities.OperatorService();
+//                    operatorService.setOperator(operator);
+//                    operatorService.setService(serviceDao.getReferenceById(serviceId));
+//                    operatorServiceDao.save(operatorService);
+//                });
     }
 
     @Override
     @Transactional
     public void updateOperator(UpdateOperatorDto updateOperatorDto) {
-        Operator operator = modelMapper.map(updateOperatorDto, Operator.class);
-        if (updateOperatorDto.getImage() != null) //todo da capire se la mando sempre
+        userDao.findByEmail(updateOperatorDto.getEmail())
+                .ifPresent(user -> {
+                    if (!user.getId().equals(updateOperatorDto.getId()))
+                        throw new EmailAlreadyUsed("Email già in uso");
+                });
+
+        Operator operator = operatorDao.getReferenceById(updateOperatorDto.getId());
+        modelMapper.map(updateOperatorDto, operator);
+        operator.setServices(serviceDao.findAllById(updateOperatorDto.getServices()));
+        if (updateOperatorDto.getImage() != null)
             operator.setImgUrl(s3Service.uploadFile(updateOperatorDto.getImage(), Constants.OPERATOR_FOLDER, operator.getName()));
         operatorDao.save(operator);
 
-        updateOperatorDto.getServices()
-                .forEach(serviceId -> {
-                    org.aldo.beautycenter.data.entities.OperatorService operatorService = new org.aldo.beautycenter.data.entities.OperatorService();
-                    operatorService.setOperator(operator);
-                    operatorService.setService(serviceDao.getReferenceById(serviceId));
-                    operatorServiceDao.save(operatorService);
-                });
+//        operatorServiceDao.deleteAll(operator.getOperatorServices());
+//        updateOperatorDto.getServices()
+//                .forEach(serviceId -> {
+//                    org.aldo.beautycenter.data.entities.OperatorService operatorService = new org.aldo.beautycenter.data.entities.OperatorService();
+//                    operatorService.setOperator(operator);
+//                    operatorService.setService(serviceDao.getReferenceById(serviceId));
+//                    operatorServiceDao.save(operatorService);
+//                });
     }
 
     @Override

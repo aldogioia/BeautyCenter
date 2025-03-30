@@ -3,6 +3,7 @@ package org.aldo.beautycenter.service.implemetations;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.BookingDao;
 import org.aldo.beautycenter.data.dto.BookingDto;
+import org.aldo.beautycenter.data.dto.CreateBookingDto;
 import org.aldo.beautycenter.data.entities.Booking;
 import org.aldo.beautycenter.service.interfaces.BookingService;
 import org.modelmapper.ModelMapper;
@@ -18,8 +19,8 @@ public class BookingServiceImpl implements BookingService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<BookingDto> getCustomerBookingsInDate(String userId, LocalDate date) {
-        return bookingDao.findAllByUser_IdAndDateIsBefore(userId, date)
+    public List<BookingDto> getCustomerBookingsInDate(String customerId, LocalDate date) {
+        return bookingDao.findAllByCustomer_IdAndDateIsBefore(customerId, date)
                 .stream()
                 .map(booking -> modelMapper.map(booking, BookingDto.class))
                 .toList();
@@ -39,8 +40,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void addBooking(BookingDto bookingDto) {
-        bookingDao.save(modelMapper.map(bookingDto, Booking.class));
+//    @Transactional  todo
+    public void addBooking(CreateBookingDto createBookingDto) {
+        //todo check if all resources are available
+        bookingDao.save(modelMapper.map(createBookingDto, Booking.class));
     }
     @Override
     public void deleteBooking(String bookingId) {

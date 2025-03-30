@@ -3,6 +3,7 @@ package org.aldo.beautycenter.security.exception;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aldo.beautycenter.data.dto.ErrorDto;
+import org.aldo.beautycenter.security.exception.customException.EmailAlreadyUsed;
 import org.aldo.beautycenter.security.exception.customException.EmailNotSentException;
 import org.aldo.beautycenter.security.exception.customException.TokenException;
 import org.aldo.beautycenter.security.exception.customException.TokenExpiredException;
@@ -51,6 +52,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorDto onAccessDeniedException(WebRequest req, AccessDeniedException e) {
+        return createErrorResponse(req, e.getMessage());
+    }
+
+    @ExceptionHandler(EmailAlreadyUsed.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto onEmailAlreadyUsedException(WebRequest req, EmailAlreadyUsed e) {
         return createErrorResponse(req, e.getMessage());
     }
 

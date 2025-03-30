@@ -29,7 +29,8 @@ public class Room extends Auditable {
     @ToString.Exclude
     private List<Booking> bookings;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany
     @ToString.Exclude
-    private List<RoomService> roomServices;
+    @JoinTable(name = "room_service", joinColumns = @JoinColumn(name = "room_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private List<Service> services;
 }

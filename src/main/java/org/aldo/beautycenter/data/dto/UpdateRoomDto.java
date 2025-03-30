@@ -11,7 +11,7 @@ import java.util.List;
 public class UpdateRoomDto {
     @NotNull(message = "Il campo id è obbligatorio")
     @ValidRoomId
-    private String roomId;
+    private String id;
 
     private List<@ValidServiceId String> services;
 }

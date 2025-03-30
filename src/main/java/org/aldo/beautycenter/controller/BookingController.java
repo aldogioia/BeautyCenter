@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.FutureOrPresent;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.BookingDto;
+import org.aldo.beautycenter.data.dto.CreateBookingDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidBookingId;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidCustomerId;
@@ -40,8 +41,8 @@ public class BookingController {
                 .body(bookingService.getOperatorBookingsInDate(operatorId, date));
     }
     @PostMapping
-    public ResponseEntity<BookingDto> createBooking(@Valid @RequestBody BookingDto bookingDto) {
-        bookingService.addBooking(bookingDto);
+    public ResponseEntity<BookingDto> createBooking(@Valid @RequestBody CreateBookingDto createBookingDto) {
+        bookingService.addBooking(createBookingDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @DeleteMapping

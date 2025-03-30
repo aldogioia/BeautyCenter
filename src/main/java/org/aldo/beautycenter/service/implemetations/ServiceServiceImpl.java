@@ -36,7 +36,8 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public void updateService(UpdateServiceDto updateServiceDto) {
-        org.aldo.beautycenter.data.entities.Service service =modelMapper.map(updateServiceDto, org.aldo.beautycenter.data.entities.Service.class);
+        org.aldo.beautycenter.data.entities.Service service = serviceDao.getReferenceById(updateServiceDto.getId());
+        modelMapper.map(updateServiceDto, org.aldo.beautycenter.data.entities.Service.class);
         if (updateServiceDto.getImage() != null) //todo da capire se può essere null
             s3Service.uploadFile(updateServiceDto.getImage(), Constants.SERVICE_FOLDER, service.getName());
         serviceDao.save(service);

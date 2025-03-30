@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "prenotation")
+@Table(name = "booking")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -33,8 +33,8 @@ public class Booking extends Auditable {
     private Service service;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "operator_id", nullable = false)

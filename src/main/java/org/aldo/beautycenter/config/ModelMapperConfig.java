@@ -1,11 +1,15 @@
 package org.aldo.beautycenter.config;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.aldo.beautycenter.data.dao.CustomerDao;
+import org.aldo.beautycenter.data.dao.OperatorDao;
+import org.aldo.beautycenter.data.dao.RoomDao;
+import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.*;
 import org.aldo.beautycenter.data.entities.*;
 import org.aldo.beautycenter.data.enumerators.Role;
 import org.aldo.beautycenter.service.interfaces.S3Service;
-import org.aldo.beautycenter.utils.Constants;
 import org.modelmapper.Converter;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
@@ -18,20 +22,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ModelMapperConfig {
     private final PasswordEncoder passwordEncoder;
+    private final RoomDao roomDao;
+    private final ServiceDao serviceDao;
+    private final OperatorDao operatorDao;
+    private final CustomerDao customerDao;
     private final S3Service s3Service;
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
-        //converter per cryptare le passowrd
+        //converter per cryptare le password
         Converter<String, String> passwordConverter = context -> passwordEncoder.encode(context.getSource());
-
-        //converter per caricare le immagini
-        Converter<CreateOperatorDto, String> operatorImageUploadConverter = context ->
-                s3Service.uploadFile(context.getSource().getImage(), Constants.OPERATOR_FOLDER, context.getSource().getName());
-
-//        Converter<CreateServiceDto, String> serviceImageUploadConverter = context ->
-//                s3Service.uploadFile(context.getSource().getImage(), Constants.SERVICE_FOLDER, context.getSource().getName());
 
         //converter per gli url delle immagini
         Converter<String, String> imageUrlConverter = context -> s3Service.presignedUrl(context.getSource());
@@ -50,8 +51,8 @@ public class ModelMapperConfig {
             @Override
             protected void configure() {
                 map().setRole(Role.ROLE_OPERATOR);
-                using(operatorImageUploadConverter).map(source, destination.getImgUrl());
-                skip().setOperatorServices(null);
+                skip().setImgUrl(null);
+                skip().setServices(null);
             }
         });
 
@@ -60,7 +61,22 @@ public class ModelMapperConfig {
             @Override
             protected void configure() {
                 skip().setImgUrl(null);
-                skip().setOperatorServices(null);
+                skip().setServices(null);
+            }
+        });
+
+        //mappatura per la creazione di una prenotazione
+        modelMapper.addMappings(new PropertyMap<CreateBookingDto, Booking>() {
+            @Override
+            protected void configure() {
+                using(ctx -> roomDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Stanza non trovata")))
+                        .map(source.getRoom(), destination.getRoom());
+                using(ctx -> serviceDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Servizio non trovato")))
+                        .map(source.getService(), destination.getService());
+                using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
+                        .map(source.getOperator(), destination.getOperator());
+                using(ctx -> customerDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Cliente non trovato")))
+                        .map(source.getCustomer(), destination.getCustomer());
             }
         });
 
@@ -69,10 +85,8 @@ public class ModelMapperConfig {
             @Override
             protected void configure() {
                 skip().setImgUrl(null);
-//                using(serviceImageUploadConverter).map(source, destination.getImgUrl());
             }
         });
-
 
         //mappatura per l'aggiornamento di un servizio
         modelMapper.addMappings(new PropertyMap<UpdateServiceDto, Service>() {
@@ -118,7 +132,7 @@ public class ModelMapperConfig {
         //skip del campo roomServices
         modelMapper
                 .typeMap(CreateRoomDto.class, Room.class)
-                .addMappings(mapper -> mapper.skip(Room::setRoomServices));
+                .addMappings(mapper -> mapper.skip(Room::setServices));
 
 
         modelMapper.getConfiguration()
