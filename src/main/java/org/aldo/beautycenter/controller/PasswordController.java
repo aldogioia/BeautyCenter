@@ -1,5 +1,6 @@
 package org.aldo.beautycenter.controller;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.service.interfaces.PasswordService;
@@ -24,8 +25,11 @@ public class PasswordController {
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<HttpStatus> resetPassword(@RequestParam String token, @RequestParam String password) { // todo add @Pattern(regexp = "^[a-zA-Z0-9]{8,}$") this is an example of regex
+    public ResponseEntity<HttpStatus> resetPassword(
+            @RequestParam String token,
+            @Pattern(regexp = "^(?=.*\\d).{8,}$", message = "La password deve essere lunga almeno 8 caratteri e contenere almeno un numero") @RequestParam String password) {
         passwordService.changePassword(token, password);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
     }
 }

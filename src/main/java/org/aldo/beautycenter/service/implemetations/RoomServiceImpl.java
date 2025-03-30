@@ -1,9 +1,9 @@
 package org.aldo.beautycenter.service.implemetations;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.RoomDao;
-import org.aldo.beautycenter.data.dao.RoomServiceDao;
 import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.CreateRoomDto;
 import org.aldo.beautycenter.data.dto.RoomDto;
@@ -21,7 +21,6 @@ import java.util.List;
 public class RoomServiceImpl implements RoomService {
     private final RoomDao roomDao;
     private final ServiceDao serviceDao;
-    private final RoomServiceDao roomServiceDao;
     private final ModelMapper modelMapper;
 
     @Override
@@ -31,11 +30,9 @@ public class RoomServiceImpl implements RoomService {
                 .map(room -> {
                     RoomDto roomDto = modelMapper.map(room, RoomDto.class);
                     roomDto.setServices(
-                            room.getRoomServices().stream()
-                                    .map(roomService -> modelMapper.map(roomService.getService(), SummaryServiceDto.class))
-                                    .toList()
+                            room.getServices().stream()
+                                    .map(service -> modelMapper.map(service, SummaryServiceDto.class)).toList()
                     );
-
                     return roomDto;
                 }).toList();
     }
@@ -44,23 +41,49 @@ public class RoomServiceImpl implements RoomService {
     @Transactional
     public void createRoom(CreateRoomDto createRoomDto) {
         Room room = modelMapper.map(createRoomDto, Room.class);
+        room.setServices(serviceDao.findAllById(createRoomDto.getServices()));
         roomDao.save(room);
 
-        serviceDao.findAllById(createRoomDto.getServices())
-                .forEach(service -> {
-                    org.aldo.beautycenter.data.entities.RoomService roomService = new org.aldo.beautycenter.data.entities.RoomService();
-                    roomService.setRoom(room);
-                    roomService.setService(service);
-                    roomServiceDao.save(roomService);
-                });
+//        serviceDao.findAllById(createRoomDto.getServices())
+//                .forEach(service -> {
+//                    org.aldo.beautycenter.data.entities.RoomService roomService = new org.aldo.beautycenter.data.entities.RoomService();
+//                    roomService.setRoom(room);
+//                    roomService.setService(service);
+//                    roomServiceDao.save(roomService);
+//                });
     }
 
     @Override
     public void updateRoom(UpdateRoomDto updateRoomDto) {
-        roomDao.save(
-                modelMapper.map(updateRoomDto, Room.class)
-        );
+        Room room = roomDao.findById(updateRoomDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Stanza non trovata"));
+        modelMapper.map(updateRoomDto, room);
+        room.setServices(serviceDao.findAllById(updateRoomDto.getServices()));
+        roomDao.save(room);
     }
+
+//    @Override
+//    @Transactional
+//    public void updateRoom(UpdateRoomDto updateRoomDto) {
+//        Room room = roomDao.findById(updateRoomDto.getId())
+//                .orElseThrow(() -> new EntityNotFoundException("Stanza non trovata"));
+//
+//        roomServiceDao.deleteAllByRoomId(updateRoomDto.getId());
+//        room.getRoomServices().clear();
+//
+//        modelMapper.map(updateRoomDto, room);
+//        roomDao.save(room);
+//
+//        List<org.aldo.beautycenter.data.entities.RoomService> roomServices = serviceDao.findAllById(updateRoomDto.getServices())
+//                .stream().map(service -> {
+//                    org.aldo.beautycenter.data.entities.RoomService roomService = new org.aldo.beautycenter.data.entities.RoomService();
+//                    roomService.setRoom(room);
+//                    roomService.setService(service);
+//                    return roomService;
+//                }).toList();
+//
+//        roomServiceDao.saveAll(roomServices);
+//    }
 
     @Override
     public void deleteRoom(String roomId) {

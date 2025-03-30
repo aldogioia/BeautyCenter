@@ -32,7 +32,7 @@ public class RoomController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<HttpStatus> createOperator(@Valid @RequestBody CreateRoomDto createRoomDto) {
+    public ResponseEntity<HttpStatus> createRoom(@Valid @RequestBody CreateRoomDto createRoomDto) {
         roomService.createRoom(createRoomDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -41,7 +41,7 @@ public class RoomController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping
-    public ResponseEntity<HttpStatus> updateOperator(@Valid @RequestBody UpdateRoomDto updateRoomDto) {
+    public ResponseEntity<HttpStatus> updateRoom(@Valid @RequestBody UpdateRoomDto updateRoomDto) {
         roomService.updateRoom(updateRoomDto);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
@@ -50,7 +50,7 @@ public class RoomController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
-    public ResponseEntity<HttpStatus> deleteOperator(@ValidOperatorId @RequestParam String roomId) {
+    public ResponseEntity<HttpStatus> deleteRoom(@ValidOperatorId @RequestParam String roomId) {
         roomService.deleteRoom(roomId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

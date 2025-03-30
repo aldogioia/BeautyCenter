@@ -18,6 +18,6 @@ public class CreateAdminDto {
     @NotAlreadyUsed
     private String email;
 
-    //TODO @Pattern(regexp = "", message = "")
+    @Pattern(regexp = "^(?=.*\\d).{8,}$", message = "La password deve essere lunga almeno 8 caratteri e contenere almeno un numero")
     private String password;
 }

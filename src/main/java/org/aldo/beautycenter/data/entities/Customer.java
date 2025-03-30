@@ -16,7 +16,7 @@ public class Customer extends User {
     @Column(name = "phone_number", unique = true)
     private Number phoneNumber;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Booking> bookings;
 }

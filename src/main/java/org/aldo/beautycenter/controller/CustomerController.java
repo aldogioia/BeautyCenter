@@ -42,7 +42,7 @@ public class CustomerController {
     public ResponseEntity<HttpStatus> updateUser(@Valid @RequestBody UpdateCustomerDto updateCustomerDto) {
         customerService.updateCustomer(updateCustomerDto);
         return ResponseEntity
-                .status(HttpStatus.CREATED)
+                .status(HttpStatus.NO_CONTENT)
                 .build();
     }
 

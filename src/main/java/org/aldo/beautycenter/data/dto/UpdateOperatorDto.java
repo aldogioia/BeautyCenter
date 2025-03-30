@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.aldo.beautycenter.security.customAnnotation.annotation.NotAlreadyUsed;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidMultipartExtension;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidOperatorId;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidServiceId;
@@ -31,7 +30,6 @@ public class UpdateOperatorDto {
     private String surname;
 
     @Email(message = "Inserire un indirizzo email valido")
-    @NotAlreadyUsed
     private String email;
 
     private List<@ValidServiceId String> services;
