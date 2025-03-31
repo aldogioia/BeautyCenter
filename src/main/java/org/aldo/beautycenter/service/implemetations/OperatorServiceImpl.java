@@ -59,7 +59,7 @@ public class OperatorServiceImpl implements OperatorService {
                 .orElseGet(() -> standardScheduleDao.findByOperatorIdAndDay(operatorId, date.getDayOfWeek()));
 
         List<LocalTime> availableTimes = new ArrayList<>();
-        if(schedule instanceof ScheduleException && ((ScheduleException) schedule).isAbsent()) return availableTimes;
+        if(schedule instanceof ScheduleException && ((ScheduleException) schedule).getAbsent()) return availableTimes;
 
         availableTimes.addAll(getAvailableSlots(schedule.getMorningStart(), schedule.getMorningEnd(), service.getDuration(), operatorBookings, roomBookings));
         availableTimes.addAll(getAvailableSlots(schedule.getAfternoonStart(), schedule.getAfternoonEnd(), service.getDuration(), operatorBookings, roomBookings));
@@ -74,14 +74,6 @@ public class OperatorServiceImpl implements OperatorService {
         operator.setImgUrl(s3Service.uploadFile(createOperatorDto.getImage(), Constants.OPERATOR_FOLDER, createOperatorDto.getName()));
         operator.setServices(serviceDao.findAllById(createOperatorDto.getServices()));
         operatorDao.save(operator);
-
-//        createOperatorDto.getServices()
-//                .forEach(serviceId -> {
-//                    org.aldo.beautycenter.data.entities.OperatorService operatorService = new org.aldo.beautycenter.data.entities.OperatorService();
-//                    operatorService.setOperator(operator);
-//                    operatorService.setService(serviceDao.getReferenceById(serviceId));
-//                    operatorServiceDao.save(operatorService);
-//                });
     }
 
     @Override
@@ -99,15 +91,6 @@ public class OperatorServiceImpl implements OperatorService {
         if (updateOperatorDto.getImage() != null)
             operator.setImgUrl(s3Service.uploadFile(updateOperatorDto.getImage(), Constants.OPERATOR_FOLDER, operator.getName()));
         operatorDao.save(operator);
-
-//        operatorServiceDao.deleteAll(operator.getOperatorServices());
-//        updateOperatorDto.getServices()
-//                .forEach(serviceId -> {
-//                    org.aldo.beautycenter.data.entities.OperatorService operatorService = new org.aldo.beautycenter.data.entities.OperatorService();
-//                    operatorService.setOperator(operator);
-//                    operatorService.setService(serviceDao.getReferenceById(serviceId));
-//                    operatorServiceDao.save(operatorService);
-//                });
     }
 
     @Override
