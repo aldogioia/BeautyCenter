@@ -3,10 +3,7 @@ package org.aldo.beautycenter.security.exception;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aldo.beautycenter.data.dto.ErrorDto;
-import org.aldo.beautycenter.security.exception.customException.EmailAlreadyUsed;
-import org.aldo.beautycenter.security.exception.customException.EmailNotSentException;
-import org.aldo.beautycenter.security.exception.customException.TokenException;
-import org.aldo.beautycenter.security.exception.customException.TokenExpiredException;
+import org.aldo.beautycenter.security.exception.customException.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -64,6 +61,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TokenExpiredException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorDto onTokenExpiredException(WebRequest req, TokenExpiredException e) {
+        return createErrorResponse(req, e.getMessage());
+    }
+
+    @ExceptionHandler(BookingConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorDto onBookingConflictException(WebRequest req, BookingConflictException e) {
         return createErrorResponse(req, e.getMessage());
     }
 

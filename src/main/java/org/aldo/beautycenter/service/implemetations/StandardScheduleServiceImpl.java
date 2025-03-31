@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.StandardScheduleDao;
 import org.aldo.beautycenter.data.dto.CreateStandardScheduleDto;
+import org.aldo.beautycenter.data.dto.StandardScheduleDto;
 import org.aldo.beautycenter.data.dto.UpdateStandardScheduleDto;
 import org.aldo.beautycenter.data.entities.StandardSchedule;
 import org.aldo.beautycenter.service.interfaces.StandardScheduleService;
@@ -17,6 +18,15 @@ import java.util.List;
 public class StandardScheduleServiceImpl implements StandardScheduleService {
     private final StandardScheduleDao standardScheduleDao;
     private final ModelMapper modelMapper;
+
+    @Override
+    public List<StandardScheduleDto> getOperatorStandardSchedules(String operatorId) {
+        return standardScheduleDao.findAllByOperatorId(operatorId)
+                .stream()
+                .map(standardSchedule -> modelMapper.map(standardSchedule, StandardScheduleDto.class))
+                .toList();
+    }
+
     @Override
     public void createSchedules(List<CreateStandardScheduleDto> createStandardScheduleDto) {
         List<StandardSchedule> standardSchedules = createStandardScheduleDto

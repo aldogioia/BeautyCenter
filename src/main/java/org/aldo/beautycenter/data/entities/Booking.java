@@ -12,7 +12,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "booking")
+@Table(name = "booking", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"date", "time", "operator_id"}),
+        @UniqueConstraint(columnNames = {"date", "time", "room_id"})
+})
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -43,4 +46,7 @@ public class Booking extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
+
+    @Version
+    private Integer version;
 }

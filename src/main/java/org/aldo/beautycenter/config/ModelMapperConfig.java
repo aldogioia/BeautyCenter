@@ -4,7 +4,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.CustomerDao;
 import org.aldo.beautycenter.data.dao.OperatorDao;
-import org.aldo.beautycenter.data.dao.RoomDao;
 import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.*;
 import org.aldo.beautycenter.data.entities.*;
@@ -22,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ModelMapperConfig {
     private final PasswordEncoder passwordEncoder;
-    private final RoomDao roomDao;
     private final ServiceDao serviceDao;
     private final OperatorDao operatorDao;
     private final CustomerDao customerDao;
@@ -69,8 +67,6 @@ public class ModelMapperConfig {
         modelMapper.addMappings(new PropertyMap<CreateBookingDto, Booking>() {
             @Override
             protected void configure() {
-                using(ctx -> roomDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Stanza non trovata")))
-                        .map(source.getRoom(), destination.getRoom());
                 using(ctx -> serviceDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Servizio non trovato")))
                         .map(source.getService(), destination.getService());
                 using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
@@ -138,6 +134,21 @@ public class ModelMapperConfig {
             protected void configure() {
                 map().setRole(Role.ROLE_CUSTOMER);
                 using(passwordConverter).map(source.getPassword(), destination.getPassword());
+            }
+        });
+
+        //mappatura per il bookingDto
+        modelMapper.addMappings(new PropertyMap<Booking, BookingDto>() {
+            @Override
+            protected void configure() {
+                map().setRoom(source.getRoom().getId());
+
+                using(ctx -> modelMapper.map(source.getService(), SummaryServiceDto.class))
+                        .map(source, destination.getService());
+                using(ctx -> modelMapper.map(source.getOperator(), SummaryOperatorDto.class))
+                        .map(source, destination.getOperator());
+                using(ctx -> modelMapper.map(source.getCustomer(), SummaryCustomerDto.class))
+                        .map(source, destination.getCustomer());
             }
         });
 

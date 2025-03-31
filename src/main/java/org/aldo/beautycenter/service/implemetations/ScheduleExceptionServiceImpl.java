@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.ScheduleExceptionDao;
 import org.aldo.beautycenter.data.dto.CreateScheduleExceptionDto;
+import org.aldo.beautycenter.data.dto.ScheduleExceptionDto;
 import org.aldo.beautycenter.data.dto.UpdateScheduleExceptionDto;
 import org.aldo.beautycenter.data.entities.ScheduleException;
 import org.aldo.beautycenter.service.interfaces.ScheduleExceptionService;
@@ -17,6 +18,15 @@ import java.util.List;
 public class ScheduleExceptionServiceImpl implements ScheduleExceptionService {
     private final ScheduleExceptionDao scheduleExceptionDao;
     private final ModelMapper modelMapper;
+
+    @Override
+    public List<ScheduleExceptionDto> getOperatorScheduleExceptions(String operatorId) {
+        return scheduleExceptionDao.findAllByOperatorId(operatorId)
+                .stream()
+                .map(scheduleException -> modelMapper.map(scheduleException, ScheduleExceptionDto.class))
+                .toList();
+    }
+
     @Override
     public void createScheduleExceptions(List<CreateScheduleExceptionDto> createScheduleExceptionDto) {
         List<ScheduleException> scheduleExceptions = createScheduleExceptionDto

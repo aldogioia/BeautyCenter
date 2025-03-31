@@ -1,11 +1,13 @@
 package org.aldo.beautycenter.service.interfaces;
 
 import org.aldo.beautycenter.data.dto.CreateStandardScheduleDto;
+import org.aldo.beautycenter.data.dto.StandardScheduleDto;
 import org.aldo.beautycenter.data.dto.UpdateStandardScheduleDto;
 
 import java.util.List;
 
 public interface StandardScheduleService {
+    List<StandardScheduleDto> getOperatorStandardSchedules(String operatorId);
     void createSchedules(List<CreateStandardScheduleDto> createStandardScheduleDto);
 
     void updateSchedules(List<UpdateStandardScheduleDto> createStandardScheduleDto);
