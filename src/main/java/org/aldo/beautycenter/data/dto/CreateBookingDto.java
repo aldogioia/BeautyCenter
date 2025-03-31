@@ -4,7 +4,6 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidOperatorId;
-import org.aldo.beautycenter.security.customAnnotation.annotation.ValidRoomId;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidServiceId;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidCustomerId;
 
@@ -31,8 +30,4 @@ public class CreateBookingDto {
     @NotNull(message = "L'operatore è obbligatorio")
     @ValidOperatorId
     private String operator;
-
-    @NotNull(message = "La stanza è obbligatorio")
-    @ValidRoomId
-    private String room;
 }

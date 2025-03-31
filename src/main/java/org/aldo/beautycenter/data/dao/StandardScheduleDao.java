@@ -5,8 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.DayOfWeek;
+import java.util.List;
 
 @Repository
 public interface StandardScheduleDao extends JpaRepository<StandardSchedule, String> {
+    List<StandardSchedule> findAllByOperatorId(String operatorId);
     StandardSchedule findByOperatorIdAndDay(String operatorId, DayOfWeek day);
 }

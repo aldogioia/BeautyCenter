@@ -3,6 +3,7 @@ package org.aldo.beautycenter.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.CreateStandardScheduleDto;
+import org.aldo.beautycenter.data.dto.StandardScheduleDto;
 import org.aldo.beautycenter.data.dto.UpdateStandardScheduleDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidStandardScheduleId;
@@ -24,6 +25,15 @@ import java.util.List;
 public class StandardScheduleController {
     private final StandardScheduleService standardScheduleService;
 
+    @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<StandardScheduleDto>> getOperatorStandardSchedules(
+            @RequestParam String operatorId
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(standardScheduleService.getOperatorStandardSchedules(operatorId));
+    }
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> createStandardSchedules(
@@ -44,7 +54,6 @@ public class StandardScheduleController {
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
-
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> deleteStandardSchedules(

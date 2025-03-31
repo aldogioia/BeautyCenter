@@ -3,6 +3,7 @@ package org.aldo.beautycenter.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.CreateScheduleExceptionDto;
+import org.aldo.beautycenter.data.dto.ScheduleExceptionDto;
 import org.aldo.beautycenter.data.dto.UpdateScheduleExceptionDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidScheduleExceptionId;
@@ -24,6 +25,15 @@ import java.util.List;
 public class ScheduleExceptionController {
     private final ScheduleExceptionService scheduleExceptionService;
 
+    @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<ScheduleExceptionDto>> getOperatorScheduleExceptions(
+            @RequestParam String operatorId
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(scheduleExceptionService.getOperatorScheduleExceptions(operatorId));
+    }
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> createScheduleExceptions(
@@ -44,7 +54,6 @@ public class ScheduleExceptionController {
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
-
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> deleteScheduleExceptions(
