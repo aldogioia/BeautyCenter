@@ -43,14 +43,6 @@ public class RoomServiceImpl implements RoomService {
         Room room = modelMapper.map(createRoomDto, Room.class);
         room.setServices(serviceDao.findAllById(createRoomDto.getServices()));
         roomDao.save(room);
-
-//        serviceDao.findAllById(createRoomDto.getServices())
-//                .forEach(service -> {
-//                    org.aldo.beautycenter.data.entities.RoomService roomService = new org.aldo.beautycenter.data.entities.RoomService();
-//                    roomService.setRoom(room);
-//                    roomService.setService(service);
-//                    roomServiceDao.save(roomService);
-//                });
     }
 
     @Override
@@ -61,29 +53,6 @@ public class RoomServiceImpl implements RoomService {
         room.setServices(serviceDao.findAllById(updateRoomDto.getServices()));
         roomDao.save(room);
     }
-
-//    @Override
-//    @Transactional
-//    public void updateRoom(UpdateRoomDto updateRoomDto) {
-//        Room room = roomDao.findById(updateRoomDto.getId())
-//                .orElseThrow(() -> new EntityNotFoundException("Stanza non trovata"));
-//
-//        roomServiceDao.deleteAllByRoomId(updateRoomDto.getId());
-//        room.getRoomServices().clear();
-//
-//        modelMapper.map(updateRoomDto, room);
-//        roomDao.save(room);
-//
-//        List<org.aldo.beautycenter.data.entities.RoomService> roomServices = serviceDao.findAllById(updateRoomDto.getServices())
-//                .stream().map(service -> {
-//                    org.aldo.beautycenter.data.entities.RoomService roomService = new org.aldo.beautycenter.data.entities.RoomService();
-//                    roomService.setRoom(room);
-//                    roomService.setService(service);
-//                    return roomService;
-//                }).toList();
-//
-//        roomServiceDao.saveAll(roomServices);
-//    }
 
     @Override
     public void deleteRoom(String roomId) {

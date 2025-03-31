@@ -13,9 +13,9 @@ import java.time.LocalDate;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ScheduleException extends Schedule{
-    @Column(name = "date", nullable = false)
+    @Column(name = "date")
     private LocalDate date;
 
-    @Column(name="absent", nullable = false)
-    private boolean absent;
+    @Column(name="absent")
+    private Boolean absent;
 }

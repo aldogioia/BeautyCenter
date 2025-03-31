@@ -80,6 +80,42 @@ public class ModelMapperConfig {
             }
         });
 
+        //mappatura per la creazione di un turno standard
+        modelMapper.addMappings(new PropertyMap<CreateStandardScheduleDto, StandardSchedule>() {
+            @Override
+            protected void configure() {
+                using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
+                        .map(source.getOperatorId(), destination.getOperator());
+            }
+        });
+
+        //mappatura per l'aggiornamento di un turno standard
+        modelMapper.addMappings(new PropertyMap<UpdateStandardScheduleDto, StandardSchedule>() {
+            @Override
+            protected void configure() {
+                using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
+                        .map(source.getOperatorId(), destination.getOperator());
+            }
+        });
+
+        //mappatura per la creazione dell'eccezione di un turno
+        modelMapper.addMappings(new PropertyMap<CreateScheduleExceptionDto, StandardSchedule>() {
+            @Override
+            protected void configure() {
+                using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
+                        .map(source.getOperatorId(), destination.getOperator());
+            }
+        });
+
+        //mappatura per l'aggiornamento di un turno standard
+        modelMapper.addMappings(new PropertyMap<UpdateScheduleExceptionDto, StandardSchedule>() {
+            @Override
+            protected void configure() {
+                using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
+                        .map(source.getOperatorId(), destination.getOperator());
+            }
+        });
+
         //mappatura per la creazione di un servizio
         modelMapper.addMappings(new PropertyMap<CreateServiceDto, Service>() {
             @Override
