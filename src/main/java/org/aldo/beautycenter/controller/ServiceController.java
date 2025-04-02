@@ -34,20 +34,18 @@ public class ServiceController {
 
     @PostMapping(consumes = {"multipart/form-data"})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpStatus> createService(@Valid @ModelAttribute CreateServiceDto createServiceDto) {
-        serviceService.addService(createServiceDto);
+    public ResponseEntity<ServiceDto> createService(@Valid @ModelAttribute CreateServiceDto createServiceDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .build();
+                .body(serviceService.addService(createServiceDto));
     }
 
     @PatchMapping(consumes = {"multipart/form-data"})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpStatus> updateService(@Valid @ModelAttribute UpdateServiceDto updateServiceDto) {
-        serviceService.updateService(updateServiceDto);
+    public ResponseEntity<String> updateService(@Valid @ModelAttribute UpdateServiceDto updateServiceDto) {
         return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .build();
+                .status(HttpStatus.OK)
+                .body(serviceService.updateService(updateServiceDto));
     }
 
     @DeleteMapping

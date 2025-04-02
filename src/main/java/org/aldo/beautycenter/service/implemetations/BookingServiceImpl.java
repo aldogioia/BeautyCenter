@@ -42,7 +42,7 @@ public class BookingServiceImpl implements BookingService {
     }
     @Override
     @Transactional
-    public void addBooking(CreateBookingDto createBookingDto) {
+    public BookingDto addBooking(CreateBookingDto createBookingDto) {
         Boolean isOperatorBusy = bookingDao
                 .existsByDateAndTimeAndOperator_Id(
                         createBookingDto.getDate(),
@@ -61,6 +61,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = modelMapper.map(createBookingDto, Booking.class);
         booking.setRoom(room.get());
         bookingDao.save(booking);
+        return modelMapper.map(booking, BookingDto.class);
     }
     @Override
     public void deleteBooking(String bookingId) {

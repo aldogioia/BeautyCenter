@@ -69,16 +69,17 @@ public class OperatorServiceImpl implements OperatorService {
 
     @Override
     @Transactional
-    public void createOperator(CreateOperatorDto createOperatorDto) {
+    public OperatorDto createOperator(CreateOperatorDto createOperatorDto) {
         Operator operator = modelMapper.map(createOperatorDto, Operator.class);
         operator.setImgUrl(s3Service.uploadFile(createOperatorDto.getImage(), Constants.OPERATOR_FOLDER, createOperatorDto.getName()));
         operator.setServices(serviceDao.findAllById(createOperatorDto.getServices()));
         operatorDao.save(operator);
+        return modelMapper.map(operator, OperatorDto.class);
     }
 
     @Override
     @Transactional
-    public void updateOperator(UpdateOperatorDto updateOperatorDto) {
+    public String updateOperator(UpdateOperatorDto updateOperatorDto) {
         userDao.findByEmail(updateOperatorDto.getEmail())
                 .ifPresent(user -> {
                     if (!user.getId().equals(updateOperatorDto.getId()))
@@ -91,6 +92,7 @@ public class OperatorServiceImpl implements OperatorService {
         if (updateOperatorDto.getImage() != null)
             operator.setImgUrl(s3Service.uploadFile(updateOperatorDto.getImage(), Constants.OPERATOR_FOLDER, operator.getName()));
         operatorDao.save(operator);
+        return operator.getImgUrl();
     }
 
     @Override

@@ -32,11 +32,10 @@ public class RoomController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<HttpStatus> createRoom(@Valid @RequestBody CreateRoomDto createRoomDto) {
-        roomService.createRoom(createRoomDto);
+    public ResponseEntity<RoomDto> createRoom(@Valid @RequestBody CreateRoomDto createRoomDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .build();
+                .body(roomService.createRoom(createRoomDto));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

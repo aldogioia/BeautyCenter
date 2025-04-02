@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ServiceService {
     List<ServiceDto> getAllServices();
-    void addService(CreateServiceDto createServiceDto);
-    void updateService(UpdateServiceDto updateServiceDto);
+    ServiceDto addService(CreateServiceDto createServiceDto);
+    String updateService(UpdateServiceDto updateServiceDto);
     void deleteService(String serviceId);
 }
