@@ -9,7 +9,7 @@ import java.util.List;
 public interface RoomService {
     List<RoomDto> getAllRooms();
 
-    void createRoom(CreateRoomDto createRoomDto);
+    RoomDto createRoom(CreateRoomDto createRoomDto);
 
     void updateRoom(UpdateRoomDto updateRoomDto);
 

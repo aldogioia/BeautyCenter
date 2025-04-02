@@ -42,8 +42,9 @@ public class BookingController {
     }
     @PostMapping
     public ResponseEntity<BookingDto> createBooking(@Valid @RequestBody CreateBookingDto createBookingDto) {
-        bookingService.addBooking(createBookingDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(bookingService.addBooking(createBookingDto));
     }
     @DeleteMapping
     public ResponseEntity<Void> deleteBooking(@ValidBookingId @RequestParam String bookingId) {

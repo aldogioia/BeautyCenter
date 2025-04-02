@@ -28,19 +28,21 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public void addService(CreateServiceDto createServiceDto) {
+    public ServiceDto addService(CreateServiceDto createServiceDto) {
         org.aldo.beautycenter.data.entities.Service service = modelMapper.map(createServiceDto, org.aldo.beautycenter.data.entities.Service.class);
         service.setImgUrl(s3Service.uploadFile(createServiceDto.getImage(), Constants.SERVICE_FOLDER, createServiceDto.getName()));
         serviceDao.save(service);
+        return modelMapper.map(service, ServiceDto.class);
     }
 
     @Override
-    public void updateService(UpdateServiceDto updateServiceDto) {
+    public String updateService(UpdateServiceDto updateServiceDto) {
         org.aldo.beautycenter.data.entities.Service service = serviceDao.getReferenceById(updateServiceDto.getId());
         modelMapper.map(updateServiceDto, org.aldo.beautycenter.data.entities.Service.class);
         if (updateServiceDto.getImage() != null)
             s3Service.uploadFile(updateServiceDto.getImage(), Constants.SERVICE_FOLDER, service.getName());
         serviceDao.save(service);
+        return service.getImgUrl();
     }
 
     @Override

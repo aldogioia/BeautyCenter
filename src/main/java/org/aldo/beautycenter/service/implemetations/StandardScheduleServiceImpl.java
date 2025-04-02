@@ -28,12 +28,17 @@ public class StandardScheduleServiceImpl implements StandardScheduleService {
     }
 
     @Override
-    public void createSchedules(List<CreateStandardScheduleDto> createStandardScheduleDto) {
+    public List<StandardScheduleDto> createSchedules(List<CreateStandardScheduleDto> createStandardScheduleDto) {
         List<StandardSchedule> standardSchedules = createStandardScheduleDto
                 .stream()
                 .map(standardSchedule -> modelMapper.map(standardSchedule, StandardSchedule.class))
                 .toList();
         standardScheduleDao.saveAll(standardSchedules);
+
+        return standardSchedules
+                .stream()
+                .map(standardSchedule -> modelMapper.map(standardSchedule, StandardScheduleDto.class))
+                .toList();
     }
 
     @Override

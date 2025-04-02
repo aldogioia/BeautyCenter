@@ -39,10 +39,11 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public void createRoom(CreateRoomDto createRoomDto) {
+    public RoomDto createRoom(CreateRoomDto createRoomDto) {
         Room room = modelMapper.map(createRoomDto, Room.class);
         room.setServices(serviceDao.findAllById(createRoomDto.getServices()));
         roomDao.save(room);
+        return modelMapper.map(room, RoomDto.class);
     }
 
     @Override

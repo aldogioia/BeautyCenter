@@ -11,6 +11,6 @@ public interface BookingService {
     List<BookingDto> getCustomerBookingsInDate(String customerId, LocalDate date);
     List<BookingDto> getOperatorBookingsInDate(String userId, LocalDate date);
     List<Booking> getBookingsByDate(LocalDate date);
-    void addBooking(CreateBookingDto createBookingDto);
+    BookingDto addBooking(CreateBookingDto createBookingDto);
     void deleteBooking(String bookingId);
 }

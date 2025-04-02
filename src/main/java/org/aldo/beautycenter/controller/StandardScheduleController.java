@@ -36,13 +36,12 @@ public class StandardScheduleController {
     }
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpStatus> createStandardSchedules(
+    public ResponseEntity<List<StandardScheduleDto>> createStandardSchedules(
             @Valid @RequestBody List<CreateStandardScheduleDto> createStandardScheduleDto
     ) {
-        standardScheduleService.createSchedules(createStandardScheduleDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .build();
+                .body(standardScheduleService.createSchedules(createStandardScheduleDto));
     }
     @PutMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")

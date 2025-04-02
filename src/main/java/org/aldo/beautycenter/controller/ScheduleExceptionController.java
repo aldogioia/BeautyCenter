@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.CreateScheduleExceptionDto;
 import org.aldo.beautycenter.data.dto.ScheduleExceptionDto;
-import org.aldo.beautycenter.data.dto.UpdateScheduleExceptionDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidScheduleExceptionId;
 import org.aldo.beautycenter.service.interfaces.ScheduleExceptionService;
@@ -36,24 +35,23 @@ public class ScheduleExceptionController {
     }
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpStatus> createScheduleExceptions(
+    public ResponseEntity<List<ScheduleExceptionDto>> createScheduleExceptions(
             @Valid @RequestBody List<CreateScheduleExceptionDto> createScheduleExceptionDto
     ) {
-        scheduleExceptionService.createScheduleExceptions(createScheduleExceptionDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .build();
+                .body(scheduleExceptionService.createScheduleExceptions(createScheduleExceptionDto));
     }
-    @PutMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpStatus> updateScheduleExceptions(
-            @Valid @RequestBody List<UpdateScheduleExceptionDto> updateScheduleExceptionDto
-    ) {
-        scheduleExceptionService.updateScheduleExceptions(updateScheduleExceptionDto);
-        return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .build();
-    }
+//    @PutMapping
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<HttpStatus> updateScheduleExceptions(
+//            @Valid @RequestBody List<UpdateScheduleExceptionDto> updateScheduleExceptionDto
+//    ) {
+//        scheduleExceptionService.updateScheduleExceptions(updateScheduleExceptionDto);
+//        return ResponseEntity
+//                .status(HttpStatus.NO_CONTENT)
+//                .build();
+//    }
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> deleteScheduleExceptions(

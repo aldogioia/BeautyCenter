@@ -12,9 +12,9 @@ public interface OperatorService {
     List<OperatorDto> getAllOperators();
     List<LocalTime> getAvailableHours(String operatorId, LocalDate date, String serviceId);
 
-    void createOperator(CreateOperatorDto createOperatorDto);
+    OperatorDto createOperator(CreateOperatorDto createOperatorDto);
 
-    void updateOperator(UpdateOperatorDto updateOperatorDto);
+    String updateOperator(UpdateOperatorDto updateOperatorDto);
 
     void deleteOperator(String operatorId);
 }
