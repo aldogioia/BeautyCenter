@@ -14,7 +14,8 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "booking", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"date", "time", "operator_id"}),
-        @UniqueConstraint(columnNames = {"date", "time", "room_id"})
+        @UniqueConstraint(columnNames = {"date", "time", "room_id"}),
+        @UniqueConstraint(columnNames = {"date", "time", "customer_id"})
 })
 @Data
 @NoArgsConstructor
@@ -46,7 +47,4 @@ public class Booking extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
-
-    @Version
-    private Integer version;
 }

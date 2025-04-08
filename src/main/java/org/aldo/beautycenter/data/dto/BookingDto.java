@@ -7,8 +7,8 @@ import java.time.LocalTime;
 
 @Data
 public class BookingDto {
-    private String Id;
-    private SummaryServiceDto service;
+    private String id;
+    private ServiceDto service;
     private SummaryOperatorDto operator;
     private SummaryCustomerDto customer;
     private String room;
