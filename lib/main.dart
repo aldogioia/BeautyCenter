@@ -1,7 +1,18 @@
+import 'package:beauty_center_frontend/screen/main_screen/MainScaffold.dart';
+import 'package:beauty_center_frontend/utils/AppColors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'RouteGenerator.dart';
 
 void main() {
-  runApp(const MyApp());
+
+  runApp(
+    ProviderScope(
+      child: const MyApp()
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,114 +23,250 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      themeMode: ThemeMode.system,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: Colors.transparent,
+        colorScheme: ColorScheme.fromSwatch(
+          brightness: Brightness.light,
+          accentColor: AppColors.black,
+          primarySwatch: const MaterialColor(
+              0xFFD3B6F9,
+              <int, Color>{
+                50: Color(0xFFF3EAFE),
+                100: Color(0xFFE3CCFB),
+                200: Color(0xFFD3B6F9),
+                300: Color(0xFFBE98F3),
+                400: Color(0xFFAB7DED),
+                500: Color(0xFFD3B6F9), // Valore principale
+                600: Color(0xFF9C6EE0),
+                700: Color(0xFF8656D1),
+                800: Color(0xFF7243C2),
+                900: Color(0xFF5525A7),
+              },
+          ),
+          errorColor: AppColors.red,
+        ),
+        iconTheme: IconThemeData(
+          size: 24,
+          color: AppColors.black
+        ),
+        shadowColor: AppColors.black.withOpacity(0.1),
+        fontFamily: GoogleFonts.quicksand().fontFamily,
+        textTheme: GoogleFonts.quicksandTextTheme().copyWith(
+        // labelLarge – bianco, grande
+        labelLarge: GoogleFonts.quicksand(
+          decoration: TextDecoration.none,
+          color: AppColors.white,
+          fontSize: 24,
+          fontWeight: FontWeight.normal,
+        ),
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+        // labelMedium – bottoni principali
+        labelMedium: GoogleFonts.quicksand(
+          decoration: TextDecoration.none,
+          color: AppColors.black,
+          fontSize: 16,
+          fontWeight: FontWeight.normal,
+        ),
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+        // labelSmall – testi per azioni
+        labelSmall: GoogleFonts.quicksand(
+          decoration: TextDecoration.none,
+          color: AppColors.white.withOpacity(0.5),
+          fontWeight: FontWeight.normal,
+          fontSize: 16,
+        ),
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+        // displayLarge – testi generici
+        displayLarge: GoogleFonts.quicksand(
+          color: AppColors.black,
+          fontWeight: FontWeight.normal,
+          fontSize: 14,
+        ),
 
-  final String title;
+        // displayMedium – input field
+        displayMedium: GoogleFonts.quicksand(
+          color: AppColors.black,
+          fontWeight: FontWeight.normal,
+          fontSize: 12,
+        ),
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+        // displaySmall – input field
+        displaySmall: GoogleFonts.quicksand(
+          color: AppColors.black,
+          fontWeight: FontWeight.normal,
+          fontSize: 10,
+        ),
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        // headlineLarge – titoli
+        headlineLarge: GoogleFonts.quicksand(
+          color: AppColors.black,
+          fontWeight: FontWeight.w600,
+          fontSize: 24,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+
+
+      inputDecorationTheme: InputDecorationTheme(
+          errorMaxLines: 10,
+          contentPadding: const EdgeInsets.all(10),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: AppColors.black.withOpacity(0.1)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: AppColors.black.withOpacity(0.1)),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: AppColors.black.withOpacity(0.1)),
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: AppColors.primary, width: 1.5)
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: AppColors.red, width: 1.5),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: AppColors.red, width: 1.5),
+          ),
+          prefixIconColor: AppColors.black,
+          labelStyle: TextStyle(fontSize: 12, color: AppColors.black.withOpacity(0.5), fontWeight: FontWeight.normal),
+          hintStyle: TextStyle(fontSize: 12, color: AppColors.black.withOpacity(0.5), fontWeight: FontWeight.normal),
+          errorStyle: TextStyle(fontSize: 12, color: AppColors.red, fontWeight: FontWeight.normal, overflow: TextOverflow.visible)
+        ),
+
+        useMaterial3: true,
+      ),
+
+
+      darkTheme: ThemeData(
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: Colors.transparent,
+        colorScheme: ColorScheme.fromSwatch(
+          brightness: Brightness.dark,
+          accentColor: AppColors.white,
+          primarySwatch: const MaterialColor(
+            0xFFD3B6F9,
+            <int, Color>{
+              50: Color(0xFFF3EAFE),
+              100: Color(0xFFE3CCFB),
+              200: Color(0xFFD3B6F9),
+              300: Color(0xFFBE98F3),
+              400: Color(0xFFAB7DED),
+              500: Color(0xFFD3B6F9), // Valore principale
+              600: Color(0xFF9C6EE0),
+              700: Color(0xFF8656D1),
+              800: Color(0xFF7243C2),
+              900: Color(0xFF5525A7),
+            },
+          ),
+
+          errorColor: AppColors.red,
+        ),
+        iconTheme: IconThemeData(
+          size: 24,
+          color: AppColors.white
+        ),
+        fontFamily: GoogleFonts.quicksand().fontFamily,
+        textTheme: GoogleFonts.quicksandTextTheme().copyWith(
+          // labelLarge – bottoni secondari (scuro: nero)
+          labelLarge: GoogleFonts.quicksand(
+            decoration: TextDecoration.none,
+            color: AppColors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.normal,
+          ),
+
+          // labelMedium – bottoni principali (scuro: bianco)
+          labelMedium: GoogleFonts.quicksand(
+            decoration: TextDecoration.none,
+            color: AppColors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+          ),
+
+          // labelSmall – testi per azioni (scuro: nero opaco)
+          labelSmall: GoogleFonts.quicksand(
+            decoration: TextDecoration.none,
+            color: AppColors.black.withOpacity(0.5),
+            fontWeight: FontWeight.normal,
+            fontSize: 16,
+          ),
+
+          // displayLarge – testi generici (scuro: bianco)
+          displayLarge: GoogleFonts.quicksand(
+            color: AppColors.white,
+            fontWeight: FontWeight.normal,
+            fontSize: 14,
+          ),
+
+          // displayMedium – input field (scuro: bianco)
+          displayMedium: GoogleFonts.quicksand(
+            color: AppColors.white,
+            fontWeight: FontWeight.normal,
+            fontSize: 12,
+          ),
+
+          // displaySmall – input field (scuro: bianco)
+          displaySmall: GoogleFonts.quicksand(
+            color: AppColors.white,
+            fontWeight: FontWeight.normal,
+            fontSize: 10,
+          ),
+
+          // headlineLarge – titoli (scuro: bianco)
+          headlineLarge: GoogleFonts.quicksand(
+            color: AppColors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+          ),
+        ),
+
+
+        inputDecorationTheme: InputDecorationTheme(
+            errorMaxLines: 10,
+            contentPadding: const EdgeInsets.all(10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: AppColors.white.withOpacity(0.1)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: AppColors.white.withOpacity(0.1)),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: AppColors.white.withOpacity(0.1)),
+            ),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide(color: AppColors.primary, width: 1.5)
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: AppColors.red, width: 1.5),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: AppColors.red, width: 1.5),
+            ),
+            prefixIconColor: AppColors.white,
+            labelStyle: TextStyle(fontSize: 12, color: AppColors.white.withOpacity(0.5), fontWeight: FontWeight.normal),
+            hintStyle: TextStyle(fontSize: 12, color: AppColors.white.withOpacity(0.5), fontWeight: FontWeight.normal),
+            errorStyle: TextStyle(fontSize: 12, color: AppColors.red, fontWeight: FontWeight.normal, overflow: TextOverflow.visible)
+        ),
+
+        useMaterial3: true,
+      ),
+      home: const MainScaffold(),
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
+
