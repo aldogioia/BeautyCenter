@@ -1,10 +1,10 @@
+import 'ServiceDto.dart';
 import 'SummaryCustomerDto.dart';
 import 'SummaryOperatorDto.dart';
-import 'SummaryServiceDto.dart';
 
 class BookingDto {
   final String id;
-  final SummaryServiceDto service;
+  final ServiceDto service;
   final SummaryOperatorDto operator;
   final SummaryCustomerDto customer;
   final String room;
@@ -24,7 +24,7 @@ class BookingDto {
   factory BookingDto.fromJson(Map<String, dynamic> json) {
     return BookingDto(
       id: json['id'],
-      service: SummaryServiceDto.fromJson(json['service']),
+      service: ServiceDto.fromJson(json['service']),
       operator: SummaryOperatorDto.fromJson(json['operator']),
       customer: SummaryCustomerDto.fromJson(json['customer']),
       room: json['room'],
@@ -47,7 +47,7 @@ class BookingDto {
 
   BookingDto copyWith({
     String? id,
-    SummaryServiceDto? service,
+    ServiceDto? service,
     SummaryOperatorDto? operator,
     SummaryCustomerDto? customer,
     String? room,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../utils/AppColors.dart';
+import '../utils/app_colors.dart';
 
 class SnackBarHandler {
   static final SnackBarHandler _instance = SnackBarHandler._privateConstructor();

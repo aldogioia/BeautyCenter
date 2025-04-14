@@ -3,7 +3,7 @@ import 'package:beauty_center_frontend/widget/CustomTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 
 class SetPasswordScreen extends ConsumerStatefulWidget {
   const SetPasswordScreen({super.key});

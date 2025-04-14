@@ -1,25 +1,19 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../api/RoomService.dart';
+import '../api/room_service.dart';
 import '../model/RoomDto.dart';
 import '../model/SummaryServiceDto.dart';
 import '../model/UpdateRoomDto.dart';
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 
 
-part 'RoomProvider.g.dart';
+part 'room_provider.g.dart';
 
 
 class RoomProviderData {
   final List<RoomDto> rooms;
 
   RoomProviderData({List<RoomDto>? rooms}) : rooms = rooms ?? [];
-
-  factory RoomProviderData.empty() {
-    return RoomProviderData(
-        rooms: []
-    );
-  }
 
   RoomProviderData copyWith({List<RoomDto>? rooms}) {
     return RoomProviderData(rooms: rooms ?? this.rooms);
@@ -33,7 +27,7 @@ class Room extends _$Room {
 
   @override
   RoomProviderData build(){
-    return RoomProviderData.empty();
+    return RoomProviderData();
   }
 
   Future<String> getAllRooms() async {

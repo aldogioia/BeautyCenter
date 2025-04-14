@@ -1,11 +1,11 @@
-import 'package:beauty_center_frontend/provider/CustomerProvider.dart';
+import 'package:beauty_center_frontend/provider/customer_provider.dart';
 import 'package:beauty_center_frontend/widget/RowItem.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/CustomModalBottomSheet.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/CustomerUpdateModalBottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 import '../widget/CustomTextField.dart';
 
 class UsersScreen extends ConsumerStatefulWidget {
@@ -44,7 +44,8 @@ class _UsersScreenState extends ConsumerState<UsersScreen> {
           final customer = customers[index - 1];
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child:  RowItem(    // todo aggiungere icona
+              child:  RowItem(
+                icon: Icons.account_circle_outlined,
                 text: "${customer.name} ${customer.surname}",
                 onTap: () => CustomModalBottomSheet.show(
                   child: CustomerUpdateModalBottomSheet(customerDto: customer),

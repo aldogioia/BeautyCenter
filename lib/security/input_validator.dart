@@ -1,5 +1,5 @@
 
-import 'package:beauty_center_frontend/utils/Strings.dart';
+import 'package:beauty_center_frontend/utils/strings.dart';
 
 class InputValidator {
   static String? _validateServiceOrRoomName(String? value, String errorText) {

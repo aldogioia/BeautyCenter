@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:beauty_center_frontend/handler/SnackBarHandler.dart';
-import 'package:beauty_center_frontend/provider/OperatorProvider.dart';
+import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
+import 'package:beauty_center_frontend/provider/operator_provider.dart';
 import 'package:beauty_center_frontend/widget/CustomImagePicker.dart';
 import 'package:beauty_center_frontend/widget/CustomTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../security/InputValidator.dart';
+import '../../security/input_validator.dart';
 import '../../model/SummaryServiceDto.dart';
-import '../../utils/Strings.dart';
+import '../../utils/strings.dart';
 import '../CustomButton.dart';
 import '../CustomServiceWrap.dart';
 

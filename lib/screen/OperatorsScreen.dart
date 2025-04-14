@@ -1,5 +1,5 @@
 import 'package:beauty_center_frontend/model/OperatorDto.dart';
-import 'package:beauty_center_frontend/provider/OperatorProvider.dart';
+import 'package:beauty_center_frontend/provider/operator_provider.dart';
 import 'package:beauty_center_frontend/widget/CustomDialog.dart';
 import 'package:beauty_center_frontend/widget/DeletePopUp.dart';
 import 'package:beauty_center_frontend/widget/RowItem.dart';
@@ -9,7 +9,7 @@ import 'package:beauty_center_frontend/widget/modal-bottom-sheet/OperatorUpdateM
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 import '../widget/CustomTextField.dart';
 
 class OperatorsScreen extends ConsumerStatefulWidget {

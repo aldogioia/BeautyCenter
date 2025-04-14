@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/Strings.dart';
+import '../../utils/strings.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});

@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:beauty_center_frontend/security/InputValidator.dart';
-import 'package:beauty_center_frontend/handler/SnackBarHandler.dart';
-import 'package:beauty_center_frontend/provider/ServiceProvider.dart';
+import 'package:beauty_center_frontend/security/input_validator.dart';
+import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
+import 'package:beauty_center_frontend/provider/service_provider.dart';
 import 'package:beauty_center_frontend/widget/CustomButton.dart';
 import 'package:beauty_center_frontend/widget/CustomImagePicker.dart';
 import 'package:beauty_center_frontend/widget/CustomTextField.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/Strings.dart';
+import '../../utils/strings.dart';
 
 class ServiceAddModalBottomSheet extends ConsumerStatefulWidget {
   const ServiceAddModalBottomSheet({super.key});

@@ -7,11 +7,13 @@ class RowItem extends StatelessWidget {
     required this.text,
     this.imgUrl,
     this.onTap,
-    this.onLongPress
+    this.onLongPress,
+    this.icon
   });
 
   final String text;
   final String? imgUrl;
+  final IconData? icon;
   final void Function()? onTap;
   final void Function()? onLongPress;
 
@@ -46,6 +48,10 @@ class RowItem extends StatelessWidget {
                 ),
 
                 const SizedBox(width: 10),
+              ],
+
+              if(icon != null) ...[
+                Icon(icon!, size: 24)
               ],
 
               Text(

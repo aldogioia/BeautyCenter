@@ -1,10 +1,14 @@
 import 'package:beauty_center_frontend/screen/main_screen/MainScaffold.dart';
-import 'package:beauty_center_frontend/utils/AppColors.dart';
+import 'package:beauty_center_frontend/utils/app_colors.dart';
+import 'package:beauty_center_frontend/widget/CustomButton.dart';
+import 'package:beauty_center_frontend/widget/modal-bottom-sheet/BookServiceModalBottomSheet.dart';
+import 'package:beauty_center_frontend/widget/modal-bottom-sheet/CustomModalBottomSheet.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'RouteGenerator.dart';
+import 'route_generator.dart';
 
 void main() {
 
@@ -27,6 +31,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         splashFactory: NoSplash.splashFactory,
         highlightColor: Colors.transparent,
+
+        cupertinoOverrideTheme: CupertinoThemeData(
+          primaryColor: AppColors.primary,
+        ),
+
         colorScheme: ColorScheme.fromSwatch(
           brightness: Brightness.light,
           accentColor: AppColors.black,
@@ -54,6 +63,7 @@ class MyApp extends StatelessWidget {
         shadowColor: AppColors.black.withOpacity(0.1),
         fontFamily: GoogleFonts.quicksand().fontFamily,
         textTheme: GoogleFonts.quicksandTextTheme().copyWith(
+
         // labelLarge – bianco, grande
         labelLarge: GoogleFonts.quicksand(
           decoration: TextDecoration.none,
@@ -121,7 +131,7 @@ class MyApp extends StatelessWidget {
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: AppColors.black.withOpacity(0.1)),
+            borderSide: BorderSide(color: AppColors.black.withAlpha((255* 0.1).toInt())),
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
@@ -264,7 +274,20 @@ class MyApp extends StatelessWidget {
 
         useMaterial3: true,
       ),
-      home: const MainScaffold(),
+      //home: const MainScaffold(),
+      home: Container(
+        color: Colors.red,
+        width: double.infinity,
+        height: double.infinity,
+        child: Center(
+          child: Builder(
+            builder: (context) => CustomButton(
+                onPressed: () => CustomModalBottomSheet.show(child: BookServiceModalBottomSheet(), context: context),
+                text: "premi"
+            )
+          )
+        ),
+      ),
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

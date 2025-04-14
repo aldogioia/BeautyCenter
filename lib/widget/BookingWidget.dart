@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/BookingDto.dart';
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 
 class BookingWidget extends StatelessWidget {
   const BookingWidget({
@@ -32,7 +32,7 @@ class BookingWidget extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
-                  image: AssetImage('assets/images/login-image.jpeg'),    // todo mettere NetworkImage e prendere imgUrl del service
+                  image: AssetImage(booking.service.imgUrl),    // todo mettere NetworkImage
                   fit: BoxFit.cover
               )
             )
@@ -49,7 +49,7 @@ class BookingWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(booking.service.name, style: displayLarge),
-                        Text("15€", style: displayMedium)    // todo prendere il price, al momento aldo non lo passa nel dto
+                        Text("${booking.service.price} €", style: displayMedium)
                       ]
                   ),
 
@@ -61,7 +61,7 @@ class BookingWidget extends StatelessWidget {
                         Text("${booking.room} ", style: displayMedium),
                         Text("${Strings.at} ", style: lightDisplayMedium),
                         Text("${booking.time.hour.toString().padLeft(2,"0")} ${booking.time.minute.toString().padLeft(2,"0")} ", style: displayMedium),
-                        Text("(30 min)", style: lightDisplayMedium),    // todo prendere durata del servizio
+                        Text("(${booking.service.duration} min)", style: lightDisplayMedium),
                       ]
                   ),
 
@@ -73,18 +73,17 @@ class BookingWidget extends StatelessWidget {
 
                   // Customer name + surname + phone icon
                   Row(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("${booking.customer.name} ${booking.customer.surname}", style: displaySmall),
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("${booking.customer.name} ${booking.customer.surname}", style: displaySmall),
 
-                        GestureDetector(
-                          onTap: () {},   // todo
-                          child: Icon(Icons.phone_outlined, color: Theme.of(context).colorScheme.primary, size: 16),
-                        )
-
-                      ]
+                      GestureDetector(
+                        onTap: () {},   // todo
+                        child: Icon(Icons.phone_outlined, color: Theme.of(context).colorScheme.primary, size: 16),
+                      )
+                    ]
                   )
                 ]
             )

@@ -1,23 +1,17 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../api/CustomerService.dart';
+import '../api/customer_service.dart';
 import '../model/CustomerDto.dart';
 import '../model/UpdateCustomerDto.dart';
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 
-part 'CustomerProvider.g.dart';
+part 'customer_provider.g.dart';
 
 
 class CustomerProviderData {
   final List<CustomerDto> customers;
 
   CustomerProviderData({List<CustomerDto>? customers}) : customers = customers ?? [];
-
-  factory CustomerProviderData.empty() {
-    return CustomerProviderData(
-        customers: []
-    );
-  }
 
   CustomerProviderData copyWith({List<CustomerDto>? customers}) {
     return CustomerProviderData(customers: customers ?? this.customers);
@@ -32,7 +26,7 @@ class Customer extends _$Customer {
 
   @override
   CustomerProviderData build(){
-    return CustomerProviderData.empty();
+    return CustomerProviderData();
   }
 
   Future<String> getAllRooms() async {

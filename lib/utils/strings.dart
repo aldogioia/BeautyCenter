@@ -27,8 +27,13 @@ class Strings {
   static const String at = "alle";
   static const String select_day = "Seleziona un giorno";
   static const String select_operator = "Seleziona un operatore";
+  static const String select_hours = "Seleziona un orario";
   static const String select_filter = "Imposta filtro";
   static const String filter_set = "Filtro impostato";
+  static const String book = "Prenota";
+  static const String next = "Avanti";
+  static const String remember_to_arrive_10_minutes_early = "Ricorda di arrivare con 10 minuti di anticipo per non rischiare di perdere l’appuntamento.";
+
 
   static const String operator = "operatore";
   static const String service = "servizio";

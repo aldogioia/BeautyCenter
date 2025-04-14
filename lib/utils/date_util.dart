@@ -54,4 +54,14 @@ class DateUtil {
   static bool isSameDay({required DateTime date1, required DateTime date2}){
     return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
   }
+
+  static List<DateTime> generateDays(DateTime start, DateTime end) {
+    final days = <DateTime>[];
+    DateTime current = start;
+    while (current.isBefore(end)) {
+      days.add(current);
+      current = current.add(const Duration(days: 1));
+    }
+    return days;
+  }
 }

@@ -1,12 +1,12 @@
 
-import 'package:beauty_center_frontend/provider/RoomProvider.dart';
+import 'package:beauty_center_frontend/provider/room_provider.dart';
 import 'package:beauty_center_frontend/widget/RowItem.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/CustomModalBottomSheet.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/RoomUpdateModalBottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 import '../widget/CustomDialog.dart';
 import '../widget/CustomTextField.dart';
 import '../widget/DeletePopUp.dart';
@@ -47,7 +47,8 @@ class _RoomsScreenState extends ConsumerState<RoomsScreen> {
           final room = rooms[index - 1];
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: RowItem(   // todo aggiungere icona
+              child: RowItem(
+                icon: Icons.storefront,
                 text: room.name,
                 onTap: () => CustomModalBottomSheet.show(child: RoomUpdateModalBottomSheet(roomDto: room), context: context),
                 onLongPress: () {

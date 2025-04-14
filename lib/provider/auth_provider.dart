@@ -1,10 +1,10 @@
-import 'package:beauty_center_frontend/api/AuthService.dart';
-import 'package:beauty_center_frontend/security/SecureStorage.dart';
+import 'package:beauty_center_frontend/api/auth_service.dart';
+import 'package:beauty_center_frontend/security/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 
-part 'AuthProvider.g.dart';
+part 'auth_provider.g.dart';
 
 @riverpod
 class Auth extends _$Auth {

@@ -1,7 +1,7 @@
 import 'package:beauty_center_frontend/widget/CustomButton.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});

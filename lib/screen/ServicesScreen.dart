@@ -1,4 +1,4 @@
-import 'package:beauty_center_frontend/provider/ServiceProvider.dart';
+import 'package:beauty_center_frontend/provider/service_provider.dart';
 import 'package:beauty_center_frontend/widget/CustomTextField.dart';
 import 'package:beauty_center_frontend/widget/ServiceWidget.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/CustomModalBottomSheet.dart';
@@ -6,7 +6,7 @@ import 'package:beauty_center_frontend/widget/modal-bottom-sheet/ServiceUpdateMo
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 import '../widget/CustomDialog.dart';
 import '../widget/DeletePopUp.dart';
 

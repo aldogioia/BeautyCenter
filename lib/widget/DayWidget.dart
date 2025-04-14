@@ -1,4 +1,4 @@
-import 'package:beauty_center_frontend/utils/DateUtil.dart';
+import 'package:beauty_center_frontend/utils/date_util.dart';
 import 'package:flutter/material.dart';
 
 class DayWidget extends StatelessWidget {

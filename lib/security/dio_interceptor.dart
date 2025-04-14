@@ -1,4 +1,4 @@
-import 'package:beauty_center_frontend/security/SecureStorage.dart';
+import 'package:beauty_center_frontend/security/secure_storage.dart';
 import 'package:dio/dio.dart';
 
 class DioInterceptor extends Interceptor {

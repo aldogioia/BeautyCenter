@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:beauty_center_frontend/handler/SnackBarHandler.dart';
+import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
 import 'package:beauty_center_frontend/widget/CustomButton.dart';
 import 'package:beauty_center_frontend/widget/CustomTextField.dart';
 import 'package:beauty_center_frontend/widget/ServiceWidget.dart';
@@ -8,10 +8,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../security/InputValidator.dart';
+import '../../security/input_validator.dart';
 import '../../model/ServiceDto.dart';
-import '../../provider/ServiceProvider.dart';
-import '../../utils/Strings.dart';
+import '../../provider/service_provider.dart';
+import '../../utils/strings.dart';
 
 class ServiceUpdateModalBottomSheet extends ConsumerStatefulWidget {
   const ServiceUpdateModalBottomSheet({

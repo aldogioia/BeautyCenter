@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:beauty_center_frontend/api/ServiceService.dart';
+import 'package:beauty_center_frontend/api/service_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/ServiceDto.dart';
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 
-part 'ServiceProvider.g.dart';
+part 'service_provider.g.dart';
 
 
 class ServiceProviderData {
@@ -14,11 +14,6 @@ class ServiceProviderData {
 
   ServiceProviderData({List<ServiceDto>? services}) : services = services ?? [];
 
-  factory ServiceProviderData.empty() {
-    return ServiceProviderData(
-      services: []
-    );
-  }
 
   ServiceProviderData copyWith({List<ServiceDto>? services}) {
     return ServiceProviderData(services: services ?? this.services);
@@ -32,7 +27,7 @@ class Service extends _$Service {
 
   @override
   ServiceProviderData build(){
-    return ServiceProviderData.empty();
+    return ServiceProviderData();
   }
 
   Future<String> getAllServices() async {

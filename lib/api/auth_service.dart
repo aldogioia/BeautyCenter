@@ -1,4 +1,4 @@
-import 'package:beauty_center_frontend/api/ApiService.dart';
+import 'package:beauty_center_frontend/api/api_service.dart';
 import 'package:dio/dio.dart';
 
 class AuthService {

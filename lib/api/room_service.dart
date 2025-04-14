@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../model/UpdateRoomDto.dart';
-import 'ApiService.dart';
+import 'api_service.dart';
 
 class RoomService {
   final Dio _dio = ApiService.instance.dio;

@@ -1,27 +1,34 @@
 import 'dart:io';
 
-import 'package:beauty_center_frontend/api/OperatorService.dart';
+import 'package:beauty_center_frontend/api/operator_service.dart';
 import 'package:beauty_center_frontend/model/OperatorDto.dart';
 import 'package:beauty_center_frontend/model/SummaryServiceDto.dart';
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 
-part 'OperatorProvider.g.dart';
+part 'operator_provider.g.dart';
 
 class OperatorProviderData {
   final List<OperatorDto> operators;
+  final List<TimeOfDay> availableTimes;
 
-  OperatorProviderData({List<OperatorDto>? operators}) : operators = operators ?? [];
+  OperatorProviderData({
+    List<OperatorDto>? operators,
+    List<TimeOfDay>? availableTimes
+  }) :  operators = operators ?? [],
+        availableTimes = availableTimes ?? [];
 
-  factory OperatorProviderData.empty() {
+
+  OperatorProviderData copyWith({
+    List<OperatorDto>? operators,
+    List<TimeOfDay>? availableTimes
+  }) {
     return OperatorProviderData(
-      operators: []
+      operators: operators ?? this.operators,
+      availableTimes: availableTimes ?? this.availableTimes
     );
-  }
-
-  OperatorProviderData copyWith({List<OperatorDto>? operators}) {
-    return OperatorProviderData(operators: operators ?? this.operators);
   }
 }
 
@@ -31,7 +38,7 @@ class Operator extends _$Operator {
 
   @override
   OperatorProviderData build(){
-    return OperatorProviderData.empty();
+    return OperatorProviderData();
   }
 
   Future<String> getAllOperators() async {
@@ -120,6 +127,29 @@ class Operator extends _$Operator {
           operators: newList
       );
       return MapEntry(true, Strings.operator_delete_successfully);
+    }
+    return MapEntry(false, (response.data as Map<String, dynamic>)['message']);
+  }
+
+
+  Future<MapEntry<bool, String>> getAvailableHours({
+    required String operatorId,
+    required DateTime date,
+    required String serviceId
+  }) async {
+    final response = await _operatorService.getAvailableHours(operatorId: operatorId, date: date, serviceId: serviceId);
+
+    if(response == null) return MapEntry(false, Strings.connection_error);
+    if(response.statusCode == 200){
+      state = state.copyWith(
+        availableTimes: response.data.map((str) {
+          final parts = str.split(":");
+          return TimeOfDay(
+            hour: int.parse(parts[0]),
+            minute: int.parse(parts[1]),
+          );
+        }).toList()
+      );
     }
     return MapEntry(false, (response.data as Map<String, dynamic>)['message']);
   }

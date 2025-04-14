@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../handler/SnackBarHandler.dart';
+import '../../handler/snack_bar_handler.dart';
 import '../../model/OperatorDto.dart';
 import '../../model/SummaryServiceDto.dart';
-import '../../provider/OperatorProvider.dart';
-import '../../utils/Strings.dart';
+import '../../provider/operator_provider.dart';
+import '../../utils/strings.dart';
 import '../CustomButton.dart';
 import '../CustomServiceWrap.dart';
 

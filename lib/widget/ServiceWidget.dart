@@ -33,7 +33,7 @@ class ServiceWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               image: DecorationImage(
                   image: image == null
-                      ? AssetImage('assets/images/login-image.jpeg') // todo prendere l'immagine dal dto e usare NetworkImage
+                      ? AssetImage(serviceDto.imgUrl) // todo usare NetworkImage
                       : FileImage(image!),
                   fit: BoxFit.cover
               )

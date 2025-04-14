@@ -1,10 +1,10 @@
-import 'package:beauty_center_frontend/api/BookingService.dart';
+import 'package:beauty_center_frontend/api/booking_service.dart';
 import 'package:beauty_center_frontend/model/BookingDto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 
-part 'BookingProvider.g.dart';
+part 'booking_provider.g.dart';
 
 class BookingProviderData {
   final List<BookingDto> operatorBookings;

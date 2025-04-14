@@ -1,5 +1,5 @@
 import 'package:beauty_center_frontend/model/SummaryOperatorDto.dart';
-import 'package:beauty_center_frontend/provider/BookingProvider.dart';
+import 'package:beauty_center_frontend/provider/booking_provider.dart';
 import 'package:beauty_center_frontend/widget/BookingWidget.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/BookingFilterModalBottomSheet.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/CustomModalBottomSheet.dart';
@@ -8,9 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/BookingDto.dart';
 import '../../model/OperatorDto.dart';
-import '../../provider/OperatorProvider.dart';
-import '../../utils/DateUtil.dart';
-import '../../utils/Strings.dart';
+import '../../provider/operator_provider.dart';
+import '../../utils/date_util.dart';
+import '../../utils/strings.dart';
 
 class BookingScreen extends ConsumerStatefulWidget {
   const BookingScreen({super.key});

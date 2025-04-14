@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../Category.dart';
-import '../../utils/Strings.dart';
+import '../../category.dart';
+import '../../utils/strings.dart';
 import '../../widget/CustomChip.dart';
 import '../../widget/modal-bottom-sheet/CustomModalBottomSheet.dart';
 import '../../widget/modal-bottom-sheet/OperatorAddModalBottomSheet.dart';

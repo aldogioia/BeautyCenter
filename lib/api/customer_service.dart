@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../model/UpdateCustomerDto.dart';
-import 'ApiService.dart';
+import 'api_service.dart';
 
 class CustomerService {
   final Dio _dio = ApiService.instance.dio;

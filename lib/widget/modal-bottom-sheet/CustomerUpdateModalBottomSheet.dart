@@ -1,14 +1,14 @@
-import 'package:beauty_center_frontend/security/InputValidator.dart';
-import 'package:beauty_center_frontend/handler/SnackBarHandler.dart';
+import 'package:beauty_center_frontend/security/input_validator.dart';
+import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
 import 'package:beauty_center_frontend/model/CustomerDto.dart';
 import 'package:beauty_center_frontend/model/UpdateCustomerDto.dart';
-import 'package:beauty_center_frontend/provider/CustomerProvider.dart';
+import 'package:beauty_center_frontend/provider/customer_provider.dart';
 import 'package:beauty_center_frontend/widget/CustomButton.dart';
 import 'package:beauty_center_frontend/widget/CustomTextField.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/Strings.dart';
+import '../../utils/strings.dart';
 
 class CustomerUpdateModalBottomSheet extends ConsumerStatefulWidget {
   const CustomerUpdateModalBottomSheet({

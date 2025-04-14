@@ -1,5 +1,5 @@
 import 'package:beauty_center_frontend/model/SummaryServiceDto.dart';
-import 'package:beauty_center_frontend/provider/ServiceProvider.dart';
+import 'package:beauty_center_frontend/provider/service_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

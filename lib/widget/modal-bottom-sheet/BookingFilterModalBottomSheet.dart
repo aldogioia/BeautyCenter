@@ -1,7 +1,7 @@
-import 'package:beauty_center_frontend/handler/SnackBarHandler.dart';
-import 'package:beauty_center_frontend/provider/BookingProvider.dart';
-import 'package:beauty_center_frontend/provider/OperatorProvider.dart';
-import 'package:beauty_center_frontend/utils/DateUtil.dart';
+import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
+import 'package:beauty_center_frontend/provider/booking_provider.dart';
+import 'package:beauty_center_frontend/provider/operator_provider.dart';
+import 'package:beauty_center_frontend/utils/date_util.dart';
 import 'package:beauty_center_frontend/widget/CustomButton.dart';
 import 'package:beauty_center_frontend/widget/DayWidget.dart';
 import 'package:beauty_center_frontend/widget/OperatorWidget.dart';
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/OperatorDto.dart';
-import '../../utils/Strings.dart';
+import '../../utils/strings.dart';
 
 class BookingFilterModalBottomSheet extends ConsumerStatefulWidget {
   const BookingFilterModalBottomSheet({
@@ -36,20 +36,10 @@ class _BookingFilterModalBottomSheetState extends ConsumerState<BookingFilterMod
   @override
   void initState() {
     _endDate = DateTime(_startDate.year + 1, _startDate.month, _startDate.day); // todo vedere se va bene come data finale un anno in più
-    _days = _generateDays(_startDate, _endDate);
+    _days = DateUtil.generateDays(_startDate, _endDate);
     _currentMonth = "${DateUtil.getItalianMonthName(month: _days.first.month)} ${_days.first.year}";
     _scrollController.addListener(_onScroll);
     super.initState();
-  }
-
-  List<DateTime> _generateDays(DateTime start, DateTime end) {
-    final days = <DateTime>[];
-    DateTime current = start;
-    while (current.isBefore(end)) {
-      days.add(current);
-      current = current.add(const Duration(days: 1));
-    }
-    return days;
   }
 
   void _onScroll() {
@@ -67,6 +57,9 @@ class _BookingFilterModalBottomSheetState extends ConsumerState<BookingFilterMod
       }
     }
   }
+
+
+  // todo gestire meglio il padding
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +107,7 @@ class _BookingFilterModalBottomSheetState extends ConsumerState<BookingFilterMod
 
         Padding(
             padding: const EdgeInsets.all(10),
-            child: Text(Strings.select_day, style: labelMedium)
+            child: Text(Strings.select_operator, style: labelMedium)
         ),
 
 

@@ -1,5 +1,5 @@
 import 'package:beauty_center_frontend/model/SummaryServiceDto.dart';
-import 'package:beauty_center_frontend/provider/RoomProvider.dart';
+import 'package:beauty_center_frontend/provider/room_provider.dart';
 import 'package:beauty_center_frontend/widget/CustomButton.dart';
 import 'package:beauty_center_frontend/widget/CustomServiceWrap.dart';
 import 'package:beauty_center_frontend/widget/CustomTextField.dart';
@@ -7,9 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../handler/SnackBarHandler.dart';
+import '../../handler/snack_bar_handler.dart';
 import '../../model/RoomDto.dart';
-import '../../utils/Strings.dart';
+import '../../utils/strings.dart';
 
 class RoomUpdateModalBottomSheet extends ConsumerStatefulWidget {
   const RoomUpdateModalBottomSheet({

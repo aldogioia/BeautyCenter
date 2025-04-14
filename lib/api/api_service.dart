@@ -1,4 +1,4 @@
-import 'package:beauty_center_frontend/security/DioInterceptor.dart';
+import 'package:beauty_center_frontend/security/dio_interceptor.dart';
 import 'package:dio/dio.dart';
 
 class ApiService {

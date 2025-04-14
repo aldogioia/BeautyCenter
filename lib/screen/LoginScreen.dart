@@ -1,15 +1,13 @@
-import 'package:beauty_center_frontend/handler/SnackBarHandler.dart';
-import 'package:beauty_center_frontend/provider/AuthProvider.dart';
+import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
+import 'package:beauty_center_frontend/provider/auth_provider.dart';
 import 'package:beauty_center_frontend/widget/CustomButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../security/InputValidator.dart';
-import '../utils/AppColors.dart';
-import '../utils/Strings.dart';
+import '../security/input_validator.dart';
+import '../utils/app_colors.dart';
+import '../utils/strings.dart';
 import '../widget/CustomTextField.dart';
-
-
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});

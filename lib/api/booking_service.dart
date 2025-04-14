@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import 'ApiService.dart';
+import 'api_service.dart';
 
 class BookingService {
   final Dio _dio = ApiService.instance.dio;

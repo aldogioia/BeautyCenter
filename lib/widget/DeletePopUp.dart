@@ -1,10 +1,10 @@
-import 'package:beauty_center_frontend/handler/SnackBarHandler.dart';
+import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
 import 'package:beauty_center_frontend/widget/CustomButton.dart';
 import 'package:beauty_center_frontend/widget/CustomTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/Strings.dart';
+import '../utils/strings.dart';
 
 class DeletePopUp extends ConsumerStatefulWidget {
   const DeletePopUp({
