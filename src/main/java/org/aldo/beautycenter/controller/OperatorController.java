@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.CreateOperatorDto;
 import org.aldo.beautycenter.data.dto.OperatorDto;
+import org.aldo.beautycenter.data.dto.SummaryOperatorDto;
 import org.aldo.beautycenter.data.dto.UpdateOperatorDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidOperatorId;
@@ -33,6 +34,15 @@ public class OperatorController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(operatorService.getAllOperators());
+    }
+
+    @GetMapping("byService")
+    public ResponseEntity<List<SummaryOperatorDto>> getOperatorsByService(
+            @ValidServiceId @RequestParam String serviceId
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(operatorService.getByService(serviceId));
     }
 
     @GetMapping("/availableHours")
