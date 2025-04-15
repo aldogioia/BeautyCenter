@@ -8,5 +8,5 @@ public  class ServiceDto {
     private String imgUrl;
     private String name;
     private Double price;
-    private Double duration;
+    private Long duration;
 }

@@ -3,10 +3,7 @@ package org.aldo.beautycenter.service.implemetations;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.*;
-import org.aldo.beautycenter.data.dto.CreateOperatorDto;
-import org.aldo.beautycenter.data.dto.OperatorDto;
-import org.aldo.beautycenter.data.dto.SummaryServiceDto;
-import org.aldo.beautycenter.data.dto.UpdateOperatorDto;
+import org.aldo.beautycenter.data.dto.*;
 import org.aldo.beautycenter.data.entities.Booking;
 import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.entities.Schedule;
@@ -47,6 +44,14 @@ public class OperatorServiceImpl implements OperatorService {
                     );
                     return operatorDto;
                 }).toList();
+    }
+
+    @Override
+    public List<SummaryOperatorDto> getByService(String serviceId) {
+        return operatorDao.findAllByServices_Id(serviceId)
+                .stream()
+                .map(operator -> modelMapper.map(operator, SummaryOperatorDto.class))
+                .toList();
     }
 
     @Override
