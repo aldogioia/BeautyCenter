@@ -36,7 +36,7 @@ public class OperatorController {
                 .body(operatorService.getAllOperators());
     }
 
-    @GetMapping("byService")
+    @GetMapping("/byService")
     public ResponseEntity<List<SummaryOperatorDto>> getOperatorsByService(
             @ValidServiceId @RequestParam String serviceId
     ) {
