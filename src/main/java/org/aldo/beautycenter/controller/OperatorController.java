@@ -45,15 +45,15 @@ public class OperatorController {
                 .body(operatorService.getByService(serviceId));
     }
 
-    @GetMapping("/availableHours")
-    public ResponseEntity<List<LocalTime>> getAvailableHours(
+    @GetMapping("/availableTimes")
+    public ResponseEntity<List<LocalTime>> getAvailableTimes(
             @ValidOperatorId @RequestParam String operatorId,
             @RequestParam LocalDate date,
             @ValidServiceId @RequestParam String serviceId
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(operatorService.getAvailableHours(operatorId, date, serviceId));
+                .body(operatorService.getAvailableTimes(operatorId, date, serviceId));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

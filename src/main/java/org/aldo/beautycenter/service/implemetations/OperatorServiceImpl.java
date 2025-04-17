@@ -55,7 +55,7 @@ public class OperatorServiceImpl implements OperatorService {
     }
 
     @Override
-    public List<LocalTime> getAvailableHours(String operatorId, LocalDate date, String serviceId) {
+    public List<LocalTime> getAvailableTimes(String operatorId, LocalDate date, String serviceId) {
         org.aldo.beautycenter.data.entities.Service service = serviceDao.getReferenceById(serviceId);
         List<Booking> operatorBookings = bookingDao.findAllByDateAndOperator_Id(date, operatorId);
         List<Booking> roomBookings = bookingDao.findAllByRoom_Services_Id(serviceId);

@@ -12,7 +12,7 @@ import java.util.List;
 public interface OperatorService {
     List<OperatorDto> getAllOperators();
     List<SummaryOperatorDto> getByService(String serviceId);
-    List<LocalTime> getAvailableHours(String operatorId, LocalDate date, String serviceId);
+    List<LocalTime> getAvailableTimes(String operatorId, LocalDate date, String serviceId);
 
     OperatorDto createOperator(CreateOperatorDto createOperatorDto);
 
