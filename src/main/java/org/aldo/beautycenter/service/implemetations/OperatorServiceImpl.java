@@ -97,11 +97,12 @@ public class OperatorServiceImpl implements OperatorService {
         if (updateOperatorDto.getImage() != null)
             operator.setImgUrl(s3Service.uploadFile(updateOperatorDto.getImage(), Constants.OPERATOR_FOLDER, operator.getName()));
         operatorDao.save(operator);
-        return operator.getImgUrl();
+        return s3Service.presignedUrl(operator.getImgUrl());
     }
 
     @Override
     public void deleteOperator(String operatorId) {
+        //todo eliminare l'immagine da s3
         operatorDao.deleteById(operatorId);
     }
 

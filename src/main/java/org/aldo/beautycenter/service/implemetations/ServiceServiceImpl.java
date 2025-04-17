@@ -42,11 +42,12 @@ public class ServiceServiceImpl implements ServiceService {
         if (updateServiceDto.getImage() != null)
             s3Service.uploadFile(updateServiceDto.getImage(), Constants.SERVICE_FOLDER, service.getName());
         serviceDao.save(service);
-        return service.getImgUrl();
+        return s3Service.presignedUrl(service.getImgUrl());
     }
 
     @Override
     public void deleteService(String serviceId) {
+        //todo eliminare l'immagine da s3
         serviceDao.deleteById(serviceId);
     }
 }
