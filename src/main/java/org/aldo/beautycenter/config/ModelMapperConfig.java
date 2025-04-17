@@ -80,6 +80,7 @@ public class ModelMapperConfig {
         modelMapper.addMappings(new PropertyMap<CreateStandardScheduleDto, StandardSchedule>() {
             @Override
             protected void configure() {
+                skip().setId(null);
                 using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
                         .map(source.getOperatorId(), destination.getOperator());
             }
