@@ -168,6 +168,13 @@ public class ModelMapperConfig {
             }
         });
 
+        //mappatura per il SummaryOperatorDto
+        modelMapper.addMappings(new PropertyMap<Operator, SummaryOperatorDto>() {
+            @Override
+            protected void configure() {
+                using(imageUrlConverter).map(source.getImgUrl(), destination.getImgUrl());
+            }
+        });
         //skip del campo services in RoomDto
         modelMapper.typeMap(Room.class, RoomDto.class)
                 .addMappings(mapper -> mapper.skip(RoomDto::setServices));
