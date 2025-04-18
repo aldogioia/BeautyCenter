@@ -79,7 +79,13 @@ public class OperatorServiceImpl implements OperatorService {
         operator.setImgUrl(s3Service.uploadFile(createOperatorDto.getImage(), Constants.OPERATOR_FOLDER, createOperatorDto.getName()));
         operator.setServices(serviceDao.findAllById(createOperatorDto.getServices()));
         operatorDao.save(operator);
-        return modelMapper.map(operator, OperatorDto.class);
+
+        OperatorDto operatorDto = modelMapper.map(operator, OperatorDto.class);
+        operatorDto.setServices(
+                operator.getServices().stream()
+                        .map(service -> modelMapper.map(service, SummaryServiceDto.class)).toList()
+        );
+        return operatorDto;
     }
 
     @Override
