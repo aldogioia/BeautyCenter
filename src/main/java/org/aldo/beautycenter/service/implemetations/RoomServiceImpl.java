@@ -43,7 +43,13 @@ public class RoomServiceImpl implements RoomService {
         Room room = modelMapper.map(createRoomDto, Room.class);
         room.setServices(serviceDao.findAllById(createRoomDto.getServices()));
         roomDao.save(room);
-        return modelMapper.map(room, RoomDto.class);
+
+        RoomDto roomDto = modelMapper.map(room, RoomDto.class);
+        roomDto.setServices(
+                room.getServices().stream()
+                        .map(service -> modelMapper.map(service, SummaryServiceDto.class)).toList()
+        );
+        return roomDto;
     }
 
     @Override
