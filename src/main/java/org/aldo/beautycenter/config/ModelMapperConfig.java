@@ -8,7 +8,6 @@ import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.*;
 import org.aldo.beautycenter.data.entities.*;
 import org.aldo.beautycenter.data.enumerators.Role;
-import org.aldo.beautycenter.service.interfaces.S3Service;
 import org.modelmapper.Converter;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +16,11 @@ import org.springframework.context.annotation.Configuration;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Configuration
 @RequiredArgsConstructor
 public class ModelMapperConfig {
@@ -24,7 +28,6 @@ public class ModelMapperConfig {
     private final ServiceDao serviceDao;
     private final OperatorDao operatorDao;
     private final CustomerDao customerDao;
-    private final S3Service s3Service;
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -32,8 +35,15 @@ public class ModelMapperConfig {
         //converter per cryptare le password
         Converter<String, String> passwordConverter = context -> passwordEncoder.encode(context.getSource());
 
-        //converter per gli url delle immagini
-        Converter<String, String> imageUrlConverter = context -> s3Service.presignedUrl(context.getSource());
+        Converter<List<String>, List<Service>> serviceIdToServiceConverter = ctx -> {
+            List<String> ids = ctx.getSource();
+            if (ids == null) return Collections.emptyList();
+
+            return ids.stream()
+                    .map(id -> serviceDao.findById(id)
+                            .orElseThrow(() -> new EntityNotFoundException("Servizio non trovato con ID: " + id)))
+                    .collect(Collectors.toList());
+        };
 
         //mappatura per la creazione di un admin
         modelMapper.addMappings(new PropertyMap<CreateAdminDto, Admin>() {
@@ -41,38 +51,6 @@ public class ModelMapperConfig {
             protected void configure() {
                 map().setRole(Role.ROLE_ADMIN);
                 using(passwordConverter).map(source.getPassword(), destination.getPassword());
-            }
-        });
-
-        //mappatura per la creazione di un operatore
-        modelMapper.addMappings(new PropertyMap<CreateOperatorDto, Operator>() {
-            @Override
-            protected void configure() {
-                map().setRole(Role.ROLE_OPERATOR);
-                skip().setImgUrl(null);
-                skip().setServices(null);
-            }
-        });
-
-        //mappatura per l'aggiornamento di un operatore
-        modelMapper.addMappings(new PropertyMap<UpdateOperatorDto, Operator>() {
-            @Override
-            protected void configure() {
-                skip().setImgUrl(null);
-                skip().setServices(null);
-            }
-        });
-
-        //mappatura per la creazione di una prenotazione
-        modelMapper.addMappings(new PropertyMap<CreateBookingDto, Booking>() {
-            @Override
-            protected void configure() {
-                using(ctx -> serviceDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Servizio non trovato")))
-                        .map(source.getService(), destination.getService());
-                using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
-                        .map(source.getOperator(), destination.getOperator());
-                using(ctx -> customerDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Cliente non trovato")))
-                        .map(source.getCustomer(), destination.getCustomer());
             }
         });
 
@@ -138,6 +116,19 @@ public class ModelMapperConfig {
             }
         });
 
+        //mappatura per la creazione di una prenotazione
+        modelMapper.addMappings(new PropertyMap<CreateBookingDto, Booking>() {
+            @Override
+            protected void configure() {
+                using(ctx -> serviceDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Servizio non trovato")))
+                        .map(source.getService(), destination.getService());
+                using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
+                        .map(source.getOperator(), destination.getOperator());
+                using(ctx -> customerDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Cliente non trovato")))
+                        .map(source.getCustomer(), destination.getCustomer());
+            }
+        });
+
         //mappatura per il bookingDto
         modelMapper.addMappings(new PropertyMap<Booking, BookingDto>() {
             @Override
@@ -153,41 +144,62 @@ public class ModelMapperConfig {
             }
         });
 
+        //mappatura per la creazione di un operator
+        modelMapper.addMappings(new PropertyMap<CreateOperatorDto, Operator>() {
+            @Override
+            protected void configure() {
+                map().setRole(Role.ROLE_OPERATOR);
+                skip().setImgUrl(null);
+                using(serviceIdToServiceConverter).map(source.getServices(), destination.getServices());
+            }
+        });
+
+        //mappatura per l'aggiornamento di un operator
+        modelMapper.addMappings(new PropertyMap<UpdateOperatorDto, Operator>() {
+            @Override
+            protected void configure() {
+                skip().setImgUrl(null);
+                using(serviceIdToServiceConverter).map(source.getServices(), destination.getServices());
+            }
+        });
+
         //mappatura per l'operatorDto
         modelMapper.addMappings(new PropertyMap<Operator, OperatorDto>() {
             @Override
             protected void configure() {
-                using(imageUrlConverter).map(source.getImgUrl(), destination.getImgUrl());
+                using(ctx -> ((Collection<?>) ctx.getSource()).stream()
+                        .map(service -> modelMapper.map(service, SummaryServiceDto.class))
+                        .collect(Collectors.toList()))
+                        .map(source.getServices(), destination.getServices());
             }
         });
 
-        //mappatura per il serviceDto
-        modelMapper.addMappings(new PropertyMap<Service, ServiceDto>() {
+        //mappatura per la creazione di una room
+        modelMapper.addMappings(new PropertyMap<CreateRoomDto, Room>() {
             @Override
             protected void configure() {
-                using(imageUrlConverter).map(source.getImgUrl(), destination.getImgUrl());
+                using(serviceIdToServiceConverter).map(source.getServices(), destination.getServices());
             }
         });
 
-        //mappatura per il SummaryOperatorDto
-        modelMapper.addMappings(new PropertyMap<Operator, SummaryOperatorDto>() {
+        //mappatura per l'aggiornamento di una room
+        modelMapper.addMappings(new PropertyMap<UpdateRoomDto, Room>() {
             @Override
             protected void configure() {
-                using(imageUrlConverter).map(source.getImgUrl(), destination.getImgUrl());
+                using(serviceIdToServiceConverter).map(source.getServices(), destination.getServices());
             }
         });
-        //skip del campo services in RoomDto
-        modelMapper.typeMap(Room.class, RoomDto.class)
-                .addMappings(mapper -> mapper.skip(RoomDto::setServices));
 
-        //skip del campo services in OperatorDto
-        modelMapper.typeMap(Operator.class, OperatorDto.class)
-                .addMappings(mapper -> mapper.skip(OperatorDto::setServices));
-
-        //skip del campo roomServices
-        modelMapper
-                .typeMap(CreateRoomDto.class, Room.class)
-                .addMappings(mapper -> mapper.skip(Room::setServices));
+        //mappatura per il roomDto
+        modelMapper.addMappings(new PropertyMap<Room, RoomDto>() {
+            @Override
+            protected void configure() {
+                using(ctx -> ((Collection<?>) ctx.getSource()).stream()
+                        .map(service -> modelMapper.map(service, SummaryServiceDto.class))
+                        .collect(Collectors.toList()))
+                        .map(source.getServices(), destination.getServices());
+            }
+        });
 
 
         modelMapper.getConfiguration()

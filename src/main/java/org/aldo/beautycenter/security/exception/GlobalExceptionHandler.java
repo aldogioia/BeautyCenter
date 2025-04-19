@@ -70,6 +70,18 @@ public class GlobalExceptionHandler {
         return createErrorResponse(req, e.getMessage());
     }
 
+    @ExceptionHandler(S3PutException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorDto onS3PutException(WebRequest req, S3PutException e) {
+        return createErrorResponse(req, e.getMessage());
+    }
+
+    @ExceptionHandler(S3DeleteException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorDto onS3DeleteException(WebRequest req, S3DeleteException e) {
+        return createErrorResponse(req, e.getMessage());
+    }
+
     private ErrorDto createErrorResponse(WebRequest req, String message){
         HttpServletRequest httpServletRequest = (HttpServletRequest) req.resolveReference("request");
         return new ErrorDto(new Date(), httpServletRequest.getRequestURI(), message);

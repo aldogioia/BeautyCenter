@@ -24,7 +24,6 @@ public class PasswordServiceImpl implements PasswordService {
     private final PasswordEncoder passwordEncoder;
     private final PasswordTokenDao passwordTokenDao;
     private final EmailService emailService;
-    private static final String BASE_URL = "http://localhost:8080";
 
     @Override
     public void requestChangePassword(String email) {
@@ -60,7 +59,7 @@ public class PasswordServiceImpl implements PasswordService {
                     user.getName(),
                     user.getSurname(),
                     user.getEmail(),
-                    BASE_URL + "/set-password?token=" + token
+                    token
             );
         } catch (Exception e) {
             throw new EmailNotSentException("Error while sending email");
