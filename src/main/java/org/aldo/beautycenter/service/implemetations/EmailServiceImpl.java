@@ -14,14 +14,13 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
 
     @Override
-    public void sendEmail(String name, String surname, String email, String resetLink) throws MessagingException {
+    public void sendEmail(String name, String surname, String email, String token) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, false);
 
         String textContent = "Ciao " + name + " " + surname + ",\n\n" +
                 "Abbiamo ricevuto una richiesta per reimpostare la tua password.\n" +
-                "Clicca sul link qui sotto per procedere:\n" +
-                resetLink + "\n\n" +
+                "Questo e il codice di verifica: "+ token + "\n\n" +
                 "Se non hai richiesto questa operazione, ignora questa email.\n\n" +
                 "Grazie";
 

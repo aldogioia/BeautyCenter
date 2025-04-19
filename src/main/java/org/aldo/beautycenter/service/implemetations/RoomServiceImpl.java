@@ -4,10 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.RoomDao;
-import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.CreateRoomDto;
 import org.aldo.beautycenter.data.dto.RoomDto;
-import org.aldo.beautycenter.data.dto.SummaryServiceDto;
 import org.aldo.beautycenter.data.dto.UpdateRoomDto;
 import org.aldo.beautycenter.data.entities.Room;
 import org.aldo.beautycenter.service.interfaces.RoomService;
@@ -20,44 +18,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
     private final RoomDao roomDao;
-    private final ServiceDao serviceDao;
     private final ModelMapper modelMapper;
 
     @Override
     public List<RoomDto> getAllRooms() {
         return roomDao.findAll()
                 .stream()
-                .map(room -> {
-                    RoomDto roomDto = modelMapper.map(room, RoomDto.class);
-                    roomDto.setServices(
-                            room.getServices().stream()
-                                    .map(service -> modelMapper.map(service, SummaryServiceDto.class)).toList()
-                    );
-                    return roomDto;
-                }).toList();
+                .map(room -> modelMapper.map(room, RoomDto.class))
+                .toList();
     }
 
     @Override
     @Transactional
     public RoomDto createRoom(CreateRoomDto createRoomDto) {
         Room room = modelMapper.map(createRoomDto, Room.class);
-        room.setServices(serviceDao.findAllById(createRoomDto.getServices()));
         roomDao.save(room);
 
-        RoomDto roomDto = modelMapper.map(room, RoomDto.class);
-        roomDto.setServices(
-                room.getServices().stream()
-                        .map(service -> modelMapper.map(service, SummaryServiceDto.class)).toList()
-        );
-        return roomDto;
+        return modelMapper.map(room, RoomDto.class);
     }
 
     @Override
+    @Transactional
     public void updateRoom(UpdateRoomDto updateRoomDto) {
         Room room = roomDao.findById(updateRoomDto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Stanza non trovata"));
         modelMapper.map(updateRoomDto, room);
-        room.setServices(serviceDao.findAllById(updateRoomDto.getServices()));
         roomDao.save(room);
     }
 

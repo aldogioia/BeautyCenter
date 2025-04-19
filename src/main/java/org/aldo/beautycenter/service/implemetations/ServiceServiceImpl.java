@@ -1,10 +1,13 @@
 package org.aldo.beautycenter.service.implemetations;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.CreateServiceDto;
 import org.aldo.beautycenter.data.dto.ServiceDto;
 import org.aldo.beautycenter.data.dto.UpdateServiceDto;
+import org.aldo.beautycenter.security.exception.customException.S3DeleteException;
 import org.aldo.beautycenter.service.interfaces.S3Service;
 import org.aldo.beautycenter.service.interfaces.ServiceService;
 import org.aldo.beautycenter.utils.Constants;
@@ -42,12 +45,23 @@ public class ServiceServiceImpl implements ServiceService {
         if (updateServiceDto.getImage() != null)
             s3Service.uploadFile(updateServiceDto.getImage(), Constants.SERVICE_FOLDER, service.getName());
         serviceDao.save(service);
-        return s3Service.presignedUrl(service.getImgUrl());
+        return service.getImgUrl();
     }
 
     @Override
+    @Transactional
     public void deleteService(String serviceId) {
-        //todo eliminare l'immagine da s3
+        org.aldo.beautycenter.data.entities.Service service = serviceDao.findById(serviceId)
+                .orElseThrow(() -> new EntityNotFoundException("Servizio non trovato"));
+
+        String serviceName = service.getName();
+
         serviceDao.deleteById(serviceId);
+
+        try {
+            s3Service.deleteFile(Constants.SERVICE_FOLDER, serviceName);
+        } catch (Exception e) {
+            throw new S3DeleteException("Errore nella cancellazione del file su S3");
+        }
     }
 }

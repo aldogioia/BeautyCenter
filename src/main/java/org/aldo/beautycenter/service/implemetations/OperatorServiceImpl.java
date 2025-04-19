@@ -1,5 +1,6 @@
 package org.aldo.beautycenter.service.implemetations;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.*;
@@ -9,6 +10,7 @@ import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.entities.Schedule;
 import org.aldo.beautycenter.data.entities.ScheduleException;
 import org.aldo.beautycenter.security.exception.customException.EmailAlreadyUsed;
+import org.aldo.beautycenter.security.exception.customException.S3DeleteException;
 import org.aldo.beautycenter.service.interfaces.OperatorService;
 import org.aldo.beautycenter.service.interfaces.S3Service;
 import org.aldo.beautycenter.utils.Constants;
@@ -36,14 +38,8 @@ public class OperatorServiceImpl implements OperatorService {
     public List<OperatorDto> getAllOperators() {
         return operatorDao.findAll()
                 .stream()
-                .map(operator -> {
-                    OperatorDto operatorDto = modelMapper.map(operator, OperatorDto.class);
-                    operatorDto.setServices(
-                            operator.getServices().stream()
-                                    .map(service -> modelMapper.map(service, SummaryServiceDto.class)).toList()
-                    );
-                    return operatorDto;
-                }).toList();
+                .map(operator -> modelMapper.map(operator, OperatorDto.class))
+                .toList();
     }
 
     @Override
@@ -77,15 +73,9 @@ public class OperatorServiceImpl implements OperatorService {
     public OperatorDto createOperator(CreateOperatorDto createOperatorDto) {
         Operator operator = modelMapper.map(createOperatorDto, Operator.class);
         operator.setImgUrl(s3Service.uploadFile(createOperatorDto.getImage(), Constants.OPERATOR_FOLDER, createOperatorDto.getName()));
-        operator.setServices(serviceDao.findAllById(createOperatorDto.getServices()));
         operatorDao.save(operator);
 
-        OperatorDto operatorDto = modelMapper.map(operator, OperatorDto.class);
-        operatorDto.setServices(
-                operator.getServices().stream()
-                        .map(service -> modelMapper.map(service, SummaryServiceDto.class)).toList()
-        );
-        return operatorDto;
+        return modelMapper.map(operator, OperatorDto.class);
     }
 
     @Override
@@ -99,17 +89,30 @@ public class OperatorServiceImpl implements OperatorService {
 
         Operator operator = operatorDao.getReferenceById(updateOperatorDto.getId());
         modelMapper.map(updateOperatorDto, operator);
-        operator.setServices(serviceDao.findAllById(updateOperatorDto.getServices()));
+
         if (updateOperatorDto.getImage() != null)
             operator.setImgUrl(s3Service.uploadFile(updateOperatorDto.getImage(), Constants.OPERATOR_FOLDER, operator.getName()));
+
         operatorDao.save(operator);
-        return s3Service.presignedUrl(operator.getImgUrl());
+
+        return operator.getImgUrl();
     }
 
     @Override
+    @Transactional
     public void deleteOperator(String operatorId) {
-        //todo eliminare l'immagine da s3
+        Operator operator = operatorDao.findById(operatorId)
+                .orElseThrow(() -> new EntityNotFoundException("Operatore non trovato"));
+
+        String operatorName = operator.getName();
+
         operatorDao.deleteById(operatorId);
+
+        try {
+            s3Service.deleteFile(Constants.OPERATOR_FOLDER, operatorName);
+        } catch (Exception e) {
+            throw new S3DeleteException("Errore nella cancellazione del file su S3");
+        }
     }
 
     private List<LocalTime> getAvailableSlots(LocalTime start, LocalTime end, Long duration, List<Booking> operatorBookings, List<Booking> roomBookings) {
