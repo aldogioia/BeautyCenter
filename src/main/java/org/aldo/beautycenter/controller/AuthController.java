@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RateLimit(permitsPerSecond = 10)
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -26,8 +28,24 @@ public class AuthController {
             @RequestParam("password") String password,
             HttpServletResponse response
     ) {
-        String Token = authService.signIn(email, password);
-        response.addHeader(HttpHeaders.AUTHORIZATION,"Bearer " + Token);
+        Map<String, String> tokens = authService.signIn(email, password);
+        String accessToken = tokens.get("accessToken");
+        String refreshToken = tokens.get("refreshToken");
+        response.addHeader(HttpHeaders.AUTHORIZATION,"Bearer " + accessToken);
+        response.addHeader("X-Refresh-Token", refreshToken);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<HttpStatus> refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        String newAccessToken = authService.refresh(request);
+        response.addHeader(HttpHeaders.AUTHORIZATION,"Bearer " + newAccessToken);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

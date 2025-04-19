@@ -8,6 +8,7 @@ import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.entities.User;
+import org.aldo.beautycenter.data.enumerators.Token;
 import org.aldo.beautycenter.security.exception.customException.TokenException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -23,46 +24,74 @@ public class JwtHandler {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(User user) {
+    public String generateAccessToken(User user) {
+        return createToken(user, 15, ChronoUnit.MINUTES, Token.ACCESS);
+    }
+
+    public String generateRefreshToken(User user) {
+        return createToken(user, 365, ChronoUnit.DAYS, Token.REFRESH);
+    }
+
+    private String createToken(User user, long amountToAdd, ChronoUnit unit, Token type) {
         Instant issuedAt = Instant.now().truncatedTo(ChronoUnit.SECONDS);
 
         JWTClaimsSet claims = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
                 .issueTime(Date.from(issuedAt))
-                .expirationTime(Date.from(issuedAt.plus(24, ChronoUnit.HOURS))) //todo change
+                .expirationTime(Date.from(issuedAt.plus(amountToAdd, unit)))
+                .claim("role", user.getRole().name())
+                .claim("type", type)
                 .build();
 
-        Payload payload = new Payload(claims.toJSONObject());
-        JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), payload);
-
         try {
-            jwsObject.sign(new MACSigner(secret.getBytes()));
+            SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claims);
+            signedJWT.sign(new MACSigner(secret.getBytes()));
+            return signedJWT.serialize();
         } catch (Exception e) {
-            throw new TokenException("Error while generating token");
+            throw new TokenException("Errore durante la generazione del " + type.name().toLowerCase() + " token");
         }
-
-        return jwsObject.serialize();
     }
 
-    public boolean isValidToken(String token) {
+    public boolean isValidAccessToken(String token) {
+        return isValidToken(token, Token.ACCESS);
+    }
+
+    public boolean isValidRefreshToken(String token) {
+        return isValidToken(token, Token.REFRESH);
+    }
+
+    private boolean isValidToken(String token, Token expectedType) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
-            JWSVerifier verifier = new MACVerifier(secret.getBytes());
-            if (!signedJWT.verify(verifier)) {
-                return false;
-            }
-            Date expiration = signedJWT.getJWTClaimsSet().getExpirationTime();
-            return expiration == null || !expiration.before(new Date());
+            if (!signedJWT.verify(new MACVerifier(secret.getBytes()))) return false;
+
+            JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+            Date expiration = claims.getExpirationTime();
+            String type = claims.getStringClaim("type");
+
+            return expectedType.name().equals(type) && (expiration == null || !expiration.before(new Date()));
         } catch (Exception e) {
             return false;
         }
     }
 
-    public String getJwtFromRequest(HttpServletRequest request) {
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header != null && header.startsWith("Bearer ")) {
-            return header.replace("Bearer ", "");
+    public String getJwtFromRequest(HttpServletRequest request, Token token) {
+        String starts = "";
+        String header = "";
+
+        if (token == Token.ACCESS ) {
+            header = request.getHeader(HttpHeaders.AUTHORIZATION);
+            starts = "Bearer ";
         }
+        else if (token == Token.REFRESH) {
+            header = request.getHeader("X-Refresh-Token");
+            starts = "Refresh ";
+        }
+
+        if (header != null && header.startsWith(starts)) {
+            return header.replace(starts, "");
+        }
+
         return "invalid";
     }
 
@@ -71,16 +100,7 @@ public class JwtHandler {
             SignedJWT signedJWT = SignedJWT.parse(token);
             return signedJWT.getJWTClaimsSet().getSubject();
         } catch (Exception e) {
-            throw new TokenException("Invalid token");
-        }
-    }
-
-    public Date getExpirationDateFromToken(String token) {
-        try {
-            SignedJWT signedJWT = SignedJWT.parse(token);
-            return signedJWT.getJWTClaimsSet().getExpirationTime();
-        } catch (Exception e) {
-            throw new TokenException("Invalid token");
+            throw new TokenException("Token non valido");
         }
     }
 }
