@@ -14,7 +14,7 @@ import java.util.List;
 public class Customer extends User {
 
     @Column(name = "phone_number", unique = true)
-    private Number phoneNumber;
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude

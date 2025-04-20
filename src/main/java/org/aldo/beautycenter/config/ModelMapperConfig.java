@@ -116,7 +116,7 @@ public class ModelMapperConfig {
             }
         });
 
-        //mappatura per la creazione di una prenotazione
+        //mappatura per la creazione di un Booking
         modelMapper.addMappings(new PropertyMap<CreateBookingDto, Booking>() {
             @Override
             protected void configure() {

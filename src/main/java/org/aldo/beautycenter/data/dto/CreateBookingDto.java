@@ -2,7 +2,9 @@ package org.aldo.beautycenter.data.dto;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidGuestInfo;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidOperatorId;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidServiceId;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidCustomerId;
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
+@ValidGuestInfo
 public class CreateBookingDto {
     @NotNull(message = "La data è obbligatoria")
     @FutureOrPresent(message = "La data non può essere nel passato")
@@ -26,6 +29,11 @@ public class CreateBookingDto {
     @NotNull(message = "L'utente è obbligatorio")
     @ValidCustomerId
     private String customer;
+
+    private String nameGuest;
+
+    @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Il numero di telefono deve contenere 10 numeri")
+    private String phoneNumberGuest;
 
     @NotNull(message = "L'operatore è obbligatorio")
     @ValidOperatorId
