@@ -70,6 +70,12 @@ public class GlobalExceptionHandler {
         return createErrorResponse(req, e.getMessage());
     }
 
+    @ExceptionHandler(BookingGuestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto onBookingGuestException(WebRequest req, BookingConflictException e) {
+        return createErrorResponse(req, e.getMessage());
+    }
+
     @ExceptionHandler(S3PutException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDto onS3PutException(WebRequest req, S3PutException e) {

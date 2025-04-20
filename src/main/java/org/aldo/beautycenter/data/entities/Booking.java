@@ -32,6 +32,12 @@ public class Booking extends Auditable {
     @Column(name = "time", nullable = false)
     private LocalTime time;
 
+    @Column(name = "name_guest")
+    private String nameGuest;
+
+    @Column(name = "phone_number_guest")
+    private String phoneNumberGuest;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", nullable = false)
     private Service service;

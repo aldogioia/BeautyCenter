@@ -19,7 +19,8 @@ public class UpdateCustomerDto {
     private String surname;
 
     @NotNull(message = "Il campo telefono è obligatorio")
-    private Number phoneNumber;
+    @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Il numero di telefono deve contenere 10 numeri")
+    private String phoneNumber;
 
     @Email(message = "Inserire un indirizzo email valido")
     private String email;
