@@ -32,7 +32,7 @@ public class AuthController {
         String accessToken = tokens.get("accessToken");
         String refreshToken = tokens.get("refreshToken");
         response.addHeader(HttpHeaders.AUTHORIZATION,"Bearer " + accessToken);
-        response.addHeader("X-Refresh-Token", refreshToken);
+        response.addHeader("X-Refresh-Token", "Refresh " +  refreshToken);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
