@@ -1,0 +1,83 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import '../utils/secure_storage.dart';
+import 'api_service.dart';
+
+class AuthService {
+  final Dio _dio = ApiService.instance.dio;
+  final String _path = "/auth";
+
+  Future<Response?> signIn({required String email, required String password}) async {
+    try {
+      return await _dio.post(
+        "$_path/sign-in",
+        queryParameters: {
+          'email': email,
+          'password': password
+        },
+      );
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+
+  Future<Response?> signUp({
+    required String name,
+    required String surname,
+    required String phoneNumber,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      return await _dio.post(
+        "$_path/sign-up",
+        data: {
+          'name': name,
+          'surname': surname,
+          'phoneNumber': phoneNumber,
+          'email': email,
+          'password': password,
+        },
+      );
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+
+  Future<Response?> signOut() async {
+    final accessToken = await SecureStorage.getAccessToken();
+    final refreshToken = await SecureStorage.getRefreshToken();
+    if (refreshToken == null || accessToken == null) {
+      debugPrint("Token not found");
+      return null;
+    }
+    try {
+      return await _dio.post(
+        "$_path/sign-out",
+        options: Options(headers: {
+          'Authorization': accessToken,
+          'X-Refresh-Token': refreshToken,
+        }),
+      );
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+
+  Future<Response?> refresh() async {
+    final refreshToken = await SecureStorage.getRefreshToken();
+    if (refreshToken == null) {
+      return null;
+    }
+    try {
+      return await _dio.post(
+        "$_path/refresh",
+        options: Options(headers: {
+          'X-Refresh-Token': refreshToken,
+        }),
+      );
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+}
