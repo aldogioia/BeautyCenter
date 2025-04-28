@@ -27,16 +27,15 @@ import java.util.List;
 public class BookingController {
     private final BookingService bookingService;
     @GetMapping("/customer")
-    public ResponseEntity<List<BookingDto>> getCustomerBookings(
-            @ValidCustomerId @RequestParam String customerId,
-            @FutureOrPresent(message = "La data non può essere nel passato") @RequestParam LocalDate date) {
+    public ResponseEntity<List<BookingDto>> getCustomerBookings(@ValidCustomerId @RequestParam String customerId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(bookingService.getCustomerBookingsInDate(customerId, date));
+                .body(bookingService.getCustomerBookingsInDate(customerId));
     }
     @GetMapping("/operator")
     public ResponseEntity<List<BookingDto>> getOperatorBookings(
             @ValidOperatorId @RequestParam String operatorId,
-            @FutureOrPresent(message = "La data non può essere nel passato") @RequestParam LocalDate date) {
+            @FutureOrPresent(message = "La data non può essere nel passato") @RequestParam LocalDate date
+    ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bookingService.getOperatorBookingsInDate(operatorId, date));
     }
