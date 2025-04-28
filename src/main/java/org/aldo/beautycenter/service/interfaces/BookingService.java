@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface BookingService {
-    List<BookingDto> getCustomerBookingsInDate(String customerId, LocalDate date);
+    List<BookingDto> getCustomerBookingsInDate(String customerId);
     List<BookingDto> getOperatorBookingsInDate(String userId, LocalDate date);
     List<Booking> getBookingsByDate(LocalDate date);
     BookingDto addBooking(CreateBookingDto createBookingDto);

@@ -62,7 +62,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-out")
-    public ResponseEntity<HttpStatus> logout(HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> signOut(HttpServletRequest request) {
         authService.signOut(request);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

@@ -85,7 +85,6 @@ public class JwtHandler {
         }
         else if (token == Token.REFRESH) {
             header = request.getHeader("X-Refresh-Token");
-            starts = "Refresh ";
         }
 
         if (header != null && header.startsWith(starts)) {
