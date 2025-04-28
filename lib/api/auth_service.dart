@@ -64,7 +64,7 @@ class AuthService {
     }
   }
 
-  Future<Response?> refresh() async {
+  /*Future<Response?> refresh() async {
     final refreshToken = await SecureStorage.getRefreshToken();
     if (refreshToken == null) {
       return null;
@@ -79,5 +79,5 @@ class AuthService {
     } on DioException catch (e) {
       return e.response;
     }
-  }
+  }*/
 }

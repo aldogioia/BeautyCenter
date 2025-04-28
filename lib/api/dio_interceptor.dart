@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import '../api/api_service.dart';
-import '../api/auth_service.dart';
 import '../navigation/navigator.dart';
 import '../utils/secure_storage.dart';
 
 class DioInterceptor extends Interceptor {
-  final AuthService _authService = AuthService();
+  final Dio _dio;
+
+  DioInterceptor(this._dio);
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
@@ -22,14 +22,35 @@ class DioInterceptor extends Interceptor {
     final opts = err.requestOptions;
 
     if (statusCode == 401 && opts.extra['retry'] != true) {
-      final refreshResp = await _authService.refresh();
+      final refreshToken = await SecureStorage.getRefreshToken();
 
-      if (refreshResp?.statusCode == 200) {
-        var rawAuth = refreshResp!.headers.value('Authorization');
-        var rawRefresh = refreshResp.headers.value('X-Refresh-Token');
+      if (refreshToken == null) {
+        await SecureStorage.clearAll();
+        NavigatorService.navigatorKey.currentState
+            ?.pushNamedAndRemoveUntil('/sign-in', (route) => false);
+        return handler.next(err);
+      }
+
+      try {
+        final refreshResponse = await _dio.post(
+          '/auth/refresh',
+          options: Options(
+            headers: {
+              'X-Refresh-Token': refreshToken,
+            },
+          ),
+        );
+
+        var rawAuth = refreshResponse.headers.value('Authorization');
+        var rawRefresh = refreshResponse.headers.value('X-Refresh-Token');
+
         if (rawAuth == null || rawRefresh == null) {
+          await SecureStorage.clearAll();
+          NavigatorService.navigatorKey.currentState
+              ?.pushNamedAndRemoveUntil('/sign-in', (route) => false);
           return handler.next(err);
         }
+
         final newAccess = rawAuth.startsWith('Bearer ')
             ? rawAuth.substring(7)
             : rawAuth;
@@ -38,27 +59,32 @@ class DioInterceptor extends Interceptor {
         await SecureStorage.setRefreshToken(rawRefresh);
 
         opts.extra['retry'] = true;
-        final newOpts = Options(
+
+        final newOptions = Options(
           method: opts.method,
           headers: {
             ...opts.headers,
             'Authorization': 'Bearer $newAccess',
           },
         );
-        final clone = await ApiService.instance.dio.request(
+
+        final clone = await _dio.request(
           opts.path,
-          options: newOpts,
+          options: newOptions,
           data: opts.data,
           queryParameters: opts.queryParameters,
         );
-        return handler.resolve(clone);
-      }
 
-      await SecureStorage.clearAll();
-      NavigatorService.navigatorKey.currentState
-          ?.pushNamedAndRemoveUntil('/signin', (route) => false);
+        return handler.resolve(clone);
+      } on DioException catch (_) {
+        await SecureStorage.clearAll();
+        NavigatorService.navigatorKey.currentState
+            ?.pushNamedAndRemoveUntil('/sign-in', (route) => false);
+        return handler.next(err);
+      }
     }
 
     handler.next(err);
   }
+
 }

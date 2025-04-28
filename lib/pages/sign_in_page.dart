@@ -78,7 +78,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               GestureDetector(
                 onTap: () {
                   _formKey.currentState?.reset();
-                  NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign_in", (route) => false,);
+                  NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign-up", (route) => false,);
                 },
                 child: Text(
                   Strings.noIn,

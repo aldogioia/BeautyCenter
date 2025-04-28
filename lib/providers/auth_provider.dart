@@ -57,7 +57,7 @@ class Auth extends _$Auth {
       NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign_in", (route) => false,);
       return "";
     } else {
-      return (response.data);
+      return (response.data as Map<String, dynamic>)['message'];
     }
   }
 
@@ -78,10 +78,10 @@ class Auth extends _$Auth {
 
     if (response == null) {
       return Strings.connectionError;
-    } else if (response.statusCode == 200) {
+    } else if (response.statusCode == 201) {
       return "";
     } else {
-      return (response.data);
+      return (response.data as Map<String, dynamic>)['message'];
     }
   }
 

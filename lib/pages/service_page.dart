@@ -17,36 +17,32 @@ class ServicePage extends ConsumerWidget {
       return const Center(child: Text(Strings.noServices));
     }
 
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.separated(
-            itemCount: services.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 16),
-            itemBuilder: (context, index) {
-              final service = services[index];
-              return GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    useSafeArea: true,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                    ),
-                    isScrollControlled: true,
-                    isDismissible: true,
-                    builder: (context) => SingleChildScrollView(
-                      child: BookingModal(serviceId: service.id),
-                    ),
-                  );
-
-                },
-                child: ServiceItem(service: service),
-              );
-            },
-          ),
-        ),
-      ],
+    return ListView.separated(
+      itemCount: services.length + 1,
+      separatorBuilder: (context, index) => const SizedBox(height: 16),
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Text(Strings.services, style: TextStyle(fontWeight: FontWeight.bold));
+        }
+        final service = services[index - 1];
+        return GestureDetector(
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              useSafeArea: true,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+              ),
+              isScrollControlled: true,
+              isDismissible: true,
+              builder: (context) => SingleChildScrollView(
+                child: BookingModal(serviceId: service.id),
+              ),
+            );
+          },
+          child: ServiceItem(service: service),
+        );
+      },
     );
   }
 }

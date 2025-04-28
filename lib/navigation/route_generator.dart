@@ -11,10 +11,10 @@ class RouteGenerator {
       case "/scaffold":
         return MaterialPageRoute(builder: (context) => const ScaffoldPage());
 
-      case "/sign_in":
+      case "/sign-in":
         return MaterialPageRoute(builder: (context) => const SignInPage());
 
-      case "/sign_up":
+      case "/sign-up":
         return MaterialPageRoute(builder: (context) => const SignUpPage());
 
       default:

@@ -17,10 +17,10 @@ class SignUpPage extends ConsumerStatefulWidget {
 class _SignUpPageState extends ConsumerState<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nameController = TextEditingController(text: "Napoleone");
-  final TextEditingController _surnameController = TextEditingController(text: "Bonaparte");
+  final TextEditingController _nameController = TextEditingController(text: "Aldo");
+  final TextEditingController _surnameController = TextEditingController(text: "Gioia");
   final TextEditingController _phoneController = TextEditingController(text: "3272830636");
-  final TextEditingController _emailController = TextEditingController(text: "napo@gmail.com");
+  final TextEditingController _emailController = TextEditingController(text: "aldo@gioia.com");
   final TextEditingController _passwordController = TextEditingController(text: "sonoCustomer1");
 
   Future<void> _submitForm() async {
@@ -104,7 +104,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               GestureDetector(
                 onTap: () {
                   _formKey.currentState?.reset();
-                  NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign_in", (route) => false);
+                  NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign-in", (route) => false);
                 },
                 child: Text(
                   Strings.alreadyIn,

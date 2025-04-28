@@ -7,13 +7,12 @@ class BookingService {
   final Dio _dio = ApiService.instance.dio;
   final String _path = "/booking";
 
-  Future<Response?> getOperatorBookings({required String operatorId, required DateTime date}) async {
+  Future<Response?> getCustomerBookings({required String customerId}) async {
     try {
       return await _dio.get(
           _path,
           queryParameters: {
-            'operatorId' : operatorId,
-            'date' : date
+            'customerId' : customerId
           }
       );
     } on DioException catch(e){
