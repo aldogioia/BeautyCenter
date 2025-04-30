@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.UserDao;
+import org.aldo.beautycenter.data.dto.AuthResponseDto;
 import org.aldo.beautycenter.data.dto.CreateCustomerDto;
 import org.aldo.beautycenter.data.entities.User;
 import org.aldo.beautycenter.data.enumerators.Token;
@@ -17,7 +18,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -28,20 +28,20 @@ public class AuthServiceImpl implements AuthService {
     private final CustomerService customerService;
     private final AuthenticationManager authenticationManager;
     @Override
-    public Map<String, String> signIn(String email, String password) {
+    public AuthResponseDto signIn(String email, String password) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password));
 
         User user = userDao.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
 
-        String accessToken = jwtHandler.generateAccessToken(user);
-        String refreshToken = jwtHandler.generateRefreshToken(user);
+        AuthResponseDto authResponseDto = new AuthResponseDto();
 
-        return Map.of(
-                "accessToken", accessToken,
-                "refreshToken", refreshToken
-        );
+        authResponseDto.setAccessToken(jwtHandler.generateAccessToken(user));
+        authResponseDto.setRefreshToken(jwtHandler.generateRefreshToken(user));
+        authResponseDto.setUserId(user.getId());
+
+        return authResponseDto;
     }
 
     @Override
