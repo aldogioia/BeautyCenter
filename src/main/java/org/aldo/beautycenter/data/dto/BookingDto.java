@@ -12,6 +12,8 @@ public class BookingDto {
     private SummaryOperatorDto operator;
     private SummaryCustomerDto customer;
     private String room;
+    private String nameGuest;
+    private String phoneNumberGuest;
     private LocalDate date;
     private LocalTime time;
 }
