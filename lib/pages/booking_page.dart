@@ -10,22 +10,40 @@ class BookingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bookings = ref.watch(bookingProvider).bookings;
+    final bookingState = ref.watch(bookingProvider);
+    final bookings = bookingState.bookings;
 
-    if (bookings.isEmpty) {
-      return const Center(child: Text(Strings.noServices));
-    }
-
-    return ListView.separated(
-      itemCount: bookings.length + 1,
-      separatorBuilder: (context, index) => const SizedBox(height: 16),
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return Text(Strings.bookings, style: TextStyle(fontWeight: FontWeight.bold));
-        }
-        final booking = bookings[index - 1];
-        return BookingItem(booking: booking);
+    return RefreshIndicator(
+      onRefresh: () async {
+        await ref.read(bookingProvider.notifier).getAllBookings();
       },
+      child: bookings.isEmpty ?
+      ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: const [
+          Padding(
+            padding: EdgeInsets.all(32),
+            child: Center(child: Text(Strings.noServices)),
+          ),
+        ],
+      ) :
+      ListView.separated(
+        itemCount: bookings.length + 1,
+        separatorBuilder: (context, index) => const SizedBox(height: 16),
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                Strings.services,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
+            );
+          }
+          final booking = bookings[index - 1];
+          return BookingItem(booking: booking);
+        },
+      ),
     );
   }
 }

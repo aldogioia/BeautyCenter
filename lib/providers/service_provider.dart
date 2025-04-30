@@ -1,4 +1,4 @@
-import 'package:edone_customer/model/ServiceDto.dart';
+import 'package:edone_customer/model/service_dto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/service_service.dart';

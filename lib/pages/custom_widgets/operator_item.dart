@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../model/OperatorDto.dart';
+import '../../model/operator_dto.dart';
 
 
 class OperatorItem extends StatelessWidget {

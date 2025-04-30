@@ -1,6 +1,7 @@
-import 'ServiceDto.dart';
-import 'SummaryCustomerDto.dart';
-import 'SummaryOperatorDto.dart';
+import 'package:edone_customer/model/service_dto.dart';
+
+import 'summary_customer_dto.dart';
+import 'summary_operator_dto.dart';
 
 class BookingDto {
   final String id;
@@ -8,6 +9,8 @@ class BookingDto {
   final SummaryOperatorDto operator;
   final SummaryCustomerDto customer;
   final String room;
+  final String? nameGuest;
+  final String? phoneNumberGuest;
   final DateTime date;
   final DateTime time;
 
@@ -17,6 +20,8 @@ class BookingDto {
     required this.operator,
     required this.customer,
     required this.room,
+    this.nameGuest,
+    this.phoneNumberGuest,
     required this.date,
     required this.time,
   });
@@ -28,6 +33,8 @@ class BookingDto {
       operator: SummaryOperatorDto.fromJson(json['operator']),
       customer: SummaryCustomerDto.fromJson(json['customer']),
       room: json['room'],
+      nameGuest: json['nameGuest'],
+      phoneNumberGuest: json['phoneNumberGuest'],
       date: DateTime.parse(json['date']),
       time: DateTime.parse(json['time']),
     );
@@ -40,6 +47,8 @@ class BookingDto {
       'operator': operator.toJson(),
       'customer': customer.toJson(),
       'room': room,
+      'nameGuest': nameGuest,
+      'phoneNumberGuest': phoneNumberGuest,
       'date': date.toIso8601String(),
       'time': time.toIso8601String(),
     };
@@ -51,6 +60,8 @@ class BookingDto {
     SummaryOperatorDto? operator,
     SummaryCustomerDto? customer,
     String? room,
+    String? nameGuest,
+    String? phoneNumberGuest,
     DateTime? date,
     DateTime? time,
   }) {
@@ -60,6 +71,8 @@ class BookingDto {
       operator: operator ?? this.operator,
       customer: customer ?? this.customer,
       room: room ?? this.room,
+      nameGuest: nameGuest ?? this.nameGuest,
+      phoneNumberGuest: phoneNumberGuest ?? this.phoneNumberGuest,
       date: date ?? this.date,
       time: time ?? this.time,
     );

@@ -1,3 +1,4 @@
+import 'package:edone_customer/model/auth_response_dto.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -26,12 +27,9 @@ class Auth extends _$Auth {
     if (response == null) {
       return Strings.connectionError;
     } else if (response.statusCode == 200) {
-      String? accessToken = response.headers.value('Authorization');
-      String? refreshToken = response.headers.value('X-Refresh-Token');
+      AuthResponseDto authResponse = AuthResponseDto.fromJson(response.data);
 
-      if (accessToken == null || refreshToken == null) {
-        return "Token not found";
-      }
+      String accessToken = authResponse.accessToken;
 
       if (_isCustomer(accessToken)) {
         return "L'accesso deve avvenire con un account Cliente";
@@ -39,7 +37,8 @@ class Auth extends _$Auth {
 
       if (accessToken.startsWith('Bearer ')) {
         await SecureStorage.setAccessToken(accessToken.substring(7));
-        await SecureStorage.setRefreshToken(refreshToken);
+        await SecureStorage.setRefreshToken(authResponse.refreshToken);
+        await SecureStorage.setUserId(authResponse.userId);
       }
 
       return "";
@@ -54,7 +53,7 @@ class Auth extends _$Auth {
       return Strings.connectionError;
     } else if (response.statusCode == 204) {
       await SecureStorage.clearAll();
-      NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign_in", (route) => false,);
+      NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign-in", (route) => false,);
       return "";
     } else {
       return (response.data as Map<String, dynamic>)['message'];

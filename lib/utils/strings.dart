@@ -9,6 +9,7 @@ class Strings {
   static const String noIn = "Non hai un account? Registati";
   static const String alreadyIn = "Hai già un account? Accedi";
   static const String bookForOthers = "Prenota per qualcun'altro";
+  static const String bookForMe = "Prenota per me";
 
   //Form
   static const String name = "Nome";

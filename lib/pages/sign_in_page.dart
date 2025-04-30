@@ -51,13 +51,13 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Column(
+                spacing: 16,
                 children: [
                   TextFormField(
                     controller: _emailController,
                     validator: InputValidator.validateEmail,
                     decoration: const InputDecoration(labelText: Strings.email),
                   ),
-                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _passwordController,
                     validator: InputValidator.validatePassword,

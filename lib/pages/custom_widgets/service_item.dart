@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../model/ServiceDto.dart';
+import '../../model/service_dto.dart';
 
 class ServiceItem extends StatelessWidget {
   final ServiceDto service;

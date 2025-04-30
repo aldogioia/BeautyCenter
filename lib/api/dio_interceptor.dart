@@ -1,17 +1,26 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import '../navigation/navigator.dart';
 import '../utils/secure_storage.dart';
 
 class DioInterceptor extends Interceptor {
   final Dio _dio;
+  final Dio _refreshDio = Dio();
 
-  DioInterceptor(this._dio);
+  bool _isRefreshing = false;
+  late List<void Function(String)> _retryQueue;
+
+  DioInterceptor(this._dio) {
+    _retryQueue = [];
+  }
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = await SecureStorage.getAccessToken();
-    if (token != null) {
-      options.headers['Authorization'] = 'Bearer $token';
+    final accessToken = await SecureStorage.getAccessToken();
+    if (accessToken != null) {
+      options.headers['Authorization'] = 'Bearer $accessToken';
     }
     handler.next(options);
   }
@@ -19,72 +28,89 @@ class DioInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final statusCode = err.response?.statusCode;
-    final opts = err.requestOptions;
 
-    if (statusCode == 401 && opts.extra['retry'] != true) {
+    if (statusCode == 401) {
       final refreshToken = await SecureStorage.getRefreshToken();
 
       if (refreshToken == null) {
-        await SecureStorage.clearAll();
-        NavigatorService.navigatorKey.currentState
-            ?.pushNamedAndRemoveUntil('/sign-in', (route) => false);
-        return handler.next(err);
+        _logout();
+        handler.next(err);
+        return;
       }
 
-      try {
-        final refreshResponse = await _dio.post(
-          '/auth/refresh',
-          options: Options(
-            headers: {
-              'X-Refresh-Token': refreshToken,
-            },
-          ),
-        );
-
-        var rawAuth = refreshResponse.headers.value('Authorization');
-        var rawRefresh = refreshResponse.headers.value('X-Refresh-Token');
-
-        if (rawAuth == null || rawRefresh == null) {
-          await SecureStorage.clearAll();
-          NavigatorService.navigatorKey.currentState
-              ?.pushNamedAndRemoveUntil('/sign-in', (route) => false);
-          return handler.next(err);
+      if (!_isRefreshing) {
+        _isRefreshing = true;
+        try {
+          final newToken = await _refreshToken(refreshToken);
+          if (newToken != null) {
+            await SecureStorage.setAccessToken(newToken);
+            for (var retry in _retryQueue) {
+              retry(newToken);
+            }
+            _retryQueue.clear();
+          } else {
+            _logout();
+          }
+        } catch (_) {
+          _logout();
+        } finally {
+          _isRefreshing = false;
         }
-
-        final newAccess = rawAuth.startsWith('Bearer ')
-            ? rawAuth.substring(7)
-            : rawAuth;
-
-        await SecureStorage.setAccessToken(newAccess);
-        await SecureStorage.setRefreshToken(rawRefresh);
-
-        opts.extra['retry'] = true;
-
-        final newOptions = Options(
-          method: opts.method,
-          headers: {
-            ...opts.headers,
-            'Authorization': 'Bearer $newAccess',
-          },
-        );
-
-        final clone = await _dio.request(
-          opts.path,
-          options: newOptions,
-          data: opts.data,
-          queryParameters: opts.queryParameters,
-        );
-
-        return handler.resolve(clone);
-      } on DioException catch (_) {
-        await SecureStorage.clearAll();
-        NavigatorService.navigatorKey.currentState
-            ?.pushNamedAndRemoveUntil('/sign-in', (route) => false);
-        return handler.next(err);
       }
+
+      final clonedRequest = await _retryRequest(err.requestOptions);
+      handler.resolve(clonedRequest);
+
+      return;
     }
 
     handler.next(err);
   }
 
+  Future<String?> _refreshToken(String refreshToken) async {
+    try {
+      final response = await _refreshDio.post(
+        'http://10.0.2.2:8080/api/v1/auth/refresh',
+        options: Options(headers: {
+          'X-Refresh-Token': refreshToken,
+        }),
+      );
+      return response.headers['Authorization']?.first;
+    } catch (e) {
+      debugPrint('Refresh token failed: $e');
+      return null;
+    }
+  }
+
+  Future<Response<dynamic>> _retryRequest(RequestOptions requestOptions) async {
+    final completer = Completer<Response<dynamic>>();
+
+    _retryQueue.add((String token) async {
+      try {
+        final options = Options(
+          method: requestOptions.method,
+          headers: {
+            ...requestOptions.headers,
+            'Authorization': 'Bearer $token',
+          },
+        );
+        final response = await _dio.request<dynamic>(
+          requestOptions.path,
+          data: requestOptions.data,
+          queryParameters: requestOptions.queryParameters,
+          options: options,
+        );
+        completer.complete(response);
+      } catch (e) {
+        completer.completeError(e);
+      }
+    });
+
+    return completer.future;
+  }
+
+  void _logout() {
+    SecureStorage.clearAll();
+    NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil('/sign-in', (route) => false);
+  }
 }

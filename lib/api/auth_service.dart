@@ -64,11 +64,7 @@ class AuthService {
     }
   }
 
-  /*Future<Response?> refresh() async {
-    final refreshToken = await SecureStorage.getRefreshToken();
-    if (refreshToken == null) {
-      return null;
-    }
+  Future<Response?> refresh({required String refreshToken}) async {
     try {
       return await _dio.post(
         "$_path/refresh",
@@ -79,5 +75,5 @@ class AuthService {
     } on DioException catch (e) {
       return e.response;
     }
-  }*/
+  }
 }

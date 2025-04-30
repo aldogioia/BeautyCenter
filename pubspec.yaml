@@ -40,6 +40,7 @@ dependencies:
   google_fonts: ^6.2.1
   fluttertoast: ^8.2.12
   jwt_decoder: ^2.0.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

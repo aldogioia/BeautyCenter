@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../api/operator_service.dart';
-import '../model/OperatorDto.dart';
+import '../model/operator_dto.dart';
 import '../utils/Strings.dart';
 
 part 'operator_provider.g.dart';
@@ -8,10 +11,10 @@ part 'operator_provider.g.dart';
 
 class OperatorProviderState {
   final List<OperatorDto> operators;
-  final List<DateTime> availableTimes;
+  final List<String> availableTimes;
 
   OperatorProviderState({
-    List<OperatorDto>? operators, List<DateTime>? availableTimes
+    List<OperatorDto>? operators, List<String>? availableTimes
   }) : operators = operators ?? [], availableTimes = availableTimes ?? [];
 
   factory OperatorProviderState.empty() {
@@ -21,8 +24,8 @@ class OperatorProviderState {
     );
   }
 
-  OperatorProviderState copyWith({List<OperatorDto>? operators, List<DateTime>? availableTimes}) {
-    return OperatorProviderState(operators: operators ?? operators, availableTimes: availableTimes ?? this.availableTimes);
+  OperatorProviderState copyWith({List<OperatorDto>? operators, List<String>? availableTimes}) {
+    return OperatorProviderState(operators: operators ?? this.operators, availableTimes: availableTimes ?? this.availableTimes);
   }
 }
 
@@ -60,23 +63,27 @@ class Operator extends _$Operator {
     required String serviceId,
     required DateTime date
   }) async {
-    final response = await _operatorService.getAvailableTimes(operatorId, serviceId, date);
+    final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+
+    final response = await _operatorService.getAvailableTimes(operatorId, serviceId, formattedDate);
 
     if (response == null) {
       return Strings.connectionError;
     }
 
+    debugPrint("Response: $response");
+
     if (response.statusCode == 200) {
       final data = response.data as List;
+
+      debugPrint("Data: $data");
 
       if (data.isEmpty) {
         return Strings.noOperators;
       }
 
-      List<DateTime> availableTimesList = data.map((json) => DateTime.parse(json)).toList();
-
       state = state.copyWith(
-        availableTimes: availableTimesList,
+        availableTimes: data.map((json) => json.toString()).toList(),
       );
 
       return "";

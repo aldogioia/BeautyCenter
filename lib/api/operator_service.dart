@@ -23,7 +23,7 @@ class OperatorService {
   Future<Response?> getAvailableTimes(
     String operatorId,
     String serviceId,
-    DateTime date,
+    String date,
   ) async {
     try {
       return await _dio.get(
