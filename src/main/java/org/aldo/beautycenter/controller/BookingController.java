@@ -12,6 +12,7 @@ import org.aldo.beautycenter.security.customAnnotation.annotation.ValidOperatorI
 import org.aldo.beautycenter.service.interfaces.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class BookingController {
                 .body(bookingService.getCustomerBookingsInDate(customerId));
     }
     @GetMapping("/operator")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OPERATOR')")
     public ResponseEntity<List<BookingDto>> getOperatorBookings(
             @ValidOperatorId @RequestParam String operatorId,
             @FutureOrPresent(message = "La data non può essere nel passato") @RequestParam LocalDate date
