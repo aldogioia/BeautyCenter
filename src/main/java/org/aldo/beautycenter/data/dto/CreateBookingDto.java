@@ -3,6 +3,7 @@ package org.aldo.beautycenter.data.dto;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidGuestInfo;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidOperatorId;
@@ -30,12 +31,13 @@ public class CreateBookingDto {
     @ValidCustomerId
     private String customer;
 
+    @NotNull(message = "L'operatore è obbligatorio")
+    @ValidOperatorId
+    private String operator;
+
+    @Size(min = 3, max = 50, message = "Il nome deve essere lungo almeno 3 caratteri")
     private String nameGuest;
 
     @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Il numero di telefono deve contenere 10 numeri")
     private String phoneNumberGuest;
-
-    @NotNull(message = "L'operatore è obbligatorio")
-    @ValidOperatorId
-    private String operator;
 }
