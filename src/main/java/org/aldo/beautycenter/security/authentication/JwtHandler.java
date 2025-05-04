@@ -25,7 +25,7 @@ public class JwtHandler {
     private String secret;
 
     public String generateAccessToken(User user) {
-        return createToken(user, 15, ChronoUnit.MINUTES, Token.ACCESS);
+        return "Bearer " + createToken(user, 15, ChronoUnit.MINUTES, Token.ACCESS);
     }
 
     public String generateRefreshToken(User user) {
