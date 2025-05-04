@@ -1,5 +1,6 @@
 package org.aldo.beautycenter.service.implemetations;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.CustomerDao;
 import org.aldo.beautycenter.data.dao.UserDao;
@@ -34,13 +35,13 @@ public class CustomerServiceImpl implements CustomerService {
         customerDao.save(modelMapper.map(createCustomerDto, Customer.class));
     }
 
-//    @Override
-//    public CustomerDto getCustomerById(String id) {
-//        Customer customer = customerDao.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("Cliente non trovato"));
-//
-//        return modelMapper.map(customer, CustomerDto.class);
-//    }
+    @Override
+    public CustomerDto getCustomerById(String id) {
+        Customer customer = customerDao.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
+
+        return modelMapper.map(customer, CustomerDto.class);
+    }
 
     public void updateCustomer(UpdateCustomerDto updateCustomerDto) {
         userDao.findByEmail(updateCustomerDto.getEmail())

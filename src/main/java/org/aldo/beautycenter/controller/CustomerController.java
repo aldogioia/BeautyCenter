@@ -25,18 +25,21 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<CustomerDto>> getAllCustomers() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(customerService.getAllCustomers());
     }
 
-//    @GetMapping("/one")
-//    public ResponseEntity<CustomerDto> getCustomer(@RequestParam String id) {
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(customerService.getCustomerById(id));
-//    }
+    @GetMapping("/one")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or authentication.principal.id == #id")
+    public ResponseEntity<CustomerDto> getCustomer(@ValidCustomerId @RequestParam String id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(customerService.getCustomerById(id));
+    }
+
     @PatchMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or authentication.principal.id == #updateCustomerDto.id")
     public ResponseEntity<HttpStatus> updateUser(@Valid @RequestBody UpdateCustomerDto updateCustomerDto) {
@@ -47,7 +50,7 @@ public class CustomerController {
     }
 
     @DeleteMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or authentication.principal.id == #id")
     public ResponseEntity<HttpStatus> deleteUser(@ValidCustomerId @RequestParam String id) {
         customerService.deleteCustomer(id);
         return ResponseEntity
