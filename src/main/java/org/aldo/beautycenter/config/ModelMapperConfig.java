@@ -116,16 +116,15 @@ public class ModelMapperConfig {
             }
         });
 
+
         //mappatura per la creazione di un Booking
         modelMapper.addMappings(new PropertyMap<CreateBookingDto, Booking>() {
             @Override
             protected void configure() {
-                using(ctx -> serviceDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Servizio non trovato")))
-                        .map(source.getService(), destination.getService());
-                using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
-                        .map(source.getOperator(), destination.getOperator());
-                using(ctx -> customerDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Cliente non trovato")))
-                        .map(source.getCustomer(), destination.getCustomer());
+                skip().setOperator(null);
+                skip().setService(null);
+                skip().setRoom(null);
+                skip().setBookedForCustomer(null);
             }
         });
 
@@ -133,16 +132,38 @@ public class ModelMapperConfig {
         modelMapper.addMappings(new PropertyMap<Booking, BookingDto>() {
             @Override
             protected void configure() {
-                map().setRoom(source.getRoom().getId());
+                map().setRoom(source.getRoom().getName()); //todo avevo inserito l'id, ora ho cambiato ma non so se avevo sbagliato o meno
 
-                using(ctx -> modelMapper.map(source.getService(), SummaryServiceDto.class))
-                        .map(source, destination.getService());
-                using(ctx -> modelMapper.map(source.getOperator(), SummaryOperatorDto.class))
-                        .map(source, destination.getOperator());
-                using(ctx -> modelMapper.map(source.getCustomer(), SummaryCustomerDto.class))
-                        .map(source, destination.getCustomer());
+                // Service
+                using(ctx -> {
+                    Booking source = (Booking) ctx.getSource();
+                    return source.getService() != null
+                            ? modelMapper.map(source.getService(), ServiceDto.class)
+                            : null;
+                }).map(source, destination.getService());
+
+                // Operator
+                using(ctx -> {
+                    Booking source = (Booking) ctx.getSource();
+                    return source.getOperator() != null
+                            ? modelMapper.map(source.getOperator(), SummaryOperatorDto.class)
+                            : null;
+                }).map(source, destination.getOperator());
+
+                // Customer
+                using(ctx -> {
+                    Booking source = (Booking) ctx.getSource();
+                    return source.getBookedForCustomer() != null
+                            ? modelMapper.map(source.getBookedForCustomer(), SummaryCustomerDto.class)
+                            : null;
+                }).map(source, destination.getBookedForCustomer());
             }
         });
+
+
+
+
+
 
         //mappatura per la creazione di un operator
         modelMapper.addMappings(new PropertyMap<CreateOperatorDto, Operator>() {

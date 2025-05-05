@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 public interface BookingDao extends JpaRepository<Booking, String> {
-    List<Booking> findAllByCustomer_IdAndDateIsBefore(String userId, LocalDate date);
+    List<Booking> findAllByBookedForCustomer_IdAndDateIsAfter(String userId, LocalDate date);
     List<Booking> findAllByDate(LocalDate date);
     List<Booking> findAllByDateAndOperator_Id(LocalDate date, String operatorId);
     List<Booking> findAllByRoom_Services_Id(String serviceId);

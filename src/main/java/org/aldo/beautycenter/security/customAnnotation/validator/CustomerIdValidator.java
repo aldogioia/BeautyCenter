@@ -12,6 +12,7 @@ public class CustomerIdValidator implements ConstraintValidator<ValidCustomerId,
 
     @Override
     public boolean isValid(String userId, ConstraintValidatorContext context) {
+        if (userId == null) return true;
         return customerDao.existsById(userId);
     }
 }
