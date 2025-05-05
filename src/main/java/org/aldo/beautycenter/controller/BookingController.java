@@ -30,7 +30,7 @@ public class BookingController {
     @GetMapping("/customer")
     public ResponseEntity<List<BookingDto>> getCustomerBookings(@ValidCustomerId @RequestParam String customerId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(bookingService.getCustomerBookingsInDate(customerId));
+                .body(bookingService.getCustomerBookings(customerId));
     }
     @GetMapping("/operator")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OPERATOR')")

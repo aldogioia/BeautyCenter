@@ -7,5 +7,5 @@ public class SummaryCustomerDto {
     private String id;
     private String name;
     private String surname;
-    private Number phoneNumber;
+    private String phoneNumber;
 }

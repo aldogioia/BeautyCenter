@@ -32,19 +32,9 @@ public class Booking extends Auditable {
     @Column(name = "time", nullable = false)
     private LocalTime time;
 
-    @Column(name = "name_guest")
-    private String nameGuest;
-
-    @Column(name = "phone_number_guest")
-    private String phoneNumberGuest;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", nullable = false)
     private Service service;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "operator_id", nullable = false)
@@ -53,4 +43,14 @@ public class Booking extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer bookedForCustomer;
+
+    @Column(name = "booked_for_name")
+    private String bookedForName;
+
+    @Column(name = "booked_for_number")
+    private String bookedForNumber;
 }
