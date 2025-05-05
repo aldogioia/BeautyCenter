@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../api/operator_service.dart';
@@ -71,12 +69,8 @@ class Operator extends _$Operator {
       return Strings.connectionError;
     }
 
-    debugPrint("Response: $response");
-
     if (response.statusCode == 200) {
       final data = response.data as List;
-
-      debugPrint("Data: $data");
 
       if (data.isEmpty) {
         return Strings.noOperators;

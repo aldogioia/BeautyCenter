@@ -1,7 +1,9 @@
+import 'package:edone_customer/pages/profile_page.dart';
 import 'package:edone_customer/pages/service_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../providers/customer_provider.dart';
 import '../providers/global_provider.dart';
 import '../utils/strings.dart';
 import 'booking_page.dart';
@@ -19,6 +21,7 @@ class _ScaffoldPageState extends ConsumerState<ScaffoldPage> {
   List<Widget> get _pages => [
     ServicePage(),
     BookingPage(),
+    ProfilePage()
   ];
 
   void _onItemTapped(int index) {
@@ -37,6 +40,8 @@ class _ScaffoldPageState extends ConsumerState<ScaffoldPage> {
 
   @override
   Widget build(BuildContext context) {
+    final customerState = ref.watch(customerProvider);
+    final customer = customerState.customer;
 
     return Scaffold(
       appBar: AppBar(
@@ -44,22 +49,14 @@ class _ScaffoldPageState extends ConsumerState<ScaffoldPage> {
           children: [
             const Text(Strings.hello),
             Text(
-              "Aldo",
+              customer.name,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ],
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.account_circle),
-            tooltip: 'Profilo',
-            onPressed: () {
-            },
-          ),
-        ],
+        )
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -71,11 +68,15 @@ class _ScaffoldPageState extends ConsumerState<ScaffoldPage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: Strings.services,
+            label: "",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
-            label: Strings.bookings,
+            label: "",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: "",
           ),
         ],
       ),

@@ -31,7 +31,7 @@ class Auth extends _$Auth {
 
       String accessToken = authResponse.accessToken;
 
-      if (_isCustomer(accessToken)) {
+      if (!_isCustomer(accessToken)) {
         return "L'accesso deve avvenire con un account Cliente";
       }
 
@@ -87,6 +87,6 @@ class Auth extends _$Auth {
   bool _isCustomer(String token) {
     final decodedToken = JwtDecoder.decode(token);
     final role = decodedToken['role'];
-    return role == 'customer';
+    return role == 'ROLE_CUSTOMER';
   }
 }

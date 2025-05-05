@@ -1,25 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'booking_provider.dart';
+part of 'customer_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookingHash() => r'ca5b7efb7b91f348ef0e3425279d8f237157972c';
+String _$customerHash() => r'7b515f3763c13f8f071b128e3793e20af6c56644';
 
-/// See also [Booking].
-@ProviderFor(Booking)
-final bookingProvider =
-    AutoDisposeNotifierProvider<Booking, BookingProviderState>.internal(
-      Booking.new,
-      name: r'bookingProvider',
+/// See also [Customer].
+@ProviderFor(Customer)
+final customerProvider =
+    AutoDisposeNotifierProvider<Customer, CustomerProviderState>.internal(
+      Customer.new,
+      name: r'customerProvider',
       debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product') ? null : _$bookingHash,
+          const bool.fromEnvironment('dart.vm.product') ? null : _$customerHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$Booking = AutoDisposeNotifier<BookingProviderState>;
+typedef _$Customer = AutoDisposeNotifier<CustomerProviderState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

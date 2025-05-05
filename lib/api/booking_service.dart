@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:edone_customer/utils/secure_storage.dart';
 
 import 'api_service.dart';
 
@@ -7,12 +8,13 @@ class BookingService {
   final Dio _dio = ApiService.instance.dio;
   final String _path = "/booking";
 
-  Future<Response?> getCustomerBookings({required String customerId}) async {
+  Future<Response?> getCustomerBookings() async {
+    final userId = SecureStorage.getUserId();
     try {
       return await _dio.get(
           _path,
           queryParameters: {
-            'customerId' : customerId
+            'customerId' : userId
           }
       );
     } on DioException catch(e){

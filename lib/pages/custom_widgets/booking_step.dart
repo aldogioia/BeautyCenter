@@ -7,7 +7,6 @@ import '../../providers/booking_provider.dart';
 import '../../providers/operator_provider.dart';
 import '../../utils/Strings.dart';
 import '../../utils/input_validator.dart';
-import '../../utils/secure_storage.dart';
 import '../../utils/snack_bar.dart';
 import 'operator_item.dart';
 
@@ -72,22 +71,17 @@ class _BookingStepState extends ConsumerState<BookingStep> {
         phoneNumber = _phoneNumberController.text;
       }
 
-      final customerId = await SecureStorage.getAccessToken();
-
-      if (customerId == null) {
-        SnackBarHandler.instance.showMessage(message: "Errore durante la prenotazione");
-        return;
-      }
-
-      ref.read(bookingProvider.notifier)
+      final result = await ref.read(bookingProvider.notifier)
           .newBooking(
-            customerId: customerId,
             operatorId: _selectedOperator!.id,
             serviceId: widget.serviceId,
             nameGuest: name,
             phoneNumberGuest: phoneNumber,
             date: _selectedDate!,
-            time: _selectedTime!);
+            time: _selectedTime!
+      );
+
+      SnackBarHandler.instance.showMessage(message: result);
     }
 
     setState(() {

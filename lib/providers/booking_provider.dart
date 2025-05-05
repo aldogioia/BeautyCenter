@@ -1,9 +1,11 @@
 import 'package:edone_customer/api/booking_service.dart';
 import 'package:edone_customer/model/booking_dto.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../utils/Strings.dart';
+import '../utils/secure_storage.dart';
 
 part 'booking_provider.g.dart';
 
@@ -36,7 +38,7 @@ class Booking extends _$Booking {
   }
 
   Future<String> getAllBookings() async {
-    final response = await _bookingService.getCustomerBookings(customerId: ""); //TODO: capire come ottenere l'id del cliente
+    final response = await _bookingService.getCustomerBookings();
 
     if(response == null) return Strings.connectionError;
 
@@ -52,7 +54,6 @@ class Booking extends _$Booking {
   }
 
   Future<String> newBooking({
-    required String customerId,
     required String operatorId,
     required String serviceId,
     required String? nameGuest,
@@ -60,7 +61,22 @@ class Booking extends _$Booking {
     required DateTime date,
     required String time
   }) async {
+    final customerId = await SecureStorage.getUserId();
     final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+
+    if (customerId == null) {
+      return "Problema durante la prenotazione";
+    }
+
+    debugPrint(
+        "customerId: $customerId, \n "
+        "operatorId: $operatorId, \n "
+        "serviceId: $serviceId, \n "
+        "nameGuest: $nameGuest, \n "
+        "phoneNumberGuest: $phoneNumberGuest, \n "
+        "date: $formattedDate, \n "
+        "time: $time"
+    );
 
     final response = await _bookingService.newBooking(
         customerId: customerId,

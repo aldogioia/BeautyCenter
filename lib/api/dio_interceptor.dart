@@ -26,6 +26,12 @@ class DioInterceptor extends Interceptor {
   }
 
   @override
+  onResponse(Response response, ResponseInterceptorHandler handler) {
+    debugPrint("\n  Response for ${response.requestOptions.path}:\n status: ${response.statusCode}, message: ${response.statusMessage};\n data: ${response.data};\n");
+    handler.next(response);
+  }
+
+  @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final statusCode = err.response?.statusCode;
 
@@ -75,7 +81,7 @@ class DioInterceptor extends Interceptor {
           'X-Refresh-Token': refreshToken,
         }),
       );
-      return response.headers['Authorization']?.first;
+      return response.data;
     } catch (e) {
       debugPrint('Refresh token failed: $e');
       return null;

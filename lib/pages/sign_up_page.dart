@@ -39,8 +39,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         password: password
       );
 
-      debugPrint("Result: $result");
-
       if (result.isNotEmpty){
         SnackBarHandler.instance.showMessage(message: result);
       } else if (result.isEmpty) {

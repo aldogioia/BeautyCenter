@@ -23,7 +23,7 @@ class BookingPage extends ConsumerWidget {
         children: const [
           Padding(
             padding: EdgeInsets.all(32),
-            child: Center(child: Text(Strings.noServices)),
+            child: Center(child: Text(Strings.noBookings)),
           ),
         ],
       ) :
