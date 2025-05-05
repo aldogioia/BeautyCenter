@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.BookingDao;
+import org.aldo.beautycenter.data.dao.CustomerDao;
 import org.aldo.beautycenter.data.dao.OperatorDao;
 import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.*;
@@ -22,15 +23,18 @@ import java.util.Optional;
 public class BookingServiceImpl implements BookingService {
     private final BookingDao bookingDao;
     private final OperatorDao operatorDao;
+    private final CustomerDao customerDao;
     private final ServiceDao serviceDao;
     private final ModelMapper modelMapper;
 
+    @Override
     public List<BookingDto> getCustomerBookings(String customerId) {
         return bookingDao.findAllByBookedForCustomer_IdAndDateIsAfter(customerId, LocalDate.now().minusDays(1))
                 .stream()
                 .map(booking -> modelMapper.map(booking, BookingDto.class))
                 .toList();
     }
+
     @Override
     public List<BookingDto> getOperatorBookingsInDate(String operatorId, LocalDate date) {
         return bookingDao.findAllByDateAndOperator_Id(date, operatorId)
@@ -38,10 +42,12 @@ public class BookingServiceImpl implements BookingService {
                 .map(booking -> modelMapper.map(booking, BookingDto.class))
                 .toList();
     }
+
     @Override
     public List<Booking> getBookingsByDate(LocalDate date) {
         return bookingDao.findAllByDate(date);
     }
+
     @Override
     @Transactional
     public BookingDto addBooking(CreateBookingDto createBookingDto) {
@@ -70,7 +76,9 @@ public class BookingServiceImpl implements BookingService {
             if (createBookingDto.getBookedForCustomer() == null) {
                 booking.setBookedForCustomer(null);
             } else {
-                booking.setBookedForCustomer(modelMapper.map(createBookingDto.getBookedForCustomer(), Customer.class));
+                Customer customer = customerDao.findById(createBookingDto.getBookedForCustomer())
+                        .orElseThrow(() -> new EntityNotFoundException("Cliente non trovato"));
+                booking.setBookedForCustomer(customer);
             }
             booking.setRoom(room.get());
             bookingDao.save(booking);
@@ -78,33 +86,12 @@ public class BookingServiceImpl implements BookingService {
             return modelMapper.map(booking, BookingDto.class);
         }
         catch (Exception e) {
-            throw new RuntimeException( e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
-
     }
+
     @Override
     public void deleteBooking(String bookingId) {
         bookingDao.deleteById(bookingId);
-    }
-    
-    private BookingDto convertToBookingDto(Booking booking) {
-        try {
-            BookingDto bookingDto = modelMapper.map(booking, BookingDto.class);
-//            BookingDto bookingDto = new BookingDto();
-//            bookingDto.setId(booking.getId());
-//            bookingDto.setDate(booking.getDate());
-//            bookingDto.setTime(booking.getTime());
-            bookingDto.setOperator(modelMapper.map(booking.getOperator(), SummaryOperatorDto.class));
-            bookingDto.setService(modelMapper.map(booking.getService(), ServiceDto.class));
-//            bookingDto.setRoom(booking.getRoom().getName());
-            bookingDto.setBookedForCustomer(modelMapper.map(booking.getBookedForCustomer(), SummaryCustomerDto.class));
-            bookingDto.setBookedForName(booking.getBookedForName());
-            bookingDto.setBookedForNumber(booking.getBookedForNumber());
-
-            return bookingDto;
-        }
-        catch (Exception e) {
-            throw new BookingConflictException("Errore durante la conversione in Dto: " + e.getMessage());
-        }
     }
 }
