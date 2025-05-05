@@ -2,7 +2,6 @@ package org.aldo.beautycenter.config;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.aldo.beautycenter.data.dao.CustomerDao;
 import org.aldo.beautycenter.data.dao.OperatorDao;
 import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.*;
@@ -27,7 +26,7 @@ public class ModelMapperConfig {
     private final PasswordEncoder passwordEncoder;
     private final ServiceDao serviceDao;
     private final OperatorDao operatorDao;
-    private final CustomerDao customerDao;
+
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -132,7 +131,7 @@ public class ModelMapperConfig {
         modelMapper.addMappings(new PropertyMap<Booking, BookingDto>() {
             @Override
             protected void configure() {
-                map().setRoom(source.getRoom().getName()); //todo avevo inserito l'id, ora ho cambiato ma non so se avevo sbagliato o meno
+                map().setRoom(source.getRoom().getName());
 
                 // Service
                 using(ctx -> {
