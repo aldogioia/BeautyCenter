@@ -1,9 +1,9 @@
-package org.aldo.beautycenter.data.dto;
+package org.aldo.beautycenter.data.dto.updates;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.aldo.beautycenter.data.dto.superClass.ScheduleExceptionAbstract;
+import org.aldo.beautycenter.data.dto.abstracts.ScheduleExceptionAbstract;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidScheduleExceptionId;
 
 @Data

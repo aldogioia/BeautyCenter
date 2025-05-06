@@ -2,8 +2,8 @@ package org.aldo.beautycenter.service.implemetations;
 
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.ScheduleExceptionDao;
-import org.aldo.beautycenter.data.dto.CreateScheduleExceptionDto;
-import org.aldo.beautycenter.data.dto.ScheduleExceptionDto;
+import org.aldo.beautycenter.data.dto.create.CreateScheduleExceptionDto;
+import org.aldo.beautycenter.data.dto.responses.ScheduleExceptionDto;
 import org.aldo.beautycenter.data.entities.ScheduleException;
 import org.aldo.beautycenter.service.interfaces.ScheduleExceptionService;
 import org.modelmapper.ModelMapper;

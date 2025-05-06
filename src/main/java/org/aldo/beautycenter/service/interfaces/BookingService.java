@@ -1,7 +1,7 @@
 package org.aldo.beautycenter.service.interfaces;
 
-import org.aldo.beautycenter.data.dto.BookingDto;
-import org.aldo.beautycenter.data.dto.CreateBookingDto;
+import org.aldo.beautycenter.data.dto.responses.BookingDto;
+import org.aldo.beautycenter.data.dto.create.CreateBookingDto;
 import org.aldo.beautycenter.data.entities.Booking;
 
 import java.time.LocalDate;

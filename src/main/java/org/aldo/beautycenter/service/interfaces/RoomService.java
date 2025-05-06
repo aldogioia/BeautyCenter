@@ -1,8 +1,8 @@
 package org.aldo.beautycenter.service.interfaces;
 
-import org.aldo.beautycenter.data.dto.CreateRoomDto;
-import org.aldo.beautycenter.data.dto.RoomDto;
-import org.aldo.beautycenter.data.dto.UpdateRoomDto;
+import org.aldo.beautycenter.data.dto.create.CreateRoomDto;
+import org.aldo.beautycenter.data.dto.responses.RoomDto;
+import org.aldo.beautycenter.data.dto.updates.UpdateRoomDto;
 
 import java.util.List;
 

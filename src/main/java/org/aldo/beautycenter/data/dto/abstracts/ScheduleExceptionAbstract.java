@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.data.dto.superClass;
+package org.aldo.beautycenter.data.dto.abstracts;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +12,7 @@ import java.time.LocalTime;
 @Data
 @ValidScheduleExceptionInfo
 public abstract class ScheduleExceptionAbstract {
-    @NotNull(message = "Il data è obbligatoria")
+    @NotNull(message = "La data è obbligatoria")
     @FutureOrPresent(message = "La data di inizio non può essere nel passato")
     private LocalDate startDate;
 

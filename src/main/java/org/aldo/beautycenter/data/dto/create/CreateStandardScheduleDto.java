@@ -1,9 +1,9 @@
-package org.aldo.beautycenter.data.dto;
+package org.aldo.beautycenter.data.dto.create;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.aldo.beautycenter.data.dto.superClass.StandardScheduleAbstract;
+import org.aldo.beautycenter.data.dto.abstracts.StandardScheduleAbstract;
 
 import java.time.DayOfWeek;
 

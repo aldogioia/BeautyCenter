@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.data.dto;
+package org.aldo.beautycenter.data.dto.updates;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

@@ -7,7 +7,8 @@ import org.aldo.beautycenter.data.dao.BookingDao;
 import org.aldo.beautycenter.data.dao.CustomerDao;
 import org.aldo.beautycenter.data.dao.OperatorDao;
 import org.aldo.beautycenter.data.dao.ServiceDao;
-import org.aldo.beautycenter.data.dto.*;
+import org.aldo.beautycenter.data.dto.create.CreateBookingDto;
+import org.aldo.beautycenter.data.dto.responses.BookingDto;
 import org.aldo.beautycenter.data.entities.*;
 import org.aldo.beautycenter.security.exception.customException.BookingConflictException;
 import org.aldo.beautycenter.service.interfaces.BookingService;
@@ -44,7 +45,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> getBookingsByDate(LocalDate date) {
+    public List<Booking> getBookingsByDate(LocalDate date) { //todo serve?
         return bookingDao.findAllByDate(date);
     }
 

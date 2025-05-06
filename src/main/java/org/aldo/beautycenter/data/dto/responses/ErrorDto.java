@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.data.dto;
+package org.aldo.beautycenter.data.dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

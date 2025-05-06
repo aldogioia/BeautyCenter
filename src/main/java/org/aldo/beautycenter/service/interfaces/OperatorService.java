@@ -1,9 +1,9 @@
 package org.aldo.beautycenter.service.interfaces;
 
-import org.aldo.beautycenter.data.dto.CreateOperatorDto;
-import org.aldo.beautycenter.data.dto.OperatorDto;
-import org.aldo.beautycenter.data.dto.SummaryOperatorDto;
-import org.aldo.beautycenter.data.dto.UpdateOperatorDto;
+import org.aldo.beautycenter.data.dto.create.CreateOperatorDto;
+import org.aldo.beautycenter.data.dto.responses.OperatorDto;
+import org.aldo.beautycenter.data.dto.summaries.SummaryOperatorDto;
+import org.aldo.beautycenter.data.dto.updates.UpdateOperatorDto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

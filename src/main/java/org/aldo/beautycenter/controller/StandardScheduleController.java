@@ -2,9 +2,9 @@ package org.aldo.beautycenter.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.aldo.beautycenter.data.dto.CreateStandardScheduleDto;
-import org.aldo.beautycenter.data.dto.StandardScheduleDto;
-import org.aldo.beautycenter.data.dto.UpdateStandardScheduleDto;
+import org.aldo.beautycenter.data.dto.create.CreateStandardScheduleDto;
+import org.aldo.beautycenter.data.dto.responses.StandardScheduleDto;
+import org.aldo.beautycenter.data.dto.updates.UpdateStandardScheduleDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidStandardScheduleId;
 import org.aldo.beautycenter.service.interfaces.StandardScheduleService;

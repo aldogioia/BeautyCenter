@@ -1,6 +1,7 @@
-package org.aldo.beautycenter.data.dto;
+package org.aldo.beautycenter.data.dto.responses;
 
 import lombok.Data;
+import org.aldo.beautycenter.data.dto.summaries.SummaryServiceDto;
 
 import java.util.List;
 

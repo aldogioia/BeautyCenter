@@ -2,10 +2,10 @@ package org.aldo.beautycenter.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.aldo.beautycenter.data.dto.CreateOperatorDto;
-import org.aldo.beautycenter.data.dto.OperatorDto;
-import org.aldo.beautycenter.data.dto.SummaryOperatorDto;
-import org.aldo.beautycenter.data.dto.UpdateOperatorDto;
+import org.aldo.beautycenter.data.dto.create.CreateOperatorDto;
+import org.aldo.beautycenter.data.dto.responses.OperatorDto;
+import org.aldo.beautycenter.data.dto.summaries.SummaryOperatorDto;
+import org.aldo.beautycenter.data.dto.updates.UpdateOperatorDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidOperatorId;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidServiceId;

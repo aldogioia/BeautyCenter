@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.data.dto;
+package org.aldo.beautycenter.data.dto.create;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;

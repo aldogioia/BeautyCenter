@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.data.dto.superClass;
+package org.aldo.beautycenter.data.dto.abstracts;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

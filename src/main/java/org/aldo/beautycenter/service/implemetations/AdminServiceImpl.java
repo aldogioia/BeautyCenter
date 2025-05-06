@@ -2,7 +2,7 @@ package org.aldo.beautycenter.service.implemetations;
 
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.AdminDao;
-import org.aldo.beautycenter.data.dto.CreateAdminDto;
+import org.aldo.beautycenter.data.dto.create.CreateAdminDto;
 import org.aldo.beautycenter.data.entities.Admin;
 import org.aldo.beautycenter.service.interfaces.AdminService;
 import org.modelmapper.ModelMapper;
