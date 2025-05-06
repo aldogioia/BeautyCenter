@@ -33,15 +33,17 @@ public class ScheduleExceptionController {
                 .status(HttpStatus.OK)
                 .body(scheduleExceptionService.getOperatorScheduleExceptions(operatorId));
     }
+
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<ScheduleExceptionDto>> createScheduleExceptions(
-            @Valid @RequestBody List<CreateScheduleExceptionDto> createScheduleExceptionDto
+    public ResponseEntity<ScheduleExceptionDto> createScheduleExceptions(
+            @Valid @RequestBody CreateScheduleExceptionDto createScheduleExceptionDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(scheduleExceptionService.createScheduleExceptions(createScheduleExceptionDto));
+                .body(scheduleExceptionService.createScheduleException(createScheduleExceptionDto));
     }
+
 //    @PutMapping
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    public ResponseEntity<HttpStatus> updateScheduleExceptions(
@@ -52,6 +54,7 @@ public class ScheduleExceptionController {
 //                .status(HttpStatus.NO_CONTENT)
 //                .build();
 //    }
+
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> deleteScheduleExceptions(
