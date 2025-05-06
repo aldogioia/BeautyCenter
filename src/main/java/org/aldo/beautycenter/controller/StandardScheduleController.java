@@ -36,23 +36,25 @@ public class StandardScheduleController {
     }
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<StandardScheduleDto>> createStandardSchedules(
-            @Valid @RequestBody List<CreateStandardScheduleDto> createStandardScheduleDto
+    public ResponseEntity<StandardScheduleDto> createStandardSchedules(
+            @Valid @RequestBody CreateStandardScheduleDto createStandardScheduleDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(standardScheduleService.createSchedules(createStandardScheduleDto));
+                .body(standardScheduleService.createSchedule(createStandardScheduleDto));
     }
-    @PutMapping
+
+    @PatchMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> updateStandardSchedules(
-            @Valid @RequestBody List<UpdateStandardScheduleDto> updateStandardScheduleDto
+            @Valid @RequestBody UpdateStandardScheduleDto updateStandardScheduleDto
     ) {
-        standardScheduleService.updateSchedules(updateStandardScheduleDto);
+        standardScheduleService.updateSchedule(updateStandardScheduleDto);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
+
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> deleteStandardSchedules(

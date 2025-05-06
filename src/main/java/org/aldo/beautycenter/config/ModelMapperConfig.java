@@ -73,16 +73,17 @@ public class ModelMapperConfig {
         });
 
         //mappatura per la creazione dell'eccezione di un turno
-        modelMapper.addMappings(new PropertyMap<CreateScheduleExceptionDto, StandardSchedule>() {
+        modelMapper.addMappings(new PropertyMap<CreateScheduleExceptionDto, ScheduleException>() {
             @Override
             protected void configure() {
+                skip().setId(null);
                 using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
                         .map(source.getOperatorId(), destination.getOperator());
             }
         });
 
         //mappatura per l'aggiornamento di un turno standard
-        modelMapper.addMappings(new PropertyMap<UpdateScheduleExceptionDto, StandardSchedule>() {
+        modelMapper.addMappings(new PropertyMap<UpdateScheduleExceptionDto, ScheduleException>() {
             @Override
             protected void configure() {
                 using(ctx -> operatorDao.findById((String) ctx.getSource()).orElseThrow(() -> new EntityNotFoundException("Operatore non trovato")))
@@ -114,7 +115,6 @@ public class ModelMapperConfig {
                 using(passwordConverter).map(source.getPassword(), destination.getPassword());
             }
         });
-
 
         //mappatura per la creazione di un Booking
         modelMapper.addMappings(new PropertyMap<CreateBookingDto, Booking>() {
@@ -158,11 +158,6 @@ public class ModelMapperConfig {
                 }).map(source, destination.getBookedForCustomer());
             }
         });
-
-
-
-
-
 
         //mappatura per la creazione di un operator
         modelMapper.addMappings(new PropertyMap<CreateOperatorDto, Operator>() {

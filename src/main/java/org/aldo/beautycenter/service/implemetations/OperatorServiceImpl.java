@@ -8,7 +8,6 @@ import org.aldo.beautycenter.data.dto.*;
 import org.aldo.beautycenter.data.entities.Booking;
 import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.entities.Schedule;
-import org.aldo.beautycenter.data.entities.ScheduleException;
 import org.aldo.beautycenter.security.exception.customException.EmailAlreadyUsed;
 import org.aldo.beautycenter.security.exception.customException.S3DeleteException;
 import org.aldo.beautycenter.service.interfaces.OperatorService;
@@ -52,18 +51,42 @@ public class OperatorServiceImpl implements OperatorService {
 
     @Override
     public List<LocalTime> getAvailableTimes(String operatorId, LocalDate date, String serviceId) {
-        org.aldo.beautycenter.data.entities.Service service = serviceDao.getReferenceById(serviceId);
+        org.aldo.beautycenter.data.entities.Service service = serviceDao.findById(serviceId)
+                .orElseThrow(() -> new EntityNotFoundException("Servizio non trovato"));
+
         List<Booking> operatorBookings = bookingDao.findAllByDateAndOperator_Id(date, operatorId);
+
         List<Booking> roomBookings = bookingDao.findAllByRoom_Services_Id(serviceId);
+
         Schedule schedule = scheduleExceptionDao.findByOperatorIdAndDate(operatorId, date)
                 .map(s -> (Schedule) s)
                 .orElseGet(() -> standardScheduleDao.findByOperatorIdAndDay(operatorId, date.getDayOfWeek()));
 
         List<LocalTime> availableTimes = new ArrayList<>();
-        if(schedule instanceof ScheduleException && ((ScheduleException) schedule).getAbsent()) return availableTimes;
 
-        availableTimes.addAll(getAvailableSlots(schedule.getMorningStart(), schedule.getMorningEnd(), service.getDuration(), operatorBookings, roomBookings));
-        availableTimes.addAll(getAvailableSlots(schedule.getAfternoonStart(), schedule.getAfternoonEnd(), service.getDuration(), operatorBookings, roomBookings));
+        if (schedule.getMorningStart() != null) //la verifica che siano entrambe null o meno viene fatta nel Dto
+            availableTimes.addAll(
+                    getAvailableSlots(
+                            schedule.getMorningStart(),
+                            schedule.getMorningEnd(),
+                            service.getDuration(),
+                            operatorBookings,
+                            roomBookings
+                    )
+            );
+
+
+        if (schedule.getAfternoonStart() != null) //la verifica che siano entrambe null o meno viene fatta nel Dto
+            availableTimes.addAll(
+                getAvailableSlots(
+                        schedule.getAfternoonStart(),
+                        schedule.getAfternoonEnd(),
+                        service.getDuration(),
+                        operatorBookings,
+                        roomBookings
+                )
+            );
+
 
         return availableTimes;
     }

@@ -28,28 +28,20 @@ public class StandardScheduleServiceImpl implements StandardScheduleService {
     }
 
     @Override
-    public List<StandardScheduleDto> createSchedules(List<CreateStandardScheduleDto> createStandardScheduleDto) {
-        List<StandardSchedule> standardSchedules = createStandardScheduleDto
-                .stream()
-                .map(standardSchedule -> modelMapper.map(standardSchedule, StandardSchedule.class))
-                .toList();
-        standardScheduleDao.saveAll(standardSchedules);
+    public StandardScheduleDto createSchedule(CreateStandardScheduleDto createStandardScheduleDto) {
+        StandardSchedule standardSchedule =modelMapper.map(createStandardScheduleDto, StandardSchedule.class);
+        standardScheduleDao.save(standardSchedule);
 
-        return standardSchedules
-                .stream()
-                .map(standardSchedule -> modelMapper.map(standardSchedule, StandardScheduleDto.class))
-                .toList();
+        return modelMapper.map(standardSchedule, StandardScheduleDto.class);
     }
 
     @Override
-    public void updateSchedules(List<UpdateStandardScheduleDto> updateStandardScheduleDto) {
-        updateStandardScheduleDto
-                .forEach(updateStandardSchedule -> {
-                    StandardSchedule standardSchedule = standardScheduleDao.findById(updateStandardSchedule.getId())
+    public void updateSchedule(UpdateStandardScheduleDto updateStandardScheduleDto) {
+        StandardSchedule standardSchedule = standardScheduleDao.findById(updateStandardScheduleDto.getId())
                             .orElseThrow(() -> new EntityNotFoundException("Turno standard non trovato"));
-                    modelMapper.map(updateStandardSchedule, standardSchedule);
-                    standardScheduleDao.save(standardSchedule);
-                });
+
+        modelMapper.map(updateStandardScheduleDto, standardSchedule);
+        standardScheduleDao.save(standardSchedule);
     }
 
     @Override

@@ -26,17 +26,17 @@ public class ScheduleExceptionServiceImpl implements ScheduleExceptionService {
     }
 
     @Override
-    public List<ScheduleExceptionDto> createScheduleExceptions(List<CreateScheduleExceptionDto> createScheduleExceptionDto) {
-        List<ScheduleException> scheduleExceptions = createScheduleExceptionDto
-                .stream()
-                .map(scheduleException -> modelMapper.map(scheduleException, ScheduleException.class))
-                .toList();
-        scheduleExceptionDao.saveAll(scheduleExceptions);
+    public ScheduleExceptionDto createScheduleException(CreateScheduleExceptionDto createScheduleExceptionDto) {
+        ScheduleException scheduleException = modelMapper.map(createScheduleExceptionDto, ScheduleException.class);
+        System.out.println(
+            "Id: " + scheduleException.getId() +
+            "endDate: " + scheduleException.getEndDate() +
+            "startDate: " + scheduleException.getStartDate()
+        );
 
-        return scheduleExceptions
-                .stream()
-                .map(scheduleException -> modelMapper.map(scheduleException, ScheduleExceptionDto.class))
-                .toList();
+        scheduleExceptionDao.save(scheduleException);
+
+        return modelMapper.map(scheduleException, ScheduleExceptionDto.class);
     }
 
 //    @Override

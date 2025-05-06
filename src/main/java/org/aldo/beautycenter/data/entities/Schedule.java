@@ -9,7 +9,6 @@ import org.aldo.beautycenter.security.logging.Auditable;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Entity
@@ -24,9 +23,6 @@ public class Schedule extends Auditable {
     @Id
     @UuidGenerator
     private String id;
-
-    @Column(name = "day", nullable = false)
-    private DayOfWeek day;
 
     @Column(name = "morning_start_time")
     private LocalTime morningStart;

@@ -8,7 +8,10 @@ import java.util.List;
 
 public interface StandardScheduleService {
     List<StandardScheduleDto> getOperatorStandardSchedules(String operatorId);
-    List<StandardScheduleDto> createSchedules(List<CreateStandardScheduleDto> createStandardScheduleDto);
-    void updateSchedules(List<UpdateStandardScheduleDto> createStandardScheduleDto);
+
+    StandardScheduleDto createSchedule(CreateStandardScheduleDto createStandardScheduleDto);
+
+    void updateSchedule(UpdateStandardScheduleDto createStandardScheduleDto);
+
     void deleteSchedules(List<String> standardScheduleIds);
 }

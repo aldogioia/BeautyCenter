@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ScheduleExceptionService {
     List<ScheduleExceptionDto> getOperatorScheduleExceptions(String operatorId);
-    List<ScheduleExceptionDto> createScheduleExceptions(List<CreateScheduleExceptionDto> createScheduleExceptionDto);
+    ScheduleExceptionDto createScheduleException(CreateScheduleExceptionDto createScheduleExceptionDto);
 //    void updateScheduleExceptions(List<UpdateScheduleExceptionDto> createScheduleExceptionDto);
     void deleteScheduleExceptions(List<String> ids);
 }
