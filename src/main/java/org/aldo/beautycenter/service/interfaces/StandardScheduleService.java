@@ -1,8 +1,8 @@
 package org.aldo.beautycenter.service.interfaces;
 
-import org.aldo.beautycenter.data.dto.CreateStandardScheduleDto;
-import org.aldo.beautycenter.data.dto.StandardScheduleDto;
-import org.aldo.beautycenter.data.dto.UpdateStandardScheduleDto;
+import org.aldo.beautycenter.data.dto.create.CreateStandardScheduleDto;
+import org.aldo.beautycenter.data.dto.responses.StandardScheduleDto;
+import org.aldo.beautycenter.data.dto.updates.UpdateStandardScheduleDto;
 
 import java.util.List;
 

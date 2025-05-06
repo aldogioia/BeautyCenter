@@ -1,11 +1,12 @@
-package org.aldo.beautycenter.data.dto;
+package org.aldo.beautycenter.data.dto.responses;
 
 import lombok.Data;
 
 @Data
-public class SummaryCustomerDto {
+public class CustomerDto {
     private String id;
     private String name;
     private String surname;
+    private String email;
     private String phoneNumber;
 }

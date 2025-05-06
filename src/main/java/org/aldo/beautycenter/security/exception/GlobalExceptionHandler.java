@@ -2,7 +2,7 @@ package org.aldo.beautycenter.security.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.aldo.beautycenter.data.dto.ErrorDto;
+import org.aldo.beautycenter.data.dto.responses.ErrorDto;
 import org.aldo.beautycenter.security.exception.customException.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -90,6 +90,7 @@ public class GlobalExceptionHandler {
 
     private ErrorDto createErrorResponse(WebRequest req, String message){
         HttpServletRequest httpServletRequest = (HttpServletRequest) req.resolveReference("request");
+        assert httpServletRequest != null;
         return new ErrorDto(new Date(), httpServletRequest.getRequestURI(), message);
     }
 }

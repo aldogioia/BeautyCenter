@@ -2,8 +2,8 @@ package org.aldo.beautycenter.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.aldo.beautycenter.data.dto.CreateScheduleExceptionDto;
-import org.aldo.beautycenter.data.dto.ScheduleExceptionDto;
+import org.aldo.beautycenter.data.dto.create.CreateScheduleExceptionDto;
+import org.aldo.beautycenter.data.dto.responses.ScheduleExceptionDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidScheduleExceptionId;
 import org.aldo.beautycenter.service.interfaces.ScheduleExceptionService;

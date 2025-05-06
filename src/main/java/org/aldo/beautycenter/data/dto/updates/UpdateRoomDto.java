@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.data.dto;
+package org.aldo.beautycenter.data.dto.updates;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

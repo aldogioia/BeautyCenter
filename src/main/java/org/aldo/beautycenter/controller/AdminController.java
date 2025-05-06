@@ -2,7 +2,7 @@ package org.aldo.beautycenter.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.aldo.beautycenter.data.dto.CreateAdminDto;
+import org.aldo.beautycenter.data.dto.create.CreateAdminDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.service.interfaces.AdminService;
 import org.springframework.http.HttpStatus;

@@ -2,7 +2,7 @@ package org.aldo.beautycenter.security.customAnnotation.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.aldo.beautycenter.data.dto.CreateBookingDto;
+import org.aldo.beautycenter.data.dto.create.CreateBookingDto;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidBookingInfo;
 
 public class BookingInfoValidator implements ConstraintValidator<ValidBookingInfo, CreateBookingDto> {

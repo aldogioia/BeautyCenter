@@ -2,7 +2,7 @@ package org.aldo.beautycenter.security.customAnnotation.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.aldo.beautycenter.data.dto.superClass.StandardScheduleAbstract;
+import org.aldo.beautycenter.data.dto.abstracts.StandardScheduleAbstract;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidStandardScheduleInfo;
 
 import java.time.LocalTime;
