@@ -27,11 +27,13 @@ import java.util.List;
 @Validated
 public class BookingController {
     private final BookingService bookingService;
+
     @GetMapping("/customer")
     public ResponseEntity<List<BookingDto>> getCustomerBookings(@ValidCustomerId @RequestParam String customerId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bookingService.getCustomerBookings(customerId));
     }
+
     @GetMapping("/operator")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OPERATOR')")
     public ResponseEntity<List<BookingDto>> getOperatorBookings(
@@ -41,12 +43,14 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bookingService.getOperatorBookingsInDate(operatorId, date));
     }
+
     @PostMapping
     public ResponseEntity<BookingDto> createBooking(@Valid @RequestBody CreateBookingDto createBookingDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(bookingService.addBooking(createBookingDto));
     }
+
     @DeleteMapping
     public ResponseEntity<Void> deleteBooking(@ValidBookingId @RequestParam String bookingId) {
         bookingService.deleteBooking(bookingId);
