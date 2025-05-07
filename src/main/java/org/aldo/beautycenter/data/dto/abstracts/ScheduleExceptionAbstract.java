@@ -19,7 +19,6 @@ public abstract class ScheduleExceptionAbstract {
     @FutureOrPresent(message = "La data di fine non può essere nel passato")
     private LocalDate endDate;
 
-    private LocalTime startTime;
     private LocalTime morningStart;
     private LocalTime morningEnd;
     private LocalTime afternoonStart;
