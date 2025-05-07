@@ -35,13 +35,7 @@ class ServicePage extends ConsumerWidget {
         separatorBuilder: (context, index) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
           if (index == 0) {
-            return Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                Strings.services,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-              ),
-            );
+            return SizedBox(height: 32);
           }
           final service = services[index - 1];
           return GestureDetector(

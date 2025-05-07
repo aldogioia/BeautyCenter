@@ -25,12 +25,19 @@ class Strings {
 
   //TitlePage
   static const String services = "Servizi";
-  static const String bookings = "Penotazioni";
-  static const String profile = "Profilo";
-  static const String details = "I tuoi dati";
+  static const String bookings = "Prenotazioni";
+  static const String settings = "Impostazioni";
+  static const String details = "Le tue info";
+  static const String personalData = "Dati personali";
+  static const String notification = "Notifiche";
+  static const String resources = "Risorse";
+
+  //Social
+  static const String facebook = "Facebook";
+  static const String instagram = "Instagram";
+  static const String tiktok = "TikTok";
 
   //Utils
-  static const String hello = "Ciao, ";
   static const String at = " alle ";
 
   //ResourceNoAvailable

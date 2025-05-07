@@ -2,7 +2,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/customer_service.dart';
 import '../model/customer_dto.dart';
+import '../navigation/navigator.dart';
 import '../utils/Strings.dart';
+import '../utils/secure_storage.dart';
 
 part 'customer_provider.g.dart';
 
@@ -73,7 +75,7 @@ class Customer extends _$Customer{
           email: email,
         ),
       );
-      return "Dati aggiornati con successo"; //todo
+      return "";
     }
 
     return (response.data as Map<String, dynamic>)['message'];
@@ -85,9 +87,8 @@ class Customer extends _$Customer{
     if (response == null) return Strings.connectionError;
 
     if (response.statusCode == 204) {
-      state = state.copyWith(
-        customer: CustomerDto.empty(),
-      );
+      await SecureStorage.clearAll();
+      NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign-in", (route) => false,);
       return "";
     }
 

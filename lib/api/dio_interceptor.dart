@@ -76,7 +76,7 @@ class DioInterceptor extends Interceptor {
   Future<String?> _refreshToken(String refreshToken) async {
     try {
       final response = await _refreshDio.post(
-        'http://10.0.2.2:8080/api/v1/auth/refresh',
+        'http://192.168.1.14:8080/api/v1/auth/refresh',
         options: Options(headers: {
           'X-Refresh-Token': refreshToken,
         }),

@@ -7,6 +7,7 @@ import '../../providers/booking_provider.dart';
 import '../../providers/operator_provider.dart';
 import '../../utils/Strings.dart';
 import '../../utils/input_validator.dart';
+import '../../utils/secure_storage.dart';
 import '../../utils/snack_bar.dart';
 import 'operator_item.dart';
 
@@ -62,7 +63,29 @@ class _BookingStepState extends ConsumerState<BookingStep> {
       toAdd = 1;
     }
 
-    else if (_currentStep >=3 && _selectedTime != null) {
+    else if (_currentStep == 3 && _selectedTime != null) {
+      final customerId = await SecureStorage.getUserId();
+
+      if(customerId != null) {
+        final result = await ref.read(bookingProvider.notifier)
+          .newBooking(
+            customerId: customerId,
+            operatorId: _selectedOperator!.id,
+            serviceId: widget.serviceId,
+            nameGuest: null,
+            phoneNumberGuest: null,
+            date: _selectedDate!,
+            time: _selectedTime!
+          );
+
+        SnackBarHandler.instance.showMessage(message: result);
+      }
+      else{
+        SnackBarHandler.instance.showMessage(message: "Errore durante la prenotazione, riprovare"); //TODO
+      }
+    }
+
+    else if (_currentStep == 4 && _selectedTime != null) {
       String? name;
       String? phoneNumber;
 
@@ -73,12 +96,13 @@ class _BookingStepState extends ConsumerState<BookingStep> {
 
       final result = await ref.read(bookingProvider.notifier)
           .newBooking(
-            operatorId: _selectedOperator!.id,
-            serviceId: widget.serviceId,
-            nameGuest: name,
-            phoneNumberGuest: phoneNumber,
-            date: _selectedDate!,
-            time: _selectedTime!
+          customerId: null,
+          operatorId: _selectedOperator!.id,
+          serviceId: widget.serviceId,
+          nameGuest: name,
+          phoneNumberGuest: phoneNumber,
+          date: _selectedDate!,
+          time: _selectedTime!
       );
 
       SnackBarHandler.instance.showMessage(message: result);
@@ -118,7 +142,6 @@ class _BookingStepState extends ConsumerState<BookingStep> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 BackButton(onPressed: () => _back()),
-                Text("Indietro") //todo
               ],
             ),
           _getCurrentStep(),

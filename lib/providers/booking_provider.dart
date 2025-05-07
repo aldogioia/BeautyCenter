@@ -1,6 +1,5 @@
 import 'package:edone_customer/api/booking_service.dart';
 import 'package:edone_customer/model/booking_dto.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -38,7 +37,8 @@ class Booking extends _$Booking {
   }
 
   Future<String> getAllBookings() async {
-    final response = await _bookingService.getCustomerBookings();
+    final customerId = await SecureStorage.getUserId();
+    final response = await _bookingService.getCustomerBookings(customerId!);
 
     if(response == null) return Strings.connectionError;
 
@@ -46,7 +46,7 @@ class Booking extends _$Booking {
       if(response.data.isEmpty) return Strings.noBookings;
 
       state = state.copyWith(
-          bookings: (response.data as List).map((json) => BookingDto.fromJson(json)).toList()
+        bookings: (response.data as List).map((json) => BookingDto.fromJson(json)).toList()
       );
       return "";
     }
@@ -54,6 +54,7 @@ class Booking extends _$Booking {
   }
 
   Future<String> newBooking({
+    required String? customerId,
     required String operatorId,
     required String serviceId,
     required String? nameGuest,
@@ -61,22 +62,7 @@ class Booking extends _$Booking {
     required DateTime date,
     required String time
   }) async {
-    final customerId = await SecureStorage.getUserId();
     final formattedDate = DateFormat('yyyy-MM-dd').format(date);
-
-    if (customerId == null) {
-      return "Problema durante la prenotazione";
-    }
-
-    debugPrint(
-        "customerId: $customerId, \n "
-        "operatorId: $operatorId, \n "
-        "serviceId: $serviceId, \n "
-        "nameGuest: $nameGuest, \n "
-        "phoneNumberGuest: $phoneNumberGuest, \n "
-        "date: $formattedDate, \n "
-        "time: $time"
-    );
 
     final response = await _bookingService.newBooking(
         customerId: customerId,
@@ -99,6 +85,22 @@ class Booking extends _$Booking {
       );
       return "";
     }
+    return (response.data as Map<String, dynamic>)['message'];
+  }
+
+  Future<String> deleteBooking(String bookingId) async {
+    final response = await _bookingService.deleteBooking(bookingId);
+
+    if(response == null) return Strings.connectionError;
+
+    if(response.statusCode == 204){
+      state = state.copyWith(
+        bookings: state.bookings.where((booking) => booking.id != bookingId).toList()
+      );
+
+      return "";
+    }
+
     return (response.data as Map<String, dynamic>)['message'];
   }
 }

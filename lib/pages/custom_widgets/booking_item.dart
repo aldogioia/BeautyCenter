@@ -15,10 +15,6 @@ class BookingItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 25,
       children: [
-        Text(
-          Strings.bookings,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-        ),
         Row(
           spacing: 10,
           mainAxisSize: MainAxisSize.max,
@@ -71,7 +67,7 @@ class BookingItem extends StatelessWidget {
                             opacity: 0.5,
                             child: Text(Strings.at, style: Theme.of(context).textTheme.bodySmall)
                         ),
-                        Text("${booking.time.hour}:${booking.time.minute}", style: Theme.of(context).textTheme.bodySmall),
+                        Text(booking.time.substring(0,5), style: Theme.of(context).textTheme.bodySmall),
                       ]
                   ),
                   Divider(

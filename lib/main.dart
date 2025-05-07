@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
 
-        fontFamily: GoogleFonts.quicksand().fontFamily,
+        fontFamily: GoogleFonts.poppins().fontFamily,
       ),
       darkTheme: ThemeData(
         splashFactory: NoSplash.splashFactory,
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, brightness: Brightness.dark),
 
-        fontFamily: GoogleFonts.quicksand().fontFamily,
+        fontFamily: GoogleFonts.poppins().fontFamily,
       ),
       navigatorKey: NavigatorService.navigatorKey,
       onGenerateRoute: RouteGenerator.generateRoute,

@@ -2,7 +2,7 @@ class SummaryCustomerDto {
   final String id;
   final String name;
   final String surname;
-  final num phoneNumber;
+  final String phoneNumber;
 
   SummaryCustomerDto({
     required this.id,
@@ -33,7 +33,7 @@ class SummaryCustomerDto {
     String? id,
     String? name,
     String? surname,
-    num? phoneNumber,
+    String? phoneNumber,
   }) {
     return SummaryCustomerDto(
       id: id ?? this.id,

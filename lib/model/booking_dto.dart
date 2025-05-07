@@ -12,7 +12,7 @@ class BookingDto {
   final String? nameGuest;
   final String? phoneNumberGuest;
   final DateTime date;
-  final DateTime time;
+  final String time;
 
   BookingDto({
     required this.id,
@@ -31,12 +31,12 @@ class BookingDto {
       id: json['id'],
       service: ServiceDto.fromJson(json['service']),
       operator: SummaryOperatorDto.fromJson(json['operator']),
-      customer: SummaryCustomerDto.fromJson(json['customer']),
+      customer: SummaryCustomerDto.fromJson(json['bookedForCustomer']),
+      nameGuest: json['bookedForName'],
+      phoneNumberGuest: json['bookedForNumber'],
       room: json['room'],
-      nameGuest: json['nameGuest'],
-      phoneNumberGuest: json['phoneNumberGuest'],
       date: DateTime.parse(json['date']),
-      time: DateTime.parse(json['time']),
+      time: json['time'],
     );
   }
 
@@ -45,12 +45,12 @@ class BookingDto {
       'id': id,
       'service': service.toJson(),
       'operator': operator.toJson(),
-      'customer': customer.toJson(),
+      'bookedForCustomer': customer.toJson(),
       'room': room,
-      'nameGuest': nameGuest,
-      'phoneNumberGuest': phoneNumberGuest,
+      'bookedForName': nameGuest,
+      'bookedForNumber': phoneNumberGuest,
       'date': date.toIso8601String(),
-      'time': time.toIso8601String(),
+      'time': time,
     };
   }
 
@@ -63,7 +63,7 @@ class BookingDto {
     String? nameGuest,
     String? phoneNumberGuest,
     DateTime? date,
-    DateTime? time,
+    String? time,
   }) {
     return BookingDto(
       id: id ?? this.id,

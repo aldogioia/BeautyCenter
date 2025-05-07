@@ -1,9 +1,8 @@
-import 'package:edone_customer/pages/profile_page.dart';
 import 'package:edone_customer/pages/service_page.dart';
+import 'package:edone_customer/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/customer_provider.dart';
 import '../providers/global_provider.dart';
 import '../utils/strings.dart';
 import 'booking_page.dart';
@@ -21,13 +20,22 @@ class _ScaffoldPageState extends ConsumerState<ScaffoldPage> {
   List<Widget> get _pages => [
     ServicePage(),
     BookingPage(),
-    ProfilePage()
+    SettingsPage()
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  String _getTitle(){
+    return switch(_selectedIndex) {
+      0 => Strings.services,
+      1 => Strings.bookings,
+      2=> Strings.settings,
+      int() => "Errore",
+    };
   }
 
   @override
@@ -40,23 +48,10 @@ class _ScaffoldPageState extends ConsumerState<ScaffoldPage> {
 
   @override
   Widget build(BuildContext context) {
-    final customerState = ref.watch(customerProvider);
-    final customer = customerState.customer;
-
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            const Text(Strings.hello),
-            Text(
-              customer.name,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        )
+        title: Text(_getTitle(), style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
+        centerTitle: false,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -67,15 +62,15 @@ class _ScaffoldPageState extends ConsumerState<ScaffoldPage> {
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.spa_rounded),
             label: "",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book),
+            icon: Icon(Icons.book_rounded),
             label: "",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(Icons.manage_accounts_rounded),
             label: "",
           ),
         ],
