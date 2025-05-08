@@ -47,7 +47,19 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    @Transactional
     public void deleteRoom(String roomId) {
-        roomDao.deleteById(roomId);
+        Room room = roomDao.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException("Stanza non trovata"));
+
+        if (room.getServices() != null) {
+            for (org.aldo.beautycenter.data.entities.Service service : room.getServices()) {
+                service.getRooms().remove(room);
+            }
+            room.getServices().clear();
+        }
+
+        roomDao.delete(room);
     }
+
 }

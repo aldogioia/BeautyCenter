@@ -7,6 +7,8 @@ import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.create.CreateServiceDto;
 import org.aldo.beautycenter.data.dto.responses.ServiceDto;
 import org.aldo.beautycenter.data.dto.updates.UpdateServiceDto;
+import org.aldo.beautycenter.data.entities.Operator;
+import org.aldo.beautycenter.data.entities.Room;
 import org.aldo.beautycenter.security.exception.customException.S3DeleteException;
 import org.aldo.beautycenter.service.interfaces.S3Service;
 import org.aldo.beautycenter.service.interfaces.ServiceService;
@@ -56,11 +58,26 @@ public class ServiceServiceImpl implements ServiceService {
 
         String serviceName = service.getName();
 
-        serviceDao.deleteById(serviceId);
+        if (service.getOperators() != null) {
+            for (Operator operator : service.getOperators()) {
+                operator.getServices().remove(service);
+            }
+            service.getOperators().clear();
+        }
+
+        if (service.getRooms() != null) {
+            for (Room room : service.getRooms()) {
+                room.getServices().remove(service);
+            }
+            service.getRooms().clear();
+        }
+
+        serviceDao.delete(service);
 
         try {
             s3Service.deleteFile(Constants.SERVICE_FOLDER, serviceName);
         } catch (Exception e) {
+            System.out.println("Errore s3: " + e.getMessage());
             throw new S3DeleteException("Errore nella cancellazione del file su S3");
         }
     }
