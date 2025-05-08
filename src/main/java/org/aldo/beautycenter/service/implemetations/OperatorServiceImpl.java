@@ -132,7 +132,14 @@ public class OperatorServiceImpl implements OperatorService {
 
         String operatorName = operator.getName();
 
-        operatorDao.deleteById(operatorId);
+        if (operator.getServices() != null) {
+            for (org.aldo.beautycenter.data.entities.Service service : operator.getServices()) {
+                service.getOperators().remove(operator);
+            }
+            operator.getServices().clear();
+        }
+
+        operatorDao.delete(operator);
 
         try {
             s3Service.deleteFile(Constants.OPERATOR_FOLDER, operatorName);
@@ -140,6 +147,7 @@ public class OperatorServiceImpl implements OperatorService {
             throw new S3DeleteException("Errore nella cancellazione del file su S3");
         }
     }
+
 
     private List<LocalTime> getAvailableSlots(LocalTime start, LocalTime end, Long duration, List<Booking> operatorBookings, List<Booking> roomBookings) {
         List<LocalTime> slots = new ArrayList<>();

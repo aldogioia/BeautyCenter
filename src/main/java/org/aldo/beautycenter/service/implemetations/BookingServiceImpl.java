@@ -93,6 +93,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void deleteBooking(String bookingId) {
+        //TODO verificare che l'utente sia admin o lo stesso a cui è associata la prenotazione
         bookingDao.deleteById(bookingId);
     }
 }
