@@ -2,10 +2,12 @@ package org.aldo.beautycenter.controller;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.aldo.beautycenter.data.dto.updates.UpdatePasswordDto;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.service.interfaces.PasswordService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +23,27 @@ public class PasswordController {
     @PostMapping("/request-reset")
     public ResponseEntity<HttpStatus> requestResetPassword(@RequestParam String email) {
         passwordService.requestChangePassword(email);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
-    @PostMapping("/reset")
+    @PatchMapping("/reset")
     public ResponseEntity<HttpStatus> resetPassword(
             @RequestParam String token,
             @Pattern(regexp = "^(?=.*\\d).{8,}$", message = "La password deve essere lunga almeno 8 caratteri e contenere almeno un numero") @RequestParam String password) {
         passwordService.changePassword(token, password);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @PatchMapping("/update-password")
+    @PreAuthorize("authentication.principal.id == #updatePasswordDto.userId")
+    public ResponseEntity<HttpStatus> updatePassword(@RequestParam UpdatePasswordDto updatePasswordDto) {
+        passwordService.updatePassword(updatePasswordDto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }
