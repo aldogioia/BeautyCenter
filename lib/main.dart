@@ -1,17 +1,35 @@
 import 'package:edone_customer/pages/auth_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import 'navigation/navigator.dart';
 import 'navigation/route_generator.dart';
 
-void main() {
-  runApp(
-    const ProviderScope(
-      child: MyApp()
-    )
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation('Europe/Rome'));
+
+  const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+  final iOSInit = DarwinInitializationSettings();
+
+  var initSettings = InitializationSettings(
+    android: androidInit,
+    iOS: iOSInit,
   );
+
+  await flutterLocalNotificationsPlugin.initialize(initSettings);
+
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

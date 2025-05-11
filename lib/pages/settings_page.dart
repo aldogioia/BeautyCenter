@@ -1,13 +1,16 @@
+import 'package:edone_customer/providers/booking_provider.dart';
 import 'package:edone_customer/utils/Strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth_provider.dart';
 import '../providers/customer_provider.dart';
-import '../utils/snack_bar.dart';
-import 'custom_widgets/confirm_modal.dart';
+import '../providers/operator_provider.dart';
+import '../providers/service_provider.dart';
+import '../handler/snack_bar_handler.dart';
+import 'modal/confirm_modal.dart';
 import 'custom_widgets/customer_info.dart';
-import 'custom_widgets/notifications_modal.dart';
+import 'modal/notifications_modal.dart';
 
 class SettingsPage extends ConsumerStatefulWidget{
   const SettingsPage({super.key});
@@ -20,17 +23,28 @@ class SettingsPage extends ConsumerStatefulWidget{
 class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   Future<void> _signOut() async {
-    final response = await ref.read(authProvider.notifier).signOut();
-    if (response.isNotEmpty) {
-      SnackBarHandler.instance.showMessage(message: response);
+    final result = await ref.read(authProvider.notifier).signOut();
+    if (result.isNotEmpty) {
+      SnackBarHandler.instance.showMessage(message: result);
+    } else {
+      _clearProviders();
     }
   }
 
- Future<void> _deleteAccount() async {
-    final response = await ref.read(customerProvider.notifier).deleteCustomer();
-    if (response.isNotEmpty) {
-      SnackBarHandler.instance.showMessage(message: response);
+  Future<void> _deleteAccount() async {
+    final result = await ref.read(customerProvider.notifier).deleteCustomer();
+    if (result.isNotEmpty) {
+      SnackBarHandler.instance.showMessage(message: result);
+    } else {
+      _clearProviders();
     }
+  }
+
+  void _clearProviders(){
+    ref.read(customerProvider.notifier).reset();
+    ref.read(operatorProvider.notifier).reset();
+    ref.read(serviceProvider.notifier).reset();
+    ref.read(bookingProvider.notifier).reset();
   }
 
   @override
@@ -40,7 +54,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: 32,
       children: [
-        SizedBox(height: 32),
+        SizedBox(height: 16),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 16,
@@ -64,7 +78,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   child: CustomerInfo()
                 ),
               );
-            }, Strings.personalData, Icons.arrow_forward_ios, icon2: Icons.account_circle_rounded),
+            }, Strings.personalData, icon: Icons.arrow_forward_ios, icon2: Icons.account_circle_rounded),
             settingsItem(() {
               showModalBottomSheet(
                 context: context,
@@ -74,7 +88,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
                 builder: (context) => SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: MediaQuery.of(context).viewInsets.bottom + 16),
                   child: NotificationsModal(
                     value: false,
                     onChanged: (value) {
@@ -83,7 +97,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   )
                 ),
               );
-            }, Strings.notification, Icons.arrow_forward_ios, icon2: Icons.notifications_rounded),
+            }, Strings.notification, icon2: Icons.notifications_rounded),
           ],
         ),
         Column(
@@ -96,9 +110,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   fontWeight: FontWeight.bold,
                 ))
             ),
-            settingsItem(() => {}, Strings.facebook, Icons.open_in_new_rounded),
-            settingsItem(() => {}, Strings.instagram, Icons.open_in_new_rounded),
-            settingsItem(() => {}, Strings.tiktok, Icons.open_in_new_rounded),
+            settingsItem(() => {}, Strings.facebook, icon: Icons.open_in_new_rounded),
+            settingsItem(() => {}, Strings.instagram, icon: Icons.open_in_new_rounded),
+            settingsItem(() => {}, Strings.tiktok, icon: Icons.open_in_new_rounded),
           ],
         ),
         Column(
@@ -112,7 +126,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
                 builder: (context) => SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: MediaQuery.of(context).viewInsets.bottom + 16),
                   child: ConfirmModal(
                     text1: "Si, voglio Uscire",
                     text2:  "No, resto acnora un pò",
@@ -122,7 +136,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   )
                 ),
               );
-            }, Strings.signOut, Icons.logout_rounded, alert: true),
+            }, Strings.signOut, icon2: Icons.logout_rounded, alert: true),
             settingsItem(() {
               showModalBottomSheet(
                 context: context,
@@ -131,24 +145,24 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
                 builder: (context) => SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
-                    child: ConfirmModal(
-                        text1: "Si, voglio Eliminare l'account",
-                        text2:  "No, era solo un pensiero intrusivo",
-                        icon: Icons.delete_rounded,
-                        onConfirm: () => _deleteAccount(),
-                        onCancel: () => Navigator.pop(context)
-                    )
+                  padding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: MediaQuery.of(context).viewInsets.bottom + 16),
+                  child: ConfirmModal(
+                      text1: "Si, voglio Eliminare l'account",
+                      text2:  "No, era solo un pensiero intrusivo",
+                      icon: Icons.delete_rounded,
+                      onConfirm: () => _deleteAccount(),
+                      onCancel: () => Navigator.pop(context)
+                  )
                 ),
               );
-            }, Strings.deleteAccount, Icons.delete_rounded, alert: true),
+            }, Strings.deleteAccount, icon2: Icons.delete_rounded, alert: true),
           ],
         ),
       ],
     );
   }
 
-  Widget settingsItem(void Function() function, String text, IconData icon, {IconData? icon2, bool alert = false}){
+  Widget settingsItem(void Function() function, String text, {IconData? icon, IconData? icon2, bool alert = false}){
     return GestureDetector(
         onTap: function,
         child: Padding(
@@ -174,7 +188,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     ),
                   ]
                 ),
-                Icon(icon, size: 16, color: alert ? Colors.red: null)
+                if (icon != null) Icon(icon, size: 16, color: alert ? Colors.red: null)
               ]
           ),
         )

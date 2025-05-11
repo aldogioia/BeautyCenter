@@ -53,7 +53,7 @@ class Auth extends _$Auth {
       return Strings.connectionError;
     } else if (response.statusCode == 204) {
       await SecureStorage.clearAll();
-      NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign-in", (route) => false,);
+      NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/start", (route) => false,);
       return "";
     } else {
       return (response.data as Map<String, dynamic>)['message'];

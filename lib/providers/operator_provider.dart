@@ -84,4 +84,17 @@ class Operator extends _$Operator {
     }
     return (response.data as Map<String, dynamic>)['message'];
   }
+
+  void clearTimes() {
+    state = state.copyWith(
+      availableTimes: []
+    );
+  }
+
+  void reset() {
+    state = state.copyWith(
+      operators: [],
+      availableTimes: []
+    );
+  }
 }

@@ -88,10 +88,16 @@ class Customer extends _$Customer{
 
     if (response.statusCode == 204) {
       await SecureStorage.clearAll();
-      NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign-in", (route) => false,);
+      NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/start", (route) => false,);
       return "";
     }
 
     return (response.data as Map<String, dynamic>)['message'];
+  }
+
+  void reset() {
+    state = state.copyWith(
+      customer: CustomerDto.empty(),
+    );
   }
 }

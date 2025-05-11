@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class SecureStorage {
   static const _storage = FlutterSecureStorage();
@@ -11,7 +12,8 @@ class SecureStorage {
   }
 
   static Future<String?> getAccessToken() async {
-    return await _storage.read(key: _accessTokenKey);
+    final token = await _storage.read(key: _accessTokenKey);
+    return token == null || JwtDecoder.isExpired(token) ? null : token;
   }
 
   static Future<void> setRefreshToken(String token) async {

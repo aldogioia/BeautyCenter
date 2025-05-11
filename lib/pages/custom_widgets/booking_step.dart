@@ -1,20 +1,29 @@
+import 'package:edone_customer/providers/customer_provider.dart';
+import 'package:edone_customer/utils/message_extractor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
+import '../../handler/notification_handler.dart';
 import '../../model/operator_dto.dart';
+import '../../navigation/navigator.dart';
 import '../../providers/booking_provider.dart';
 import '../../providers/operator_provider.dart';
 import '../../utils/Strings.dart';
-import '../../utils/input_validator.dart';
-import '../../utils/secure_storage.dart';
-import '../../utils/snack_bar.dart';
+import '../../handler/snack_bar_handler.dart';
+import '../../utils/success_ovelay.dart';
 import 'operator_item.dart';
 
 class BookingStep extends ConsumerStatefulWidget {
   final String serviceId;
+  final String serviceImage;
 
-  const BookingStep({super.key, required this.serviceId});
+  const BookingStep({
+    super.key,
+    required this.serviceId,
+    required this.serviceImage,
+  });
 
   @override
   ConsumerState<BookingStep> createState() => _BookingStepState();
@@ -24,275 +33,277 @@ class _BookingStepState extends ConsumerState<BookingStep> {
   DateTime? _selectedDate;
   OperatorDto? _selectedOperator;
   String? _selectedTime;
+  bool loading = false;
 
-  int _currentStep = 0;
+  final ScrollController _scrollController = ScrollController();
+  FixedExtentScrollController? _pickerController;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
-
-  void _back() {
-    if(_currentStep == 4) {
-      _formKey.currentState?.reset();
-    }
-
-    if(_currentStep > 0) {
-      setState(() {
-        _currentStep--;
-      });
-    }
-  }
-
-  Future<void> _next() async {
-    int toAdd = 0;
-
-    if (_currentStep == 0 && _selectedDate != null) {
-      ref.read(operatorProvider.notifier)
-          .getAllOperators(widget.serviceId);
-      toAdd = 1;
-    }
-
-    else if (_currentStep == 1 && _selectedOperator != null) {
-      ref.read(operatorProvider.notifier)
-          .getAvailableTimes(operatorId: _selectedOperator!.id, serviceId: widget.serviceId, date: _selectedDate!);
-      toAdd = 1;
-    }
-
-    else if (_currentStep == 2 && _selectedTime != null) {
-      toAdd = 1;
-    }
-
-    else if (_currentStep == 3 && _selectedTime != null) {
-      final customerId = await SecureStorage.getUserId();
-
-      if(customerId != null) {
-        final result = await ref.read(bookingProvider.notifier)
-          .newBooking(
-            customerId: customerId,
-            operatorId: _selectedOperator!.id,
-            serviceId: widget.serviceId,
-            nameGuest: null,
-            phoneNumberGuest: null,
-            date: _selectedDate!,
-            time: _selectedTime!
-          );
-
-        SnackBarHandler.instance.showMessage(message: result);
-      }
-      else{
-        SnackBarHandler.instance.showMessage(message: "Errore durante la prenotazione, riprovare"); //TODO
-      }
-    }
-
-    else if (_currentStep == 4 && _selectedTime != null) {
-      String? name;
-      String? phoneNumber;
-
-      if (_formKey.currentState?.validate() ?? false) {
-        name = _nameController.text;
-        phoneNumber = _phoneNumberController.text;
-      }
-
-      final result = await ref.read(bookingProvider.notifier)
-          .newBooking(
-          customerId: null,
-          operatorId: _selectedOperator!.id,
-          serviceId: widget.serviceId,
-          nameGuest: name,
-          phoneNumberGuest: phoneNumber,
-          date: _selectedDate!,
-          time: _selectedTime!
-      );
-
-      SnackBarHandler.instance.showMessage(message: result);
-    }
-
-    setState(() {
-      _currentStep =_currentStep + toAdd;
-    });
-  }
-
-  Widget _getCurrentStep() {
-    switch (_currentStep) {
-      case 0:
-        return step1();
-      case 1:
-        return step2();
-      case 2:
-        return step3();
-      case 3:
-        return step4();
-      case 4:
-        return step5();
-      default:
-        return step1();
-    }
+  @override
+  void initState() {
+    ref.read(operatorProvider.notifier).getAllOperators(widget.serviceId);
+    super.initState();
   }
 
   @override
-  Widget build(BuildContext context){
-    return SafeArea(
-      child: Column(
-        spacing: 16,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if(_currentStep > 0)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                BackButton(onPressed: () => _back()),
-              ],
+  void dispose() {
+    _scrollController.dispose();
+    _pickerController?.dispose();
+    super.dispose();
+  }
+
+  void _advanceStep() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+
+  Future<void> _book() async {
+    final customerId = ref.watch(customerProvider).customer.id;
+    final result = await ref.read(bookingProvider.notifier).newBooking(
+      customerId: customerId,
+      operatorId: _selectedOperator!.id,
+      serviceId: widget.serviceId,
+      date: _selectedDate!,
+      time: _selectedTime!,
+    );
+    if (result.isEmpty) {
+      final appointmentDateTime = DateTime(
+        _selectedDate!.year,
+        _selectedDate!.month,
+        _selectedDate!.day,
+        _selectedTime!.split(":")[0] as int,
+        _selectedTime!.split(":")[1] as int,
+      );
+
+      await NotificationHandler.scheduleBookingNotifications(
+        appointmentDateTime: appointmentDateTime,
+      );
+
+      NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/scaffold", (route) => false);
+      showSuccessOverlay();
+    } else {
+      SnackBarHandler.instance.showMessage(
+        message: result.isEmpty ? Strings.booked : MessageExtractor.extract(result),
+      );
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final operators = ref.watch(operatorProvider).operators;
+    final times = ref.watch(operatorProvider.select((s) => s.availableTimes));
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Strings.book)
+      ),
+      body: SingleChildScrollView(
+        controller: _scrollController,
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 16,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image.network(
+                widget.serviceImage,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 150,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    color: Colors.grey,
+                    height: 150,
+                    alignment: Alignment.center,
+                    child: const CircularProgressIndicator(),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey,
+                    height: 150,
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
+                  );
+                },
+              )
             ),
-          _getCurrentStep(),
-          FilledButton(
-              onPressed: () => _next(),
-              child: Text(_currentStep >= 3 ? Strings.book : Strings.forward)
-          ),
-          if(_currentStep == 3)
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _currentStep++;
-                });
-              },
-              child: Text(
-                Strings.bookForOthers,
-                textAlign: TextAlign.center,
+
+            _buildStep1(),
+
+            Visibility(
+              visible: _selectedDate != null,
+              maintainState: true,
+              child: AnimatedOpacity(
+                opacity: _selectedDate != null ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: _buildStep2(operators),
               ),
-            )
-        ]
-      )
+            ),
+
+            Visibility(
+              visible: _selectedOperator != null,
+              maintainState: true,
+              child: AnimatedOpacity(
+                opacity: _selectedOperator != null ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: _buildStep3(times),
+              ),
+            ),
+
+            Visibility(
+              visible: _selectedTime != null,
+              maintainState: true,
+              child: AnimatedOpacity(
+                opacity: _selectedTime != null ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: FilledButton(
+                  onPressed: ( loading ? null : () async {
+                    setState(() {
+                      loading = true;
+                    });
+                    await _book();
+                  }),
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: loading
+                      ? Lottie.asset("assets/lottie/loading.json")
+                      : Text(Strings.book)
+                  )
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget step1() {
+  Widget _buildStep1() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 8,
+      spacing: 16,
       children: [
-        Text(Strings.selectDay, style: Theme.of(context).textTheme.titleLarge),
+        Opacity(
+          opacity: 0.5,
+          child: Text(Strings.selectDay, style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ))
+        ),
         CalendarDatePicker(
           initialDate: null,
           firstDate: DateTime.now(),
           lastDate: DateTime.now().add(const Duration(days: 60)),
-          onDateChanged: (date) {
+          onDateChanged: (date){
             setState(() {
               _selectedDate = date;
+              _selectedOperator = null;
+              _selectedTime = null;
             });
+
+            _advanceStep();
           },
-        )
+        ),
       ],
     );
   }
 
-  Widget step2() {
-    final operators = ref.watch(operatorProvider).operators;
-
+  Widget _buildStep2(List<OperatorDto> operators) {
     if (operators.isEmpty) {
-      return SizedBox(
-          height: 150,
-          child: Center(child: Text(Strings.noOperators))
-      );
+      return Center(child: Text(Strings.noOperators));
     }
-
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 8,
-        children: [
-          Text(Strings.selectOperator, style: Theme.of(context).textTheme.titleLarge),
-          SizedBox(
-            height: 200,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: operators.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 16),
-              itemBuilder: (BuildContext context, int index) {
-                final operator = operators[index];
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedOperator = operator;
-                    });
-                  },
-                  child: OperatorItem(
-                    isSelected: operator == _selectedOperator,
-                    operator: operator,
-                  ),
-                );
-              },
-            ),
-          )
-        ]
-    );
-  }
-
-  Widget step3() {
-    final times = ref.watch(operatorProvider.select((state) => state.availableTimes));
-
-    if (times.isEmpty) {
-      return SizedBox(
-          height: 150,
-          child: Center(child: Text(Strings.noTimes))
-      );
-    }
-
-    _selectedTime ??= times.first;
-
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 8,
-        children: [
-          Text(Strings.selectTime, style: Theme.of(context).textTheme.titleLarge),
-          SizedBox(
-            height: 100,
-            child: CupertinoPicker(
-                itemExtent: 25,
-                scrollController: FixedExtentScrollController(initialItem: times.indexOf(times[0])),
-                selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
-                  background: Theme.of(context).colorScheme.primary.withAlpha(64),
-                ),
-                onSelectedItemChanged: (index) {
-                  setState(() {
-                    _selectedTime = times[index];
-                  });
-                },
-                children: times.map(
-                        (time) => Center(
-                        child: Text(time.substring(0, 5), style: Theme.of(context).textTheme.titleMedium)
-                    )
-                ).toList()
-            ),
-          )
-        ]
-    );
-  }
-
-  Widget step4() {
-    return Text("Ricorda di arrivare con 10 minuti di anticipo per non rischiare di perdere l'appuntamento.", textAlign: TextAlign.center,);
-  }
-
-  Widget step5() {
-    return Column(
-      spacing: 32,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 16,
       children: [
-        Column(
-          spacing: 16,
-          children: [
-            TextFormField(
-              controller: _nameController,
-              validator: InputValidator.validateName,
-              decoration: const InputDecoration(labelText: Strings.name),
-            ),
-            TextFormField(
-              controller: _phoneNumberController,
-              validator: InputValidator.validatePhoneNumber,
-              obscureText: true,
-              decoration: const InputDecoration(labelText: Strings.mobilePhone),
-            ),
-          ],
+        Opacity(
+          opacity: 0.5,
+          child: Text(Strings.selectOperator, style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ))
         ),
-        //Text("Ricorda di arrivare con 10 minuti di anticipo per non rischiare di perdere l'appuntamento."),
+        SizedBox(
+          height: 200,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: operators.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 16),
+            itemBuilder: (context, i) {
+              final operator = operators[i];
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedOperator = operator;
+                    _selectedTime = null;
+                  });
+
+                  ref.read(operatorProvider.notifier).clearTimes();
+
+                  ref.read(operatorProvider.notifier).getAvailableTimes(
+                    operatorId: _selectedOperator!.id,
+                    serviceId: widget.serviceId,
+                    date: _selectedDate!,
+                  );
+
+                  _advanceStep();
+                },
+                child: OperatorItem(
+                  isSelected: operator == _selectedOperator,
+                  operator: operator,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStep3(List<String> times) {
+    _pickerController ??= FixedExtentScrollController(
+      initialItem: _selectedTime != null ? times.indexOf(_selectedTime!) : 0,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8,
+      children: [
+        Opacity(
+          opacity: 0.5,
+          child: Text(Strings.selectDay, style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ))
+        ),
+        times.isNotEmpty ?
+        SizedBox(
+          height: 200,
+          child: CupertinoPicker(
+            scrollController: _pickerController,
+            itemExtent: 32,
+            onSelectedItemChanged: (idx) {
+              setState(() {
+                _selectedTime = times[idx];
+              });
+              _advanceStep();
+            },
+            children: times.map((t) => Center(child: Text(t.substring(0, 5)))).toList(),
+          ),
+        ) :
+        SizedBox(
+          height: 200,
+          width: double.infinity,
+          child: Center(child: Text(Strings.noTimes))
+        )
       ],
     );
   }

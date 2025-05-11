@@ -1,11 +1,14 @@
+import 'package:edone_customer/navigation/navigator.dart';
+import 'package:edone_customer/utils/success_ovelay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../utils/strings.dart';
-import '../navigation/navigator.dart';
 import '../providers/auth_provider.dart';
 import '../utils/input_validator.dart';
-import '../utils/snack_bar.dart';
+import '../utils/message_extractor.dart';
+import '../handler/snack_bar_handler.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
@@ -17,14 +20,20 @@ class SignUpPage extends ConsumerStatefulWidget {
 class _SignUpPageState extends ConsumerState<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nameController = TextEditingController(text: "Aldo");
-  final TextEditingController _surnameController = TextEditingController(text: "Gioia");
-  final TextEditingController _phoneController = TextEditingController(text: "3272830636");
-  final TextEditingController _emailController = TextEditingController(text: "aldo@gioia.com");
-  final TextEditingController _passwordController = TextEditingController(text: "sonoCustomer1");
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _surnameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool loading = false;
 
   Future<void> _submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        loading = true;
+      });
+
       final name = _nameController.text;
       final surname = _surnameController.text;
       final phoneNumber = _phoneController.text;
@@ -40,9 +49,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       );
 
       if (result.isNotEmpty){
-        SnackBarHandler.instance.showMessage(message: result);
+        SnackBarHandler.instance.showMessage(message: MessageExtractor.extract(result));
       } else if (result.isEmpty) {
-        NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign-in", (route) => false);
+        showSuccessOverlay();
+        NavigatorService.navigatorKey.currentState?.pop();
       }
     }
   }
@@ -50,70 +60,64 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(Strings.signUp),
+      ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 24,
             children: [
-              Column(
-                spacing: 16,
-                children: [
-                  TextFormField(
-                    controller: _nameController,
-                    validator: InputValidator.validateName,
-                    decoration: const InputDecoration(labelText: Strings.name),
-                  ),
-                  TextFormField(
-                    controller: _surnameController,
-                    validator: InputValidator.validateSurname,
-                    decoration: const InputDecoration(labelText: Strings.surname),
-                  ),
-                  TextFormField(
-                    controller: _phoneController,
-                    validator: InputValidator.validatePhoneNumber,
-                    decoration: const InputDecoration(labelText: Strings.mobilePhone),
-                  ),
-                  TextFormField(
-                    controller: _emailController,
-                    validator: InputValidator.validateEmail,
-                    decoration: const InputDecoration(labelText: Strings.email),
-                  ),
-                  TextFormField(
-                    controller: _passwordController,
-                    validator: InputValidator.validatePassword,
-                    obscureText: true,
-                    decoration: const InputDecoration(labelText: Strings.password),
-                  ),
-                ],
+              Text("Che bello conoscerti", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)), //TODO
+              TextFormField(
+                controller: _nameController,
+                validator: InputValidator.validateName,
+                decoration: const InputDecoration(labelText: Strings.name),
               ),
-              const SizedBox(height: 32),
+              TextFormField(
+                controller: _surnameController,
+                validator: InputValidator.validateSurname,
+                decoration: const InputDecoration(labelText: Strings.surname),
+              ),
+              TextFormField(
+                controller: _phoneController,
+                validator: InputValidator.validatePhoneNumber,
+                decoration: const InputDecoration(labelText: Strings.mobilePhone),
+              ),
+              TextFormField(
+                controller: _emailController,
+                validator: InputValidator.validateEmail,
+                decoration: const InputDecoration(labelText: Strings.email),
+              ),
+              TextFormField(
+                controller: _passwordController,
+                validator: InputValidator.validatePassword,
+                obscureText: true,
+                decoration: const InputDecoration(labelText: Strings.password),
+              ),
               FilledButton(
-                onPressed: _submitForm,
-                child: const Text(
-                  Strings.signUp,
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-              ),
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTap: () {
-                  _formKey.currentState?.reset();
-                  NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign-in", (route) => false);
-                },
-                child: Text(
-                  Strings.alreadyIn,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
+                onPressed: ( loading ? null : () async {
+                  await _submitForm();
+                  setState(() {
+                    loading = true;
+                  });
+                }),
+                child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: loading
+                        ? Lottie.asset("assets/lottie/loading.json")
+                        : Text(Strings.signUp)
+                )
               ),
             ],
           ),
-        ),
-      ),
+        )
+      )
     );
   }
 }

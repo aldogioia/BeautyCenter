@@ -1,4 +1,7 @@
 class Strings {
+  //ip
+  static const String ip = "192.168.1.14";
+
   //Buttons
   static const String signIn = "Accedi";
   static const String signUp = "Registrati";
@@ -12,8 +15,8 @@ class Strings {
   static const String alreadyIn = "Hai già un account? Accedi";
   static const String book = "Prenota";
   static const String bookFor = "Prenota per:";
-  static const String bookForOthers = "Prenota per qualcun'altro";
-  static const String bookForMe = "Prenota per me";
+  static const String bookForOthers = "Per qualcun'altro";
+  static const String bookForMe = "Per me";
   static const String booked = "Prenotazione avvenuta con successo";
 
   //Form
@@ -22,6 +25,7 @@ class Strings {
   static const String mobilePhone = "Cellulare";
   static const String email = "Email";
   static const String password = "Password";
+  static const String newPassword = "Nuova password";
 
   //TitlePage
   static const String services = "Servizi";

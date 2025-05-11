@@ -5,7 +5,8 @@ import '../../model/customer_dto.dart';
 import '../../providers/customer_provider.dart';
 import '../../utils/Strings.dart';
 import '../../utils/input_validator.dart';
-import '../../utils/snack_bar.dart';
+import '../../utils/message_extractor.dart';
+import '../../handler/snack_bar_handler.dart';
 
 class CustomerInfo extends ConsumerStatefulWidget {
   const CustomerInfo({super.key});
@@ -69,7 +70,7 @@ class _ProfilePageState extends ConsumerState<CustomerInfo> {
           _hasChanged = false;
         });
       }
-      SnackBarHandler.instance.showMessage(message: result);
+      SnackBarHandler.instance.showMessage(message: MessageExtractor.extract(result));
     }
   }
 

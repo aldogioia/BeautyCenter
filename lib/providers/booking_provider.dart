@@ -57,8 +57,6 @@ class Booking extends _$Booking {
     required String? customerId,
     required String operatorId,
     required String serviceId,
-    required String? nameGuest,
-    required String? phoneNumberGuest,
     required DateTime date,
     required String time
   }) async {
@@ -68,8 +66,6 @@ class Booking extends _$Booking {
         customerId: customerId,
         operatorId: operatorId,
         serviceId: serviceId,
-        nameGuest: nameGuest,
-        phoneNumberGuest: phoneNumberGuest,
         date: formattedDate,
         time: time
     );
@@ -102,5 +98,11 @@ class Booking extends _$Booking {
     }
 
     return (response.data as Map<String, dynamic>)['message'];
+  }
+
+  void reset() {
+    state = state.copyWith(
+      bookings: []
+    );
   }
 }

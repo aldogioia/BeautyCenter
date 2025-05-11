@@ -11,6 +11,7 @@ class ServiceItem extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(30),
       child: Stack(
+        alignment: Alignment.bottomCenter,
         children: [
           Image.network(
             service.imgUrl,
@@ -36,19 +37,45 @@ class ServiceItem extends StatelessWidget {
             },
           ),
           Positioned(
-            bottom: 10,
-            left: 10,
-            child: Text(
-              service.name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                shadows: [
-                  Shadow(blurRadius: 5, color: Colors.black),
-                ],
+            right: 0,
+            bottom: 0,
+            left: 0,
+            top: 0,
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.black54],
+                ),
               ),
             ),
+          ),
+          Positioned(
+            right: 10,
+            bottom: 10,
+            left: 10,
+            child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    service.name,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16
+                    ),
+                  ),
+                  Text(
+                    "${service.price}0€",
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16
+                    ),
+                  ),
+                ]
+            )
           ),
         ],
       ),

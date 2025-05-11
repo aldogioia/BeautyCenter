@@ -58,7 +58,7 @@ class OperatorItem extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(operator.name, textAlign: TextAlign.center),
+              Text(operator.name, textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
               if(isSelected)
                 Positioned(
                   right: 5,

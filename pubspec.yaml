@@ -41,6 +41,9 @@ dependencies:
   fluttertoast: ^8.2.12
   jwt_decoder: ^2.0.1
   intl: ^0.18.1
+  lottie: ^3.3.1
+  timezone: ^0.9.2
+  flutter_local_notifications: ^17.0.0
 
 dev_dependencies:
   flutter_test:
@@ -56,3 +59,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  assets:
+    - assets/images/
+    - assets/lottie/

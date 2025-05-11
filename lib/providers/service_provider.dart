@@ -49,4 +49,10 @@ class Service extends _$Service {
     }
     return (response.data as Map<String, dynamic>)['message'];
   }
+
+  void reset() {
+    state = state.copyWith(
+      services: []
+    );
+  }
 }

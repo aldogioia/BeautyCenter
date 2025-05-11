@@ -1,7 +1,8 @@
-import 'package:edone_customer/pages/custom_widgets/booking_step.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
+import '../navigation/navigator.dart';
 import '../providers/service_provider.dart';
 import '../utils/Strings.dart';
 import 'custom_widgets/service_item.dart';
@@ -21,12 +22,17 @@ class ServicePage extends ConsumerWidget {
       child: services.isEmpty ?
       ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        children: const [
-          Center(
-            child: Padding(
-              padding: EdgeInsets.all(32),
-              child: Text(Strings.noServices)
-            )
+        children: [
+          Column(
+            spacing: 16,
+              children: [
+                const SizedBox(height: 32),
+                Lottie.asset(
+                  'assets/lottie/no_items.json',
+                  height: 200
+                ),
+                const Text(Strings.noServices)
+              ]
           )
         ],
       ) :
@@ -40,17 +46,12 @@ class ServicePage extends ConsumerWidget {
           final service = services[index - 1];
           return GestureDetector(
             onTap: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                isDismissible: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                ),
-                builder: (context) => SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: BookingStep(serviceId: service.id),
-                ),
+              NavigatorService.navigatorKey.currentState?.pushNamed(
+                '/booking',
+                arguments: Map<String, dynamic>.from({
+                  'serviceId': service.id,
+                  'serviceImage': service.imgUrl
+                })
               );
             },
             child: ServiceItem(service: service),

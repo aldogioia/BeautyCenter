@@ -6,7 +6,7 @@ part of 'operator_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$operatorHash() => r'688a926c05f065ed5b6adffe93c8292435d7b4db';
+String _$operatorHash() => r'17f342167aab4a3a96bf448d763f4203f284ffb5';
 
 /// See also [Operator].
 @ProviderFor(Operator)

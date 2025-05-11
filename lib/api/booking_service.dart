@@ -24,23 +24,19 @@ class BookingService {
     required String? customerId,
     required String operatorId,
     required String serviceId,
-    required String? nameGuest,
-    required String? phoneNumberGuest,
     required String date,
     required String time
   }) async {
     try {
       return await _dio.post(
-          _path,
-          data: {
-            'date' : date,
-            'time' : time,
-            'service' : serviceId,
-            'operator' : operatorId,
-            'bookedForCustomer': customerId,
-            'bookedForName' : nameGuest,
-            'bookedForNumber' : phoneNumberGuest,
-          }
+        _path,
+        data: {
+          'date' : date,
+          'time' : time,
+          'service' : serviceId,
+          'operator' : operatorId,
+          'bookedForCustomer': customerId,
+        }
       );
     } on DioException catch(e){
       return e.response;
@@ -52,7 +48,7 @@ class BookingService {
       return await _dio.delete(
           _path,
           queryParameters: {
-            'customerId': bookingId
+            'bookingId': bookingId
           }
       );
     } on DioException catch (e) {

@@ -29,6 +29,7 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 
+	<!-- Permessi rete locale -->
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Questa app richiede l'accesso alla rete locale per comunicare con il server backend.</string>
 	<key>NSBonjourServices</key>
@@ -36,6 +37,7 @@
 		<string>_http._tcp</string>
 	</array>
 
+	<!-- Orientamenti supportati -->
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -49,9 +51,20 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
+	<!-- Altri flag -->
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- 🔔 Notifiche locali -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>NSUserNotificationAlertStyle</key>
+	<string>alert</string>
 </dict>
 </plist>

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../providers/auth_provider.dart';
 import '../../utils/strings.dart';
 import '../navigation/navigator.dart';
+import '../providers/global_provider.dart';
 import '../utils/input_validator.dart';
-import '../utils/snack_bar.dart';
+import '../handler/snack_bar_handler.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
@@ -20,8 +22,14 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   final TextEditingController _emailController = TextEditingController(text: "aldo@gioia.com");
   final TextEditingController _passwordController = TextEditingController(text: "sonoCustomer1");
 
+  bool loading = false;
+
   Future<void> _submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        loading = true;
+      });
+
       final email = _emailController.text;
       final password = _passwordController.text;
 
@@ -33,7 +41,8 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       if (result.isNotEmpty) {
         SnackBarHandler.instance.showMessage(message: result);
       } else if (result.isEmpty) {
-        NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/scaffold", (route) => false,);
+        await ref.refresh(appInitProvider.future);
+        NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/scaffold", (route) => false);
       }
     }
   }
@@ -41,55 +50,58 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(Strings.signIn),
+      ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 24,
             children: [
-              Column(
-                spacing: 16,
-                children: [
-                  TextFormField(
-                    controller: _emailController,
-                    validator: InputValidator.validateEmail,
-                    decoration: const InputDecoration(labelText: Strings.email),
-                  ),
-                  TextFormField(
-                    controller: _passwordController,
-                    validator: InputValidator.validatePassword,
-                    obscureText: true,
-                    decoration: const InputDecoration(labelText: Strings.password),
-                  ),
-                ],
+              Text("Che bello rivederti", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)), //TODO
+              TextFormField(
+                controller: _emailController,
+                validator: InputValidator.validateEmail,
+                decoration: const InputDecoration(labelText: Strings.email),
               ),
-              const SizedBox(height: 32),
+              TextFormField(
+                controller: _passwordController,
+                validator: InputValidator.validatePassword,
+                obscureText: true,
+                decoration: const InputDecoration(labelText: Strings.password),
+              ),
+              Opacity(
+                opacity: 0.5,
+                child: GestureDetector(
+                  onTap: () {
+                    NavigatorService.navigatorKey.currentState?.pushNamed("/password-recovery");
+                  },
+                  child: Text("Password dimenticata?")
+                ),
+              ),
               FilledButton(
-                onPressed: _submitForm,
-                child: const Text(
-                  Strings.signIn,
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-              ),
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTap: () {
-                  _formKey.currentState?.reset();
-                  NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/sign-up", (route) => false,);
-                },
-                child: Text(
-                  Strings.noIn,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
+                onPressed: ( loading ? null : () async {
+                  await _submitForm();
+                  setState(() {
+                    loading = false;
+                  });
+                }),
+                child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: loading
+                        ? Lottie.asset("assets/lottie/loading.json")
+                        : Text(Strings.signIn)
+                )
               ),
             ],
           ),
-        ),
-      ),
+        )
+      )
     );
   }
 }
