@@ -37,6 +37,14 @@ public class OperatorServiceImpl implements OperatorService {
     private final ModelMapper modelMapper;
 
     @Override
+    public OperatorDto getOperatorById(String operatorId) {
+        Operator operator =  operatorDao.findById(operatorId)
+                .orElseThrow(() -> new EntityNotFoundException("Operator not found"));
+
+        return modelMapper.map(operator, OperatorDto.class);
+    }
+
+    @Override
     public List<OperatorDto> getAllOperators() {
         return operatorDao.findAll()
                 .stream()

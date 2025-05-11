@@ -10,8 +10,12 @@ import java.time.LocalTime;
 import java.util.List;
 
 public interface OperatorService {
+    OperatorDto getOperatorById(String operatorId);
+
     List<OperatorDto> getAllOperators();
+
     List<SummaryOperatorDto> getByService(String serviceId);
+
     List<LocalTime> getAvailableTimes(String operatorId, LocalDate date, String serviceId);
 
     OperatorDto createOperator(CreateOperatorDto createOperatorDto);
