@@ -1,6 +1,7 @@
 package org.aldo.beautycenter.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.create.CreateOperatorDto;
 import org.aldo.beautycenter.data.dto.responses.OperatorDto;
@@ -28,6 +29,14 @@ import java.util.List;
 @Validated
 public class OperatorController {
     private final OperatorService operatorService;
+
+    @GetMapping("/one")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_CUSTOMER') && authentication.principal.id == #operatorId)")
+    public ResponseEntity<OperatorDto> getOperator(@NotNull @ValidOperatorId String operatorId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(operatorService.getOperatorById(operatorId));
+    }
 
     @GetMapping("/all")
     public ResponseEntity<List<OperatorDto>> getAllOperators() {
