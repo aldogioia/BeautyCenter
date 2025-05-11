@@ -40,8 +40,8 @@ public class RoomController {
                 .body(roomService.createRoom(createRoomDto));
     }
 
+    @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping
     public ResponseEntity<HttpStatus> updateRoom(@Valid @RequestBody UpdateRoomDto updateRoomDto) {
         roomService.updateRoom(updateRoomDto);
         return ResponseEntity

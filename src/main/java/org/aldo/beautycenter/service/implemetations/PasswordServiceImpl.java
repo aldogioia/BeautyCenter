@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.PasswordTokenDao;
 import org.aldo.beautycenter.data.dao.UserDao;
+import org.aldo.beautycenter.data.dto.updates.UpdatePasswordDto;
 import org.aldo.beautycenter.data.entities.PasswordToken;
 import org.aldo.beautycenter.data.entities.User;
 import org.aldo.beautycenter.security.exception.customException.EmailNotSentException;
@@ -46,6 +47,20 @@ public class PasswordServiceImpl implements PasswordService {
         User user = passwordToken.getUser();
         user.setPassword(passwordEncoder.encode(newPassword));
 
+        userDao.save(user);
+    }
+
+    @Override
+    public void updatePassword(UpdatePasswordDto updatePasswordDto) {
+        User user = userDao.findById(updatePasswordDto.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
+
+        if (!passwordEncoder.matches(updatePasswordDto.getOldPassword(), user.getPassword())) {
+            //TODO fare eccezione personalizzata
+            throw new RuntimeException("La vecchia password è errata, riprovare");
+        }
+
+        user.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
         userDao.save(user);
     }
 
