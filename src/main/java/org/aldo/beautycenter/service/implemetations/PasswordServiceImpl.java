@@ -7,6 +7,7 @@ import org.aldo.beautycenter.data.dao.UserDao;
 import org.aldo.beautycenter.data.entities.PasswordToken;
 import org.aldo.beautycenter.data.entities.User;
 import org.aldo.beautycenter.security.exception.customException.EmailNotSentException;
+import org.aldo.beautycenter.security.exception.customException.TokenException;
 import org.aldo.beautycenter.service.interfaces.EmailService;
 import org.aldo.beautycenter.service.interfaces.PasswordService;
 import org.aldo.beautycenter.utils.PasswordTokenGenerator;
@@ -34,8 +35,13 @@ public class PasswordServiceImpl implements PasswordService {
     }
 
     @Override
-    public void changePassword(String email, String newPassword) {
-        PasswordToken passwordToken = passwordTokenDao.findByToken(email);
+    public void changePassword(String token, String newPassword) {
+        PasswordToken passwordToken = passwordTokenDao.findByToken(token)
+                .orElseThrow(() -> new EntityNotFoundException("Token invalido"));
+
+        if (passwordToken.getExpirationDate().before(Date.from(Instant.now()))) {
+            throw new TokenException("Token invalido");
+        }
 
         User user = passwordToken.getUser();
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -49,7 +55,7 @@ public class PasswordServiceImpl implements PasswordService {
 
         PasswordToken passwordToken = new PasswordToken();
         passwordToken.setToken(token);
-        passwordToken.setExpirationDate(Date.from(issued.plus(5, ChronoUnit.MINUTES)));
+        passwordToken.setExpirationDate(Date.from(issued.plus(10, ChronoUnit.MINUTES)));
         passwordToken.setUser(user);
 
         passwordTokenDao.save(passwordToken);

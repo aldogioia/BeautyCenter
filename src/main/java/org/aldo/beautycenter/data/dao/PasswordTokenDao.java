@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface PasswordTokenDao extends JpaRepository<PasswordToken, String> {
-    PasswordToken findByToken(String token);
+    Optional<PasswordToken> findByToken(String token);
 
     Optional<PasswordToken> findByUser(User user);
 }
