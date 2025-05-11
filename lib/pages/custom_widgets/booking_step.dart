@@ -114,28 +114,31 @@ class _BookingStepState extends ConsumerState<BookingStep> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(30),
-              child: Image.network(
-                widget.serviceImage,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 150,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    color: Colors.grey,
-                    height: 150,
-                    alignment: Alignment.center,
-                    child: const CircularProgressIndicator(),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey,
-                    height: 150,
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
-                  );
-                },
+              child: Hero(
+                tag: widget.serviceId,
+                child: Image.network(
+                  widget.serviceImage,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 150,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      color: Colors.grey,
+                      height: 150,
+                      alignment: Alignment.center,
+                      child: const CircularProgressIndicator(),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey,
+                      height: 150,
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
+                    );
+                  },
+                )
               )
             ),
 

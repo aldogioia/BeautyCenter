@@ -13,28 +13,31 @@ class ServiceItem extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          Image.network(
-            service.imgUrl,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: 150,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Container(
-                color: Colors.grey,
-                height: 150,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                color: Colors.grey,
-                height: 150,
-                alignment: Alignment.center,
-                child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
-              );
-            },
+          Hero(
+            tag: service.id,
+            child: Image.network(
+              service.imgUrl,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: 150,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Container(
+                  color: Colors.grey,
+                  height: 150,
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: Colors.grey,
+                  height: 150,
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
+                );
+              },
+            )
           ),
           Positioned(
             right: 0,
