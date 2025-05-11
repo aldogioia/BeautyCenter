@@ -69,7 +69,8 @@ public class JwtHandler {
             Date expiration = claims.getExpirationTime();
             String type = claims.getStringClaim("type");
 
-            return expectedType.name().equals(type) && (expiration == null || !expiration.before(new Date()));
+            if (expiration == null) return false;
+            return expectedType.name().equals(type) && expiration.after(new Date());
         } catch (Exception e) {
             return false;
         }
