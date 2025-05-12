@@ -41,7 +41,7 @@ class ServicePage extends ConsumerWidget {
         separatorBuilder: (context, index) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
           if (index == 0) {
-            return SizedBox(height: 32);
+            return SizedBox(height: 16);
           }
           final service = services[index - 1];
           return GestureDetector(

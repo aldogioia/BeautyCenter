@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../model/customer_dto.dart';
 import '../../providers/customer_provider.dart';
@@ -7,6 +8,7 @@ import '../../utils/Strings.dart';
 import '../../utils/input_validator.dart';
 import '../../utils/message_extractor.dart';
 import '../../handler/snack_bar_handler.dart';
+import '../../utils/success_ovelay.dart';
 
 class CustomerInfo extends ConsumerStatefulWidget {
   const CustomerInfo({super.key});
@@ -25,6 +27,7 @@ class _ProfilePageState extends ConsumerState<CustomerInfo> {
 
   late final CustomerDto _initialCustomer;
   bool _hasChanged = false;
+  bool loading = false;
 
   @override
   void initState() {
@@ -55,7 +58,9 @@ class _ProfilePageState extends ConsumerState<CustomerInfo> {
     }
   }
 
-  Future<void> submitForm() async {
+  Future<void> _submitForm() async {
+    if (!_hasChanged) return;
+
     if (formKey.currentState?.validate() ?? false) {
       String result = await ref.read(customerProvider.notifier).updateCustomer(
         name: _nameController.text,
@@ -65,61 +70,70 @@ class _ProfilePageState extends ConsumerState<CustomerInfo> {
       );
 
       if (result.isEmpty) {
-        result = "Dati aggiornati con successo"; //todo
+        showSuccessOverlay();
         setState(() {
           _hasChanged = false;
         });
       }
-      SnackBarHandler.instance.showMessage(message: MessageExtractor.extract(result));
+      else{
+        SnackBarHandler.instance.showMessage(message: MessageExtractor.extract(result));
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Form(
-        key: formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: 16,
-          children: [
-            Row(
-                mainAxisAlignment: _hasChanged ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(Strings.personalData, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                  if (_hasChanged)
-                    GestureDetector(
-                      onTap: submitForm,
-                      child: Text(
-                        "Modifica",
-                        style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.primary),
-                      ),
-                    ),
-                ]
-            ),
-            TextFormField(
-              controller: _nameController,
-              validator: InputValidator.validateName,
-              decoration: const InputDecoration(labelText: Strings.name),
-            ),
-            TextFormField(
-              controller: _surnameController,
-              validator: InputValidator.validateSurname,
-              decoration: const InputDecoration(labelText: Strings.surname),
-            ),
-            TextFormField(
-              controller: _phoneController,
-              validator: InputValidator.validatePhoneNumber,
-              decoration: const InputDecoration(labelText: Strings.mobilePhone),
-            ),
-            TextFormField(
-              controller: _emailController,
-              validator: InputValidator.validateEmail,
-              decoration: const InputDecoration(labelText: Strings.email),
-            ),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Strings.personalData),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 24,
+            children: [
+              Text(Strings.personalData, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+              TextFormField(
+                controller: _nameController,
+                validator: InputValidator.validateName,
+                decoration: const InputDecoration(labelText: Strings.name),
+              ),
+              TextFormField(
+                controller: _surnameController,
+                validator: InputValidator.validateSurname,
+                decoration: const InputDecoration(labelText: Strings.surname),
+              ),
+              TextFormField(
+                controller: _phoneController,
+                validator: InputValidator.validatePhoneNumber,
+                decoration: const InputDecoration(labelText: Strings.mobilePhone),
+              ),
+              TextFormField(
+                controller: _emailController,
+                validator: InputValidator.validateEmail,
+                decoration: const InputDecoration(labelText: Strings.email),
+              ),
+              FilledButton(
+                onPressed: (loading ? null : () async {
+                  await _submitForm();
+                  setState(() {
+                    loading = false;
+                  });
+                }),
+                style: ButtonStyle(backgroundColor: _hasChanged ? null : WidgetStateProperty.all(Colors.grey)),
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 300),
+                  child: loading
+                      ? Lottie.asset("assets/lottie/loading.json")
+                      : Text(Strings.update)
+                )
+              ),
+            ],
+          ),
+        )
       )
     );
   }

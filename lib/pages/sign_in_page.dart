@@ -41,7 +41,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       if (result.isNotEmpty) {
         SnackBarHandler.instance.showMessage(message: result);
       } else if (result.isEmpty) {
-        await ref.refresh(appInitProvider.future);
+        final _ =  await ref.refresh(appInitProvider.future);
         NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/scaffold", (route) => false);
       }
     }
@@ -53,7 +53,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       appBar: AppBar(
         title: Text(Strings.signIn),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
         child: Form(
           key: _formKey,
@@ -63,7 +63,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: 24,
             children: [
-              Text("Che bello rivederti", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)), //TODO
+              Text(Strings.good, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
               TextFormField(
                 controller: _emailController,
                 validator: InputValidator.validateEmail,
@@ -75,14 +75,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 obscureText: true,
                 decoration: const InputDecoration(labelText: Strings.password),
               ),
-              Opacity(
-                opacity: 0.5,
-                child: GestureDetector(
-                  onTap: () {
-                    NavigatorService.navigatorKey.currentState?.pushNamed("/password-recovery");
-                  },
-                  child: Text("Password dimenticata?")
-                ),
+              GestureDetector(
+                onTap: () {
+                  NavigatorService.navigatorKey.currentState?.pushNamed("/password-recovery");
+                },
+                child: Text(Strings.forgotPassword, style: TextStyle(color: Theme.of(context).primaryColor))
               ),
               FilledButton(
                 onPressed: ( loading ? null : () async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../model/operator_dto.dart';
 
@@ -26,7 +27,7 @@ class OperatorItem extends StatelessWidget {
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Container(
-                    color: Colors.grey,
+                    color: Colors.grey[200],
                     width: 150,
                     height: 200,
                     alignment: Alignment.center,
@@ -35,11 +36,11 @@ class OperatorItem extends StatelessWidget {
                 },
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    color: Colors.grey,
+                    color: Colors.grey[200],
                     width: 150,
                     height: 200,
                     alignment: Alignment.center,
-                    child: const Icon(Icons.image_not_supported)
+                    child: const FaIcon(FontAwesomeIcons.solidFaceSadTear)
                   );
                 },
               ),

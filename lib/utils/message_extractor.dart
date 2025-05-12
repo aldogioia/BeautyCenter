@@ -8,6 +8,8 @@ class MessageExtractor{
     debugPrint("message: $message");
     debugPrint("matches: $matches");
 
-    return matches[1].group(1) ?? message;
+    if (matches.length < 2) return message;
+
+    return matches[1].group(0) ?? message;
   }
 }

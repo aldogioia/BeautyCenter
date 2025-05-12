@@ -31,11 +31,6 @@ class _NewPasswordState extends ConsumerState<NewPasswordPage> {
 
   Future<void> _submitForm() async {
     if (_formKeyPassword.currentState?.validate() ?? false) {
-      if (_passwordController.text != _newPasswordController.text) {
-        SnackBarHandler.instance.showMessage(message: "Le password non corrispondono");
-        return;
-      }
-
       setState(() {
         loading = true;
       });
@@ -58,7 +53,7 @@ class _NewPasswordState extends ConsumerState<NewPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Recupero password"),
+        title: Text(Strings.resetPassword),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -68,7 +63,7 @@ class _NewPasswordState extends ConsumerState<NewPasswordPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 spacing: 24,
                 children: [
-                  Text("È il tuo momento! Reimposta la tua nuova password."),
+                  Text(Strings.yourMoment),
 
                   TextFormField(
                     controller: _passwordController,
@@ -79,7 +74,12 @@ class _NewPasswordState extends ConsumerState<NewPasswordPage> {
 
                   TextFormField(
                     controller: _newPasswordController,
-                    validator: InputValidator.validatePassword,
+                    validator: (value){
+                      if (value == null || value.isEmpty || value != _passwordController.text) {
+                        return Strings.passwordNotMatch;
+                      }
+                      return null;
+                    },
                     obscureText: true,
                     decoration: const InputDecoration(labelText: Strings.newPassword),
                   ),
@@ -95,7 +95,7 @@ class _NewPasswordState extends ConsumerState<NewPasswordPage> {
                       duration: Duration(milliseconds: 300),
                       child: loading
                         ? Lottie.asset("assets/lottie/loading.json")
-                        : Text("Reimposta la password") //TODO
+                        : Text(Strings.reset)
                     )
                   ),
                 ]

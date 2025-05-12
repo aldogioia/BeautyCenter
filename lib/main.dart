@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import 'handler/notification_handler.dart';
 import 'navigation/navigator.dart';
 import 'navigation/route_generator.dart';
 
@@ -29,8 +30,11 @@ void main() async {
 
   await flutterLocalNotificationsPlugin.initialize(initSettings);
 
-  runApp(ProviderScope(child: MyApp()));
+  await NotificationHandler.handleNotificationPermissions();
+
+  runApp(const ProviderScope(child: MyApp()));
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

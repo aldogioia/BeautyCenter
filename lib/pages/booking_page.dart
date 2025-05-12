@@ -1,8 +1,10 @@
 import 'package:edone_customer/pages/custom_widgets/booking_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 
+import '../handler/notification_handler.dart';
 import '../providers/booking_provider.dart';
 import '../utils/strings.dart';
 import 'modal/confirm_modal.dart';
@@ -42,7 +44,7 @@ class BookingPage extends ConsumerWidget {
         separatorBuilder: (context, index) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
           if (index == 0) {
-            return SizedBox(height: 32);
+            return SizedBox(height: 16);
           }
           final booking = bookings[index - 1];
           final bookingId = booking.id;
@@ -50,6 +52,7 @@ class BookingPage extends ConsumerWidget {
           return Dismissible(
             key: Key(bookingId),
             direction: DismissDirection.endToStart,
+            behavior: HitTestBehavior.translucent,
             confirmDismiss: (direction) async {
               return await showModalBottomSheet<bool>(
                 context: context,
@@ -62,7 +65,7 @@ class BookingPage extends ConsumerWidget {
                   child: ConfirmModal(
                     text1: "Si, disdici la prenotazione",
                     text2: 'No, mantieni la prenotazione',
-                    icon: Icons.delete,
+                    icon: FontAwesomeIcons.solidTrashCan,
                     onConfirm: () {
                       Navigator.of(context).pop(true);
                     },
@@ -74,15 +77,29 @@ class BookingPage extends ConsumerWidget {
               );
             },
             onDismissed: (direction) async {
+              final hour = int.parse(booking.time.split(":")[0]);
+              final minute = int.parse(booking.time.split(":")[1]);
+
+              final appointmentDateTime = DateTime(
+                booking.date.year,
+                booking.date.month,
+                booking.date.day,
+                hour,
+                minute,
+              );
+
+              await NotificationHandler.cancelBookingNotifications(appointmentDateTime);
+
               await ref.read(bookingProvider.notifier).deleteBooking(booking.id);
             },
             background: Container(
-              width: 44,
-              height: 44,
-              color: Colors.red,
               alignment: Alignment.centerRight,
-              transformAlignment: Alignment.center,
-              child: const Icon(Icons.delete_rounded),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.red,
+              ),
+              child: const FaIcon(FontAwesomeIcons.solidTrashCan),
             ),
             child: BookingItem(booking: booking),
           );

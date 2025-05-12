@@ -19,20 +19,20 @@ class ServiceItem extends StatelessWidget {
               service.imgUrl,
               fit: BoxFit.cover,
               width: double.infinity,
-              height: 150,
+              height: 160,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
                 return Container(
-                  color: Colors.grey,
-                  height: 150,
+                  color: Colors.grey[200],
+                  height: 160,
                   alignment: Alignment.center,
                   child: const CircularProgressIndicator(),
                 );
               },
               errorBuilder: (context, error, stackTrace) {
                 return Container(
-                  color: Colors.grey,
-                  height: 150,
+                  color: Colors.grey[200],
+                  height: 160,
                   alignment: Alignment.center,
                   child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
                 );

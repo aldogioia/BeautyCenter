@@ -1,4 +1,5 @@
 import 'package:edone_customer/pages/custom_widgets/booking_step.dart';
+import 'package:edone_customer/pages/custom_widgets/customer_info.dart';
 import 'package:edone_customer/pages/password_recovery_page.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,7 @@ import '../pages/sign_in_page.dart';
 import '../pages/sign_up_page.dart';
 import '../pages/scaffold_page.dart';
 import '../pages/start_page.dart';
+import '../pages/update_password_page.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -33,8 +35,14 @@ class RouteGenerator {
       case "/booking":
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(builder: (context) => BookingStep(
-          serviceId: args['serviceId'], serviceImage: args['serviceImage'])
+            serviceId: args['serviceId'], serviceImage: args['serviceImage'])
         );
+
+      case "/update-password":
+        return MaterialPageRoute(builder: (context) => UpdatePasswordPage());
+
+      case "/personal-data":
+        return MaterialPageRoute(builder: (context) => CustomerInfo());
 
       default:
         return MaterialPageRoute(builder: (context) => Text("Errore di navigazione"));

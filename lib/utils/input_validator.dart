@@ -24,7 +24,7 @@ class InputValidator {
     if (value == null || value.isEmpty ||
         !RegExp(r'^\d{5}$').hasMatch(
             value)) {
-      return "Il token è composto da 5 numeri"; //todo Strings.invalidToken
+      return Strings.invalidToken;
     }
     return null;
   }

@@ -24,7 +24,7 @@ class BookingItem extends StatelessWidget {
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress == null) return child;
               return Container(
-                color: Colors.grey,
+                color: Colors.grey[200],
                 height: 80,
                 width: 80,
                 alignment: Alignment.center,
@@ -33,7 +33,7 @@ class BookingItem extends StatelessWidget {
             },
             errorBuilder: (context, error, stackTrace) {
               return Container(
-                color: Colors.grey,
+                color: Colors.grey[200],
                 height: 80,
                 width: 80,
                 alignment: Alignment.center,
@@ -46,8 +46,9 @@ class BookingItem extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(8.0),
             child: Column(
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,10 +68,43 @@ class BookingItem extends StatelessWidget {
                     Text(booking.time.substring(0,5), style: Theme.of(context).textTheme.bodySmall),
                   ]
                 ),
-                Divider(
-                  thickness: 0.5,
-                ),
-                Text("${booking.operator.name} ${booking.operator.surname}"),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  spacing: 8,
+                  children: [
+                    Text("${booking.operator.name} ${booking.operator.surname}"),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Image.network(
+                        booking.operator.imgUrl,
+                        fit: BoxFit.cover,
+                        height: 25,
+                        width: 25,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            color: Colors.grey[200],
+                            height: 25,
+                            width: 25,
+                            alignment: Alignment.center,
+                            child: const CircularProgressIndicator(),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[200],
+                            height: 25,
+                            width: 25,
+                            alignment: Alignment.center,
+                            child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
+                          );
+                        },
+                      ),
+                    ),
+                  ]
+                )
               ],
             )
           )

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ConfirmModal extends StatelessWidget {
   final String text1;
@@ -38,7 +39,7 @@ class ConfirmModal extends StatelessWidget {
                         color: Colors.red
                     )
                   ),
-                  Icon(icon, color: Colors.red)
+                  FaIcon(icon, color: Colors.red)
                 ]
               )
             )
@@ -56,7 +57,7 @@ class ConfirmModal extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     )
                   ),
-                  Icon(Icons.sentiment_satisfied_rounded)
+                  FaIcon(FontAwesomeIcons.solidFaceSmileWink)
                 ]
               )
             )

@@ -12,6 +12,7 @@ import '../../providers/booking_provider.dart';
 import '../../providers/operator_provider.dart';
 import '../../utils/Strings.dart';
 import '../../handler/snack_bar_handler.dart';
+import '../../utils/secure_storage.dart';
 import '../../utils/success_ovelay.dart';
 import 'operator_item.dart';
 
@@ -72,17 +73,23 @@ class _BookingStepState extends ConsumerState<BookingStep> {
       time: _selectedTime!,
     );
     if (result.isEmpty) {
+
+      final hour = int.parse(_selectedTime!.split(":")[0]);
+      final minute = int.parse(_selectedTime!.split(":")[1]);
+
       final appointmentDateTime = DateTime(
         _selectedDate!.year,
         _selectedDate!.month,
         _selectedDate!.day,
-        _selectedTime!.split(":")[0] as int,
-        _selectedTime!.split(":")[1] as int,
+        hour,
+        minute,
       );
 
-      await NotificationHandler.scheduleBookingNotifications(
-        appointmentDateTime: appointmentDateTime,
-      );
+      if (await SecureStorage.getNotificationsEnabled()) {
+        await NotificationHandler.scheduleBookingNotifications(
+          appointmentDateTime: appointmentDateTime,
+        );
+      }
 
       NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/scaffold", (route) => false);
       showSuccessOverlay();
@@ -120,12 +127,12 @@ class _BookingStepState extends ConsumerState<BookingStep> {
                   widget.serviceImage,
                   fit: BoxFit.cover,
                   width: double.infinity,
-                  height: 150,
+                  height: 160,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
                     return Container(
                       color: Colors.grey,
-                      height: 150,
+                      height: 160,
                       alignment: Alignment.center,
                       child: const CircularProgressIndicator(),
                     );
@@ -133,7 +140,7 @@ class _BookingStepState extends ConsumerState<BookingStep> {
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       color: Colors.grey,
-                      height: 150,
+                      height: 160,
                       alignment: Alignment.center,
                       child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
                     );

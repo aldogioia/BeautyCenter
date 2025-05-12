@@ -18,6 +18,9 @@ class Strings {
   static const String bookForOthers = "Per qualcun'altro";
   static const String bookForMe = "Per me";
   static const String booked = "Prenotazione avvenuta con successo";
+  static const String reset = "Recupera";
+  static const String verifyToken = "Verifica Token";
+  static const String sendCode = "Invia codice";
 
   //Form
   static const String name = "Nome";
@@ -26,6 +29,12 @@ class Strings {
   static const String email = "Email";
   static const String password = "Password";
   static const String newPassword = "Nuova password";
+  static const String confirmPassword = "Conferma password";
+  static const String oldPassword = "Vecchia password";
+  static const String token = "Token";
+
+  //GenericText
+  static const String yourMoment = "È il tuo momento! Inserisci la tua nuova password.";
 
   //TitlePage
   static const String services = "Servizi";
@@ -33,8 +42,16 @@ class Strings {
   static const String settings = "Impostazioni";
   static const String details = "Le tue info";
   static const String personalData = "Dati personali";
+  static const String updatePassword = "Aggiorna password";
+  static const String resetPassword = "Recupera password";
   static const String notification = "Notifiche";
   static const String resources = "Risorse";
+  static const String access = "Accesso";
+  static const String good = "Che bello rivederti";
+  static const String meetYou = "Che bello conoscerti";
+  static const String forgotPassword = "Password dimenticata?";
+  static const String insertToken = "Inserisci il codice di 5 cifre che abbiamo inviato alla tua mail.";
+  static const String noProblem = "Nessun problema, può capitare! Conferma la tua mail e ti invieremo un codice per recuperare la tua password.";
 
   //Social
   static const String facebook = "Facebook";
@@ -64,6 +81,9 @@ class Strings {
   static const String invalidNumber = "Il numero di telefono deve contenere 10 numeri";
   static const String invalidName = "Il nome deve contenere almeno 3 caratteri e massimo 50";
   static const String invalidSurname = "Il cognome deve contenere almeno 3 caratteri e massimo 50";
+  static const String passwordNotMatch = "Le password non corrispondono";
+  static const String required = "Campo obbligatorio";
+  static const String invalidToken = "Il token inserito è errato";
 
   //LoadingErrors
   static const String noLoadImage = "Errore nel caricamento dell'immagine";

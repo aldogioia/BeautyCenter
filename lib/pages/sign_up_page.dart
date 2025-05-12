@@ -63,7 +63,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       appBar: AppBar(
         title: Text(Strings.signUp),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
         child: Form(
           key: _formKey,
@@ -73,7 +73,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: 24,
             children: [
-              Text("Che bello conoscerti", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)), //TODO
+              Text(Strings.meetYou, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
               TextFormField(
                 controller: _nameController,
                 validator: InputValidator.validateName,

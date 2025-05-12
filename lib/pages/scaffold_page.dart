@@ -3,6 +3,7 @@ import 'package:edone_customer/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 import '../main.dart';
@@ -78,19 +79,20 @@ class _ScaffoldPageState extends ConsumerState<ScaffoldPage> {
         child: _pages[_selectedIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 0,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.spa_rounded),
+            icon: FaIcon(FontAwesomeIcons.spa),
             label: "",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book_rounded),
+            icon: FaIcon(FontAwesomeIcons.bookBookmark),
             label: "",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.manage_accounts_rounded),
+            icon: FaIcon(FontAwesomeIcons.gear),
             label: "",
           ),
         ],

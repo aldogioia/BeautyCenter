@@ -63,7 +63,7 @@ class _PasswordRecoveryState extends ConsumerState<PasswordRecoveryPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Recupero password"),
+        title: Text(Strings.resetPassword),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -71,15 +71,15 @@ class _PasswordRecoveryState extends ConsumerState<PasswordRecoveryPage>{
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: 24,
             children: [
-              Text("Password Dimenticata?", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)), //TODO
+              Text(Strings.forgotPassword, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
               Opacity(
                 opacity: 0.5,
                 child: AnimatedSwitcher(
                   duration: Duration(milliseconds: 300),
                   child: !isTokenVisible
-                      ? Text("Nessun problema, può capitare! Conferma la tua mail e ti invieremo un codice per recuperare la tua password.")
-                      : Text("Inserisci il codice di 5 cifre che abbiamo inviato alla tua mail."),
-                ), //TODO
+                      ? Text(Strings.noProblem)
+                      : Text(Strings.insertToken),
+                ),
               ),
               AnimatedSwitcher(
                 duration: Duration(milliseconds: 300),
@@ -95,7 +95,7 @@ class _PasswordRecoveryState extends ConsumerState<PasswordRecoveryPage>{
                   duration: Duration(milliseconds: 300),
                   child: loading
                       ? Lottie.asset("assets/lottie/loading.json")
-                      : Text(isTokenVisible ? "Verifica Token" : "Invia codice")
+                      : Text(isTokenVisible ? Strings.verifyToken : Strings.sendCode)
                 )
               )
             ],
@@ -121,7 +121,7 @@ class _PasswordRecoveryState extends ConsumerState<PasswordRecoveryPage>{
         child: TextFormField(
           controller: _tokenController,
           validator: InputValidator.validateToken,
-          decoration: const InputDecoration(labelText: "Token"),//todo Strings.token
+          decoration: const InputDecoration(labelText: Strings.token),
         )
     );
   }

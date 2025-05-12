@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/password_service.dart';
 import '../utils/Strings.dart';
+import '../utils/secure_storage.dart';
 
 part 'password_provider.g.dart';
 
@@ -33,6 +34,27 @@ class Password extends _$Password{
     required String password,
   }) async {
     final response = await _passwordService.resetPassword(token, password);
+
+    if (response == null) {
+      return Strings.connectionError;
+    } else if (response.statusCode == 204) {
+      return "";
+    } else {
+      return (response.data as Map<String, dynamic>)['message'];
+    }
+  }
+
+  Future<String> updatePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    final customerId = await SecureStorage.getUserId();
+
+    if (customerId == null) {
+      return "Errore, riprovare";
+    }
+
+    final response = await _passwordService.updatePassword(customerId, oldPassword, newPassword);
 
     if (response == null) {
       return Strings.connectionError;
