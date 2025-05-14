@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.aldo.beautycenter.data.dao.FcmTokenDao;
 import org.aldo.beautycenter.data.dao.UserDao;
 import org.aldo.beautycenter.data.dto.responses.AuthResponseDto;
 import org.aldo.beautycenter.data.dto.create.CreateCustomerDto;
@@ -26,7 +27,9 @@ public class AuthServiceImpl implements AuthService {
     private final UserDao userDao;
     private final BlacklistService blacklistService;
     private final CustomerService customerService;
+    private final FcmTokenDao fcmTokenDao;
     private final AuthenticationManager authenticationManager;
+
     @Override
     public AuthResponseDto signIn(String email, String password) {
         authenticationManager.authenticate(
@@ -75,7 +78,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void signOut(HttpServletRequest request) {
+    public void signOut(HttpServletRequest request, String token, User user) {
+        /*user.getTokens().stream()
+                .filter(fcmToken -> fcmToken.getToken().equals(token))
+                .forEach(fcmToken -> fcmTokenDao.deleteByToken(token));*/
+
         blacklistService.addTokenToBlacklist(jwtHandler.getJwtFromRequest(request, Token.ACCESS));
         blacklistService.addTokenToBlacklist(jwtHandler.getJwtFromRequest(request, Token.REFRESH));
     }

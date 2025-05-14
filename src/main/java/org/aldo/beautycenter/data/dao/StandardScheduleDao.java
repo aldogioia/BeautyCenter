@@ -11,4 +11,5 @@ import java.util.List;
 public interface StandardScheduleDao extends JpaRepository<StandardSchedule, String> {
     List<StandardSchedule> findAllByOperatorId(String operatorId);
     StandardSchedule findByOperatorIdAndDay(String operatorId, DayOfWeek day);
+    boolean existsByDay(DayOfWeek day);
 }

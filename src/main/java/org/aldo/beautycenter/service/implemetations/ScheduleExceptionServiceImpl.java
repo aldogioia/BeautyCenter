@@ -51,7 +51,7 @@ public class ScheduleExceptionServiceImpl implements ScheduleExceptionService {
 //    }
 
     @Override
-    public void deleteScheduleExceptions(List<String> ids) {
-        scheduleExceptionDao.deleteAllById(ids);
+    public void deleteScheduleException(String id) {
+        scheduleExceptionDao.deleteById(id);
     }
 }

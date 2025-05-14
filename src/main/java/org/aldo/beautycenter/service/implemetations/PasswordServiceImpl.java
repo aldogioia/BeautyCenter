@@ -8,6 +8,7 @@ import org.aldo.beautycenter.data.dto.updates.UpdatePasswordDto;
 import org.aldo.beautycenter.data.entities.PasswordToken;
 import org.aldo.beautycenter.data.entities.User;
 import org.aldo.beautycenter.security.exception.customException.EmailNotSentException;
+import org.aldo.beautycenter.security.exception.customException.PasswordNotMatchException;
 import org.aldo.beautycenter.security.exception.customException.TokenException;
 import org.aldo.beautycenter.service.interfaces.EmailService;
 import org.aldo.beautycenter.service.interfaces.PasswordService;
@@ -56,8 +57,7 @@ public class PasswordServiceImpl implements PasswordService {
                 .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
 
         if (!passwordEncoder.matches(updatePasswordDto.getOldPassword(), user.getPassword())) {
-            //TODO fare eccezione personalizzata
-            throw new RuntimeException("La vecchia password è errata, riprovare");
+            throw new PasswordNotMatchException("La vecchia password è errata, riprovare");
         }
 
         user.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));

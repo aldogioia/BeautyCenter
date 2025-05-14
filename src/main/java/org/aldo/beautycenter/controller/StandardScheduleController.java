@@ -34,6 +34,7 @@ public class StandardScheduleController {
                 .status(HttpStatus.OK)
                 .body(standardScheduleService.getOperatorStandardSchedules(operatorId));
     }
+
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<StandardScheduleDto> createStandardSchedules(
@@ -57,10 +58,10 @@ public class StandardScheduleController {
 
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpStatus> deleteStandardSchedules(
-            @ValidStandardScheduleId @RequestParam List<String> standardScheduleIds
+    public ResponseEntity<HttpStatus> deleteStandardSchedule(
+            @ValidStandardScheduleId @RequestParam String standardScheduleId
     ) {
-        standardScheduleService.deleteSchedules(standardScheduleIds);
+        standardScheduleService.deleteSchedule(standardScheduleId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();

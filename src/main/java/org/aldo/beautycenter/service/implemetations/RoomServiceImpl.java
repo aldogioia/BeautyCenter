@@ -8,6 +8,7 @@ import org.aldo.beautycenter.data.dto.create.CreateRoomDto;
 import org.aldo.beautycenter.data.dto.responses.RoomDto;
 import org.aldo.beautycenter.data.dto.updates.UpdateRoomDto;
 import org.aldo.beautycenter.data.entities.Room;
+import org.aldo.beautycenter.service.interfaces.NotificationService;
 import org.aldo.beautycenter.service.interfaces.RoomService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
     private final RoomDao roomDao;
+    private final NotificationService notificationService;
     private final ModelMapper modelMapper;
 
     @Override
@@ -58,6 +60,8 @@ public class RoomServiceImpl implements RoomService {
             }
             room.getServices().clear();
         }
+
+        notificationService.sendNotificationBeforeDeletingBooking(room.getBookings());
 
         roomDao.delete(room);
     }

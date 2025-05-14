@@ -13,5 +13,5 @@ public interface StandardScheduleService {
 
     void updateSchedule(UpdateStandardScheduleDto createStandardScheduleDto);
 
-    void deleteSchedules(List<String> standardScheduleIds);
+    void deleteSchedule(String standardScheduleId);
 }

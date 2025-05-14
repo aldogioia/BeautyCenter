@@ -40,7 +40,7 @@ public class PasswordController {
 
     @PatchMapping("/update-password")
     @PreAuthorize("authentication.principal.id == #updatePasswordDto.userId")
-    public ResponseEntity<HttpStatus> updatePassword(@RequestParam UpdatePasswordDto updatePasswordDto) {
+    public ResponseEntity<HttpStatus> updatePassword(@RequestBody UpdatePasswordDto updatePasswordDto) {
         passwordService.updatePassword(updatePasswordDto);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

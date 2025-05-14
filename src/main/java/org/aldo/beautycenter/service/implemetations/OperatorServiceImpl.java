@@ -13,6 +13,7 @@ import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.entities.Schedule;
 import org.aldo.beautycenter.security.exception.customException.EmailAlreadyUsed;
 import org.aldo.beautycenter.security.exception.customException.S3DeleteException;
+import org.aldo.beautycenter.service.interfaces.NotificationService;
 import org.aldo.beautycenter.service.interfaces.OperatorService;
 import org.aldo.beautycenter.service.interfaces.S3Service;
 import org.aldo.beautycenter.utils.Constants;
@@ -32,8 +33,10 @@ public class OperatorServiceImpl implements OperatorService {
     private final ServiceDao serviceDao;
     private final UserDao userDao;
     private final S3Service s3Service;
+    private final NotificationService notificationService;
     private final StandardScheduleDao standardScheduleDao;
     private final ScheduleExceptionDao scheduleExceptionDao;
+
     private final ModelMapper modelMapper;
 
     @Override
@@ -146,6 +149,8 @@ public class OperatorServiceImpl implements OperatorService {
             }
             operator.getServices().clear();
         }
+
+        notificationService.sendNotificationBeforeDeletingBooking(operator.getBookings());
 
         operatorDao.delete(operator);
 
