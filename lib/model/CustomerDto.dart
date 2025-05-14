@@ -3,7 +3,7 @@ class CustomerDto {
   final String name;
   final String surname;
   final String email;
-  final num phoneNumber;
+  final String phoneNumber;
 
   CustomerDto({
     required this.id,
@@ -18,7 +18,7 @@ class CustomerDto {
     String? name,
     String? surname,
     String? email,
-    num? phoneNumber,
+    String? phoneNumber,
   }) {
     return CustomerDto(
       id: id ?? this.id,
@@ -35,7 +35,7 @@ class CustomerDto {
       name: json['name'] as String,
       surname: json['surname'] as String,
       email: json['email'] as String,
-      phoneNumber: json['phoneNumber'] as num,
+      phoneNumber: json['phoneNumber'],
     );
   }
 

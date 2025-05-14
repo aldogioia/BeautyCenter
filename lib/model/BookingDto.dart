@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+import '../utils/time_utils.dart';
 import 'ServiceDto.dart';
 import 'SummaryCustomerDto.dart';
 import 'SummaryOperatorDto.dart';
@@ -6,10 +9,12 @@ class BookingDto {
   final String id;
   final ServiceDto service;
   final SummaryOperatorDto operator;
-  final SummaryCustomerDto customer;
+  final SummaryCustomerDto? customer;
   final String room;
   final DateTime date;
-  final DateTime time;
+  final TimeOfDay time;
+  final String? bookedForName;
+  final String? bookedForNumber;
 
   BookingDto({
     required this.id,
@@ -19,6 +24,8 @@ class BookingDto {
     required this.room,
     required this.date,
     required this.time,
+    required this.bookedForName,
+    required this.bookedForNumber
   });
 
   factory BookingDto.fromJson(Map<String, dynamic> json) {
@@ -26,10 +33,12 @@ class BookingDto {
       id: json['id'],
       service: ServiceDto.fromJson(json['service']),
       operator: SummaryOperatorDto.fromJson(json['operator']),
-      customer: SummaryCustomerDto.fromJson(json['customer']),
+      customer: json['bookedForCustomer'] == null ? null : SummaryCustomerDto.fromJson(json['bookedForCustomer']),
       room: json['room'],
       date: DateTime.parse(json['date']),
-      time: DateTime.parse(json['time']),
+      time: TimeUtils.timeOfDayFromString(json['time']),
+      bookedForName: json['bookedForName'],
+      bookedForNumber: json['bookedForNumber'],
     );
   }
 
@@ -38,10 +47,12 @@ class BookingDto {
       'id': id,
       'service': service.toJson(),
       'operator': operator.toJson(),
-      'customer': customer.toJson(),
+      'bookedForCustomer': customer?.toJson(),
       'room': room,
       'date': date.toIso8601String(),
-      'time': time.toIso8601String(),
+      'time': TimeUtils.formatTimeOfDay(time),
+      'bookedForName': bookedForName,
+      'bookedForNumber': bookedForNumber
     };
   }
 
@@ -52,7 +63,9 @@ class BookingDto {
     SummaryCustomerDto? customer,
     String? room,
     DateTime? date,
-    DateTime? time,
+    TimeOfDay? time,
+    String? bookedForName,
+    String? bookedForNumber
   }) {
     return BookingDto(
       id: id ?? this.id,
@@ -62,6 +75,8 @@ class BookingDto {
       room: room ?? this.room,
       date: date ?? this.date,
       time: time ?? this.time,
+      bookedForName: bookedForName ?? this.bookedForName,
+      bookedForNumber: bookedForNumber ?? this.bookedForNumber
     );
   }
 }

@@ -1,5 +1,6 @@
 
 import 'package:beauty_center_frontend/utils/strings.dart';
+import 'package:flutter/material.dart';
 
 class InputValidator {
   static String? _validateServiceOrRoomName(String? value, String errorText) {
@@ -19,11 +20,9 @@ class InputValidator {
   }
 
 
-  // todo cambiare la regex, non matcha con il backend
+
   static String? validatePassword(String? value) {
-    if (value == null || value.isEmpty ||
-        !RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,50}$').hasMatch(
-            value)) {
+    if (value == null || value.isEmpty || !RegExp(r'^(?=.*\d).{8,}$').hasMatch(value)) {
       return Strings.invalid_password_error;
     }
     return null;
@@ -90,4 +89,17 @@ class InputValidator {
   static String? validateName(String? value) => _validateNameOrSurname(value, Strings.invalid_name);
 
   static String? validateSurname(String? value) => _validateNameOrSurname(value, Strings.invalid_surname);
+
+  static String? validateResetPasswordCode(String? value) {
+    if (value == null || value.isEmpty || !RegExp(r'^\d{5}$').hasMatch(value)) {
+      return Strings.code_verify_validation_error;
+    }
+    return null;
+  }
+
+  static bool validateStartAndEndScheduleTime({required TimeOfDay? start, required TimeOfDay? end}) {
+    if (start == null && end == null) return true;
+    if (start != null && end != null) return !start.isAfter(end);
+    return false;
+  }
 }

@@ -53,9 +53,11 @@ class OperatorDto {
       surname: json['surname'] as String,
       email: json['email'] as String,
       imgUrl: json['imgUrl'] as String,
-      services: (json['services'] as List<dynamic>)
+      services: json['services'] != null
+          ? (json['services'] as List<dynamic>)
           .map((e) => SummaryServiceDto.fromJson(e as Map<String, dynamic>))
-          .toList(),
+          .toList()
+          :[]
     );
   }
 

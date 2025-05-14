@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:beauty_center_frontend/api/service_service.dart';
+import 'package:beauty_center_frontend/provider/operator_provider.dart';
+import 'package:beauty_center_frontend/provider/room_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/ServiceDto.dart';
@@ -21,12 +23,13 @@ class ServiceProviderData {
 }
 
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Service extends _$Service {
   final ServiceService _serviceService = ServiceService();
 
   @override
   ServiceProviderData build(){
+    ref.keepAlive();
     return ServiceProviderData();
   }
 
@@ -53,7 +56,7 @@ class Service extends _$Service {
     final response =  await _serviceService.updateService(id: id, name: name, price: price, duration: duration, image: image);
 
     if(response == null) return Strings.connection_error;
-    if(response.statusCode == 204) {
+    if(response.statusCode == 200) {
       state = state.copyWith(
           services: state.services.map((e) {
             if(e.id == id) {
@@ -102,11 +105,18 @@ class Service extends _$Service {
       List<ServiceDto> newList = List.from(state.services);
       newList.removeWhere((e) => e.id == serviceId);
 
-      state = state.copyWith(
-        services: newList
-      );
+      // todo rimuovere i booking con il servizio eliminato
+
+      state = state.copyWith(services: newList);
+      ref.read(roomProvider.notifier).removeServiceFromRoom(serviceId: serviceId);
+      ref.read(operatorProvider.notifier).removeServiceFromOperator(serviceId: serviceId);
       return MapEntry(true, Strings.service_delete_successfully);
     }
     return MapEntry(false, (response.data as Map<String, dynamic>)['message']);
+  }
+
+
+  void reset() {
+    state = state.copyWith(services: []);
   }
 }

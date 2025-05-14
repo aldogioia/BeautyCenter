@@ -34,7 +34,7 @@ class ServiceDto {
       imgUrl: json['imgUrl'] as String,
       id: json['id'] as String,
       name: json['name'] as String,
-      duration: (json['description'] as num).toInt(),
+      duration: (json['duration'] as num).toInt(),
       price: (json['price'] as num).toDouble(),
     );
   }

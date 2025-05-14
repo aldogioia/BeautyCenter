@@ -27,11 +27,12 @@ class ServiceService {
       FormData formData = FormData.fromMap({
         "id": id,
         "name": name,
-        "price": price,
-        "duration": duration,
+        "price": price.toString(),
+        "duration": duration.toString(),
         if(image != null)
           "image": await MultipartFile.fromFile(image.path, filename: image.path.split('/').last),
       });
+
       return await _dio.patch(
         _path,
         data: formData,

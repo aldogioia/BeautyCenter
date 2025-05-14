@@ -27,9 +27,11 @@ class RoomDto {
     return RoomDto(
       id: json['id'] as String,
       name: json['name'] as String,
-      services: (json['services'] as List<dynamic>)
+      services: json['services'] != null
+          ? ((json['services'] as List<dynamic>))
           .map((service) => SummaryServiceDto.fromJson(service as Map<String, dynamic>))
-          .toList(),
+          .toList()
+          : []
     );
   }
 

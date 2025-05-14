@@ -6,12 +6,12 @@ part of 'operator_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$operatorHash() => r'039826fc3a463a94c85c5bf6f1bf53f7dfe4411e';
+String _$operatorHash() => r'bc4355afaf742ff651d3019ea036b7381ff4b017';
 
 /// See also [Operator].
 @ProviderFor(Operator)
 final operatorProvider =
-    AutoDisposeNotifierProvider<Operator, OperatorProviderData>.internal(
+    NotifierProvider<Operator, OperatorProviderData>.internal(
   Operator.new,
   name: r'operatorProvider',
   debugGetCreateSourceHash:
@@ -20,6 +20,6 @@ final operatorProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$Operator = AutoDisposeNotifier<OperatorProviderData>;
+typedef _$Operator = Notifier<OperatorProviderData>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

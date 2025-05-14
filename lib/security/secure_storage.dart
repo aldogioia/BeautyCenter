@@ -8,11 +8,38 @@ class SecureStorage {
     await _storage.write(key: 'access_token', value: token);
   }
 
+  static Future<void> saveRefreshToken(String token) async {
+    await _storage.write(key: 'refresh_token', value: token);
+  }
+
+  static Future<void> saveUserId(String userId) async {
+    await _storage.write(key: 'user_id', value: userId);
+  }
+
+
   static Future<String?> getAccessToken() async {
     return await _storage.read(key: 'access_token');
   }
 
+  static Future<String?> getRefreshToken() async {
+    return await _storage.read(key: 'refresh_token');
+  }
+
+  static Future<String?> getUserId() async {
+    return _storage.read(key: 'user_id');
+  }
+
+
   static Future<void> deleteAccessToken() async {
     await _storage.delete(key: 'access_token');
   }
+
+  static Future<void> deleteRefreshToken() async {
+    await _storage.delete(key: 'refresh_token');
+  }
+
+  static Future<void> deleteUserId() async {
+    await _storage.delete(key: 'user_id');
+  }
+
 }

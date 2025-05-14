@@ -3,7 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../api/room_service.dart';
 import '../model/RoomDto.dart';
 import '../model/SummaryServiceDto.dart';
-import '../model/UpdateRoomDto.dart';
 import '../utils/strings.dart';
 
 
@@ -21,12 +20,13 @@ class RoomProviderData {
 }
 
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Room extends _$Room {
   final RoomService _roomService = RoomService();
 
   @override
   RoomProviderData build(){
+    ref.keepAlive();
     return RoomProviderData();
   }
 
@@ -43,21 +43,25 @@ class Room extends _$Room {
   }
 
 
-  Future<String> updateRoom({required RoomDto roomDto}) async {
-    // todo rimuovere il dto, non serve
-    final updateRoomDto = UpdateRoomDto(
-        id: roomDto.id,
-        services: roomDto.services.map((e) => e.id).toList()
-    );
+  Future<String> updateRoom({
+    required String id,
+    required List<SummaryServiceDto> services,
+    required String name
+  }) async {
 
-    final response =  await _roomService.updateRoom(updateRoomDto: updateRoomDto);
+
+    final response =  await _roomService.updateRoom(
+      id: id,
+      services: services.map((e) => e.id).toList(),
+      name: name
+    );
 
     if(response == null) return Strings.connection_error;
     if(response.statusCode == 204) {
       state = state.copyWith(
         rooms: state.rooms.map((e) {
-          if(e.id == roomDto.id) {
-            return roomDto;
+          if(e.id == id) {
+            return RoomDto(id: id, name: name.isEmpty ? e.name : name, services: services);
           }
           return e;
         }).toList()
@@ -84,9 +88,11 @@ class Room extends _$Room {
 
       state = state.copyWith(rooms: newList);
 
-      return MapEntry(true, Strings.operator_create_successfully);
+      return MapEntry(true, Strings.room_create_successfully);
     }
+
     return MapEntry(false, (response.data as Map<String, dynamic>)['message']);
+
   }
 
 
@@ -98,11 +104,30 @@ class Room extends _$Room {
       List<RoomDto> newList = List.from(state.rooms);
       newList.removeWhere((e) => e.id == roomId);
 
+      // todo rimuovere le booking prenotate per quella stanza
+
       state = state.copyWith(
           rooms: newList
       );
       return MapEntry(true, Strings.room_delete_successfully);
     }
     return MapEntry(false, (response.data as Map<String, dynamic>)['message']);
+  }
+
+
+  void removeServiceFromRoom({required String serviceId}) {
+    state = state.copyWith(
+      rooms: state.rooms.map((room) {
+        final removedServices = room.services;
+        removedServices.removeWhere((service) => service.id == serviceId);
+
+        return room.copyWith(services: removedServices);
+      }).toList()
+    );
+  }
+
+
+  void reset() {
+    state = state.copyWith(rooms: []);
   }
 }

@@ -88,10 +88,38 @@ class OperatorService {
   Future<Response?> getAvailableHours({required String operatorId, required DateTime date, required String serviceId}) async {
     try {
       return await _dio.get(
-        "$_path/availableHours",
+        "$_path/availableTimes",
         queryParameters: {
           "operatorId" : operatorId,
-          "date" : date,
+          "date" : date.toIso8601String().split('T').first,
+          "serviceId" : serviceId
+        }
+      );
+    } on DioException catch(e){
+      return e.response;
+    }
+  }
+
+
+  Future<Response?> getOperator({required String operatorId}) async {
+    try {
+      return await _dio.get(
+          "$_path/one",
+          queryParameters: {
+            'operatorId': operatorId
+          }
+      );
+    } on DioException catch(e) {
+      return e.response;
+    }
+  }
+
+
+  Future<Response?> getOperatorsByService({required String serviceId}) async {
+    try {
+      return await _dio.get(
+        "$_path/byService",
+        queryParameters: {
           "serviceId" : serviceId
         }
       );

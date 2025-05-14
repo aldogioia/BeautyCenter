@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../model/UpdateRoomDto.dart';
+import '../model/SummaryServiceDto.dart';
 import 'api_service.dart';
 
 class RoomService {
@@ -15,9 +15,19 @@ class RoomService {
     }
   }
 
-  Future<Response?> updateRoom({required UpdateRoomDto updateRoomDto}) async {
+  Future<Response?> updateRoom({
+    required String id,
+    required List<String> services,
+    required String name
+  }) async {
     try {
-      return await _dio.patch(_path, data: updateRoomDto.toJson());
+      final data = {
+        'id': id,
+        'services': services,
+        'name': name
+      };
+
+      return await _dio.put(_path, data: data);
     } on DioException catch(e){
       return e.response;
     }
@@ -28,15 +38,12 @@ class RoomService {
     required List<String> services
   }) async {
     try {
-      FormData formData = FormData.fromMap({
-        "name": name,
-        "services": services,
-      });
-
       return await _dio.post(
           _path,
-          data: formData,
-          options: Options(headers: {"Content-Type": "multipart/form-data"})
+          data: {
+            "name": name,
+            "services": services
+          }
       );
     } on DioException catch(e){
       return e.response;

@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/customer_service.dart';
 import '../model/CustomerDto.dart';
-import '../model/UpdateCustomerDto.dart';
 import '../utils/strings.dart';
 
 part 'customer_provider.g.dart';
@@ -20,7 +19,7 @@ class CustomerProviderData {
 
 
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Customer extends _$Customer {
   final CustomerService _customerService = CustomerService();
 
@@ -42,19 +41,31 @@ class Customer extends _$Customer {
   }
   
   
-  Future<String> updateCustomer({required UpdateCustomerDto updateCustomerDto}) async {
-    final response = await _customerService.updateCustomer(updateCustomerDto: updateCustomerDto);
+  Future<String> updateCustomer({
+    required String id,
+    required String name,
+    required String surname,
+    required String email,
+    required String phoneNumber
+  }) async {
+    final response = await _customerService.updateCustomer(
+      id: id,
+      name: name,
+      surname: surname,
+      email: email,
+      phoneNumber: phoneNumber
+    );
 
     if(response == null) return Strings.connection_error;
     if(response.statusCode == 204){
       state = state.copyWith(
         customers: state.customers.map((dto){
-          if(dto.id == updateCustomerDto.id) {
+          if(dto.id == id) {
             return dto.copyWith(
-              name: updateCustomerDto.name,
-              surname: updateCustomerDto.surname,
-              email: updateCustomerDto.email,
-              phoneNumber: updateCustomerDto.phoneNumber
+              name: name,
+              surname: surname,
+              email: email,
+              phoneNumber: phoneNumber
             );
           }
           return dto;
@@ -63,5 +74,9 @@ class Customer extends _$Customer {
       return Strings.customer_updated_successfully;
     }
     return (response.data as Map<String, dynamic>)['message'];
+  }
+
+  void reset() {
+    state = state.copyWith(customers: []);
   }
 }

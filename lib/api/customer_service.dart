@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-import '../model/UpdateCustomerDto.dart';
 import 'api_service.dart';
 
 class CustomerService {
@@ -16,9 +15,22 @@ class CustomerService {
   }
 
 
-  Future<Response?> updateCustomer({required UpdateCustomerDto updateCustomerDto}) async {
+  Future<Response?> updateCustomer({
+    required String id,
+    required String name,
+    required String surname,
+    required String email,
+    required String phoneNumber
+  }) async {
     try {
-      return await _dio.patch(_path, data: updateCustomerDto.toJson());
+      final data = {
+        'id': id,
+        'name': name,
+        'surname': surname,
+        'email': email,
+        'phoneNumber': phoneNumber
+      };
+      return await _dio.patch(_path, data: data);
     } on DioException catch(e){
       return e.response;
     }

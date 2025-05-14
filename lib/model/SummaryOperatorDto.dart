@@ -11,6 +11,15 @@ class SummaryOperatorDto {
     required this.imgUrl,
   });
 
+  factory SummaryOperatorDto.empty(){
+     return SummaryOperatorDto(
+       id: "",
+       name: "",
+       surname: "",
+       imgUrl: ""
+     );
+  }
+
   factory SummaryOperatorDto.fromJson(Map<String, dynamic> json) {
     return SummaryOperatorDto(
       id: json['id'],

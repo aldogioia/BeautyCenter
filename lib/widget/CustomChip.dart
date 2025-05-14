@@ -19,7 +19,7 @@ class CustomChip extends StatelessWidget {
     double borderWidth = 1;
 
     if(isSelected){
-      background = Theme.of(context).colorScheme.primary.withOpacity(0.25);
+      background = Theme.of(context).colorScheme.primary.withAlpha((255 * 0.25).toInt());
       border = background;
       borderWidth = 0;
     }
@@ -33,7 +33,7 @@ class CustomChip extends StatelessWidget {
           color: background,
           border: Border.all(color: border, width: borderWidth)
         ),
-        child: Text(text, style: Theme.of(context).textTheme.displayMedium, overflow: TextOverflow.ellipsis),
+        child: Text(text, style: Theme.of(context).textTheme.bodySmall)
       )
     );
   }

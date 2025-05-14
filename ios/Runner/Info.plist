@@ -7,6 +7,10 @@
         <key>NSAllowsArbitraryLoads</key>
         <true/>
     </dict>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>tel</string>
+    </array>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Questa app necessita di accesso alla galleria per selezionare immagini.</string>
     <key>NSCameraUsageDescription</key>
