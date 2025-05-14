@@ -58,9 +58,9 @@ public class ScheduleExceptionController {
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<HttpStatus> deleteScheduleExceptions(
-            @ValidScheduleExceptionId @RequestParam List<String> scheduleExceptionsIds
+            @ValidScheduleExceptionId @RequestParam String scheduleExceptionsId
     ) {
-        scheduleExceptionService.deleteScheduleExceptions(scheduleExceptionsIds);
+        scheduleExceptionService.deleteScheduleException(scheduleExceptionsId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();

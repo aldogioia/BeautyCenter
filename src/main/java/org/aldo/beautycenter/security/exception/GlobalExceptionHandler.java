@@ -88,6 +88,18 @@ public class GlobalExceptionHandler {
         return createErrorResponse(req, e.getMessage());
     }
 
+    @ExceptionHandler(BookingDeleteException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorDto onBookingDeleteException(WebRequest req, BookingDeleteException e) {
+        return createErrorResponse(req, e.getMessage());
+    }
+
+    @ExceptionHandler(PasswordNotMatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto onPasswordNotMatchException(WebRequest req, PasswordNotMatchException e) {
+        return createErrorResponse(req, e.getMessage());
+    }
+
     private ErrorDto createErrorResponse(WebRequest req, String message){
         HttpServletRequest httpServletRequest = (HttpServletRequest) req.resolveReference("request");
         assert httpServletRequest != null;

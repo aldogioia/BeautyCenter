@@ -45,7 +45,7 @@ public class StandardScheduleServiceImpl implements StandardScheduleService {
     }
 
     @Override
-    public void deleteSchedules(List<String> standardScheduleIds) {
-        standardScheduleDao.deleteAllById(standardScheduleIds);
+    public void deleteSchedule(String standardScheduleId) {
+        standardScheduleDao.deleteById(standardScheduleId);
     }
 }

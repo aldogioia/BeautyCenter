@@ -5,6 +5,7 @@ import jakarta.validation.constraints.FutureOrPresent;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.responses.BookingDto;
 import org.aldo.beautycenter.data.dto.create.CreateBookingDto;
+import org.aldo.beautycenter.security.authorization.CustomUserDetails;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidBookingId;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidCustomerId;
@@ -13,6 +14,7 @@ import org.aldo.beautycenter.service.interfaces.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,8 +54,8 @@ public class BookingController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteBooking(@ValidBookingId @RequestParam String bookingId) {
-        bookingService.deleteBooking(bookingId);
+    public ResponseEntity<Void> deleteBooking(@ValidBookingId @RequestParam String bookingId, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        bookingService.deleteBooking(bookingId, customUserDetails.user());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

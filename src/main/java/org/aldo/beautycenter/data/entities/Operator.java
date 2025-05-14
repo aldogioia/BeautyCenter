@@ -18,6 +18,9 @@ public class Operator extends User {
     @OneToMany(mappedBy = "operator", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Schedule> schedules;
 
+    @OneToMany(mappedBy = "operator", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Booking> bookings;
+
     @ManyToMany
     @ToString.Exclude
     @JoinTable(name = "operator_service", joinColumns = @JoinColumn(name = "operator_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))

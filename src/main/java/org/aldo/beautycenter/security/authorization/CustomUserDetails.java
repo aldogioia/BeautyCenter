@@ -1,6 +1,5 @@
 package org.aldo.beautycenter.security.authorization;
 
-import lombok.AllArgsConstructor;
 import org.aldo.beautycenter.data.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,13 +9,11 @@ import java.util.Collection;
 import java.util.List;
 
 
-@AllArgsConstructor
-public class CustomUserDetails implements UserDetails {
-    private final User user;
-
+public record CustomUserDetails(User user) implements UserDetails {
     public String getId() {
         return user.getId();
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(user.getRole().name()));

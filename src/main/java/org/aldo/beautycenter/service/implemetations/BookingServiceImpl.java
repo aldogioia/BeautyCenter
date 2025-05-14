@@ -10,8 +10,11 @@ import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.create.CreateBookingDto;
 import org.aldo.beautycenter.data.dto.responses.BookingDto;
 import org.aldo.beautycenter.data.entities.*;
+import org.aldo.beautycenter.data.enumerators.Role;
 import org.aldo.beautycenter.security.exception.customException.BookingConflictException;
+import org.aldo.beautycenter.security.exception.customException.BookingDeleteException;
 import org.aldo.beautycenter.service.interfaces.BookingService;
+import org.aldo.beautycenter.service.interfaces.NotificationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,7 @@ public class BookingServiceImpl implements BookingService {
     private final OperatorDao operatorDao;
     private final CustomerDao customerDao;
     private final ServiceDao serviceDao;
+    private final NotificationService notificationService;
     private final ModelMapper modelMapper;
 
     @Override
@@ -42,11 +46,6 @@ public class BookingServiceImpl implements BookingService {
                 .stream()
                 .map(booking -> modelMapper.map(booking, BookingDto.class))
                 .toList();
-    }
-
-    @Override
-    public List<Booking> getBookingsByDate(LocalDate date) { //todo serve?
-        return bookingDao.findAllByDate(date);
     }
 
     @Override
@@ -92,8 +91,33 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void deleteBooking(String bookingId) {
-        //TODO verificare che l'utente sia admin o lo stesso a cui è associata la prenotazione
-        bookingDao.deleteById(bookingId);
+    public void deleteBooking(String bookingId, User user) {
+        try{
+            Booking booking = bookingDao.findById(bookingId)
+                    .orElseThrow(() -> new EntityNotFoundException("Booking non trovato"));
+
+            final String title = "Appuntamento cancellato";
+
+            if (user.getRole().equals(Role.ROLE_ADMIN)){
+                notificationService.sendNotificationToUser(
+                        booking.getBookedForCustomer(),
+                        title,
+                        "L'appuntamento " + booking.getService().getName() + "in data" + booking.getDate() + " è stato cancellato per un imprevisto"
+                );
+                bookingDao.deleteById(bookingId);
+            }
+
+            if (user.getId().equals(booking.getBookedForCustomer().getId())) {
+                notificationService.sendNotificationToUser(
+                        booking.getBookedForCustomer(),
+                        title,
+                        booking.getBookedForCustomer().getName() + booking.getBookedForCustomer().getSurname() + " ha cancellato l'appuntamento" + booking.getService().getName()
+                );
+                bookingDao.deleteById(bookingId);
+            }
+        }
+        catch (Exception e) {
+            throw new BookingDeleteException(e.getMessage());
+        }
     }
 }

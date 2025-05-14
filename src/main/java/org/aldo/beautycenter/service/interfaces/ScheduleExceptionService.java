@@ -9,5 +9,5 @@ public interface ScheduleExceptionService {
     List<ScheduleExceptionDto> getOperatorScheduleExceptions(String operatorId);
     ScheduleExceptionDto createScheduleException(CreateScheduleExceptionDto createScheduleExceptionDto);
 //    void updateScheduleExceptions(List<UpdateScheduleExceptionDto> createScheduleExceptionDto);
-    void deleteScheduleExceptions(List<String> ids);
+    void deleteScheduleException(String scheduleExceptionsId);
 }

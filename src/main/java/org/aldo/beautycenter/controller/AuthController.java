@@ -5,10 +5,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.responses.AuthResponseDto;
 import org.aldo.beautycenter.data.dto.create.CreateCustomerDto;
+import org.aldo.beautycenter.security.authorization.CustomUserDetails;
 import org.aldo.beautycenter.security.availability.RateLimit;
 import org.aldo.beautycenter.service.interfaces.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RateLimit(permitsPerSecond = 10)
@@ -38,8 +40,8 @@ public class AuthController {
     }
 
     @PostMapping("/sign-out")
-    public ResponseEntity<HttpStatus> signOut(HttpServletRequest request) {
-        authService.signOut(request);
+    public ResponseEntity<HttpStatus> signOut(HttpServletRequest request, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        authService.signOut(request, "", customUserDetails.user());
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();

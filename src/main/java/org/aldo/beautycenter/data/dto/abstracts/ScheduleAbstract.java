@@ -3,13 +3,13 @@ package org.aldo.beautycenter.data.dto.abstracts;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidOperatorId;
-import org.aldo.beautycenter.security.customAnnotation.annotation.ValidStandardScheduleInfo;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidScheduleInfo;
 
 import java.time.LocalTime;
 
 @Data
-@ValidStandardScheduleInfo
-public abstract class StandardScheduleAbstract {
+@ValidScheduleInfo
+public abstract class ScheduleAbstract {
     private LocalTime morningStart;
     private LocalTime morningEnd;
     private LocalTime afternoonStart;

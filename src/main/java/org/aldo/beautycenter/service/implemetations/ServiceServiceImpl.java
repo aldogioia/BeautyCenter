@@ -10,6 +10,7 @@ import org.aldo.beautycenter.data.dto.updates.UpdateServiceDto;
 import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.entities.Room;
 import org.aldo.beautycenter.security.exception.customException.S3DeleteException;
+import org.aldo.beautycenter.service.interfaces.NotificationService;
 import org.aldo.beautycenter.service.interfaces.S3Service;
 import org.aldo.beautycenter.service.interfaces.ServiceService;
 import org.aldo.beautycenter.utils.Constants;
@@ -23,6 +24,7 @@ import java.util.List;
 public class ServiceServiceImpl implements ServiceService {
     private final ServiceDao serviceDao;
     private final S3Service s3Service;
+    private final NotificationService notificationService;
     private final ModelMapper modelMapper;
     @Override
     public List<ServiceDto> getAllServices() {
@@ -71,6 +73,8 @@ public class ServiceServiceImpl implements ServiceService {
             }
             service.getRooms().clear();
         }
+
+        notificationService.sendNotificationBeforeDeletingBooking(service.getBookings());
 
         serviceDao.delete(service);
 
