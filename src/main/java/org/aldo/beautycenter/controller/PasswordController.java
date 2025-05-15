@@ -1,5 +1,7 @@
 package org.aldo.beautycenter.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.updates.UpdatePasswordDto;
@@ -21,7 +23,7 @@ public class PasswordController {
     private final PasswordService passwordService;
 
     @PostMapping("/request-reset")
-    public ResponseEntity<HttpStatus> requestResetPassword(@RequestParam String email) {
+    public ResponseEntity<HttpStatus> requestResetPassword(@NotNull(message = "L'email è obbligatoria") @RequestParam String email) {
         passwordService.requestChangePassword(email);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
@@ -40,7 +42,7 @@ public class PasswordController {
 
     @PatchMapping("/update-password")
     @PreAuthorize("authentication.principal.id == #updatePasswordDto.userId")
-    public ResponseEntity<HttpStatus> updatePassword(@RequestBody UpdatePasswordDto updatePasswordDto) {
+    public ResponseEntity<HttpStatus> updatePassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) {
         passwordService.updatePassword(updatePasswordDto);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

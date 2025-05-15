@@ -1,6 +1,7 @@
 package org.aldo.beautycenter.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.create.CreateRoomDto;
 import org.aldo.beautycenter.data.dto.responses.RoomDto;
@@ -51,7 +52,7 @@ public class RoomController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
-    public ResponseEntity<HttpStatus> deleteRoom(@ValidOperatorId @RequestParam String roomId) {
+    public ResponseEntity<HttpStatus> deleteRoom(@NotNull @ValidOperatorId @RequestParam String roomId) {
         roomService.deleteRoom(roomId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
