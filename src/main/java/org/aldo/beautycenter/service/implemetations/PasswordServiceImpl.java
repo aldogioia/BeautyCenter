@@ -83,7 +83,7 @@ public class PasswordServiceImpl implements PasswordService {
                     token
             );
         } catch (Exception e) {
-            throw new EmailNotSentException("Error while sending email");
+            throw new EmailNotSentException("Errore nell'invio dell'email");
         }
     }
 }

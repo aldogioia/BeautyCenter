@@ -31,8 +31,8 @@ public class OperatorController {
     private final OperatorService operatorService;
 
     @GetMapping("/one")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_CUSTOMER') && authentication.principal.id == #operatorId)")
-    public ResponseEntity<OperatorDto> getOperator(@NotNull @ValidOperatorId String operatorId) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_OPERATOR') && authentication.principal.id == #operatorId)")
+    public ResponseEntity<OperatorDto> getOperator(@NotNull @ValidOperatorId @RequestParam String operatorId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(operatorService.getOperatorById(operatorId));

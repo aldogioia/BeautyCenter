@@ -1,5 +1,6 @@
 package org.aldo.beautycenter.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.create.CreateFcmToken;
 import org.aldo.beautycenter.security.authorization.CustomUserDetails;
@@ -20,7 +21,7 @@ public class NotificationController {
 
     @PostMapping
     public ResponseEntity<HttpStatus> registerToken(
-            @RequestBody CreateFcmToken createFcmToken,
+            @Valid @RequestBody CreateFcmToken createFcmToken,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         notificationService.saveToken(createFcmToken, customUserDetails.user());
