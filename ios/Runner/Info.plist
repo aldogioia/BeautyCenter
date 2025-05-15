@@ -28,16 +28,14 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-
-	<!-- Permessi rete locale -->
+	<key>aps-environment</key>
+    <string>development</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Questa app richiede l'accesso alla rete locale per comunicare con il server backend.</string>
+	<string>Questa app richiede l&apos;accesso alla rete locale per comunicare con il server backend.</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_http._tcp</string>
 	</array>
-
-	<!-- Orientamenti supportati -->
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -51,14 +49,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-
-	<!-- Altri flag -->
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-
-	<!-- 🔔 Notifiche locali -->
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

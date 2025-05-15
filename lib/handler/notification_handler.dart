@@ -47,7 +47,7 @@ class NotificationHandler {
         await _plugin.zonedSchedule(
           scheduledTime.hashCode, // Unique ID
           "Promemoria appuntamento",
-          "Hai un appuntamento tra ${duration.inMinutes} minuti.",
+          "Hai un appuntamento tra ${duration.inMinutes > 30 ? "${duration.inHours} ore" : "${duration.inMinutes} minuti."}",
           tz.TZDateTime.from(scheduledTime, tz.local),
           const NotificationDetails(
             android: AndroidNotificationDetails(
@@ -81,5 +81,4 @@ class NotificationHandler {
       await _plugin.cancel(notificationId);
     }
   }
-
 }

@@ -7,6 +7,15 @@ class SecureStorage {
   static const _refreshTokenKey = 'refresh_token';
   static const _userId = 'user_id';
   static const _notificationsEnabledKey = 'notifications_enabled';
+  static const _fcmTokenKey = 'fcm_token';
+
+  static Future<void> setFCMToken(String token) async {
+    await _storage.write(key: _fcmTokenKey, value: token);
+  }
+
+  static Future<String?> getFCMToken() async {
+    return await _storage.read(key: _fcmTokenKey);
+  }
 
   static Future<void> setNotificationsEnabled(bool enabled) async {
     await _storage.write(key: _notificationsEnabledKey, value: enabled.toString());
