@@ -1,6 +1,7 @@
 package org.aldo.beautycenter.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.create.CreateOperatorDto;
@@ -47,7 +48,7 @@ public class OperatorController {
 
     @GetMapping("/byService")
     public ResponseEntity<List<SummaryOperatorDto>> getOperatorsByService(
-            @ValidServiceId @RequestParam String serviceId
+            @NotNull @ValidServiceId @RequestParam String serviceId
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -56,9 +57,9 @@ public class OperatorController {
 
     @GetMapping("/availableTimes")
     public ResponseEntity<List<LocalTime>> getAvailableTimes(
-            @ValidOperatorId @RequestParam String operatorId,
-            @RequestParam LocalDate date,
-            @ValidServiceId @RequestParam String serviceId
+            @NotNull @ValidOperatorId @RequestParam String operatorId,
+            @FutureOrPresent @NotNull @RequestParam LocalDate date,
+            @NotNull @ValidServiceId @RequestParam String serviceId
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)

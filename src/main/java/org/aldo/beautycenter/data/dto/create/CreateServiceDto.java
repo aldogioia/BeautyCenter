@@ -6,7 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidMultipartExtension;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidToolId;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
 public class CreateServiceDto {
@@ -25,4 +28,6 @@ public class CreateServiceDto {
     @NotNull(message = "Il campo durata è obbligatorio")
     @Min(value = 1, message = "Il campo durata dev'essere almeno 1")
     private Long duration;
+
+    private List<@ValidToolId String> tools;
 }
