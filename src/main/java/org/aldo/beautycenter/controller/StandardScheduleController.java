@@ -26,7 +26,7 @@ public class StandardScheduleController {
     private final StandardScheduleService standardScheduleService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_OPERATOR') && authentication.principal.id == #operatorId)")
     public ResponseEntity<List<StandardScheduleDto>> getOperatorStandardSchedules(
             @RequestParam String operatorId
     ) {
