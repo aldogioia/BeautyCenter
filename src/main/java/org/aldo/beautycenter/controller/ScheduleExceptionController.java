@@ -1,6 +1,7 @@
 package org.aldo.beautycenter.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.create.CreateScheduleExceptionDto;
 import org.aldo.beautycenter.data.dto.responses.ScheduleExceptionDto;
@@ -27,7 +28,7 @@ public class ScheduleExceptionController {
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_OPERATOR') && authentication.principal.id == #operatorId)")
     public ResponseEntity<List<ScheduleExceptionDto>> getOperatorScheduleExceptions(
-            @RequestParam String operatorId
+            @NotNull @RequestParam String operatorId
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)

@@ -7,8 +7,6 @@ import org.aldo.beautycenter.data.dao.ServiceDao;
 import org.aldo.beautycenter.data.dto.create.CreateServiceDto;
 import org.aldo.beautycenter.data.dto.responses.ServiceDto;
 import org.aldo.beautycenter.data.dto.updates.UpdateServiceDto;
-import org.aldo.beautycenter.data.entities.Operator;
-import org.aldo.beautycenter.data.entities.Room;
 import org.aldo.beautycenter.security.exception.customException.S3DeleteException;
 import org.aldo.beautycenter.service.interfaces.NotificationService;
 import org.aldo.beautycenter.service.interfaces.S3Service;
@@ -26,6 +24,7 @@ public class ServiceServiceImpl implements ServiceService {
     private final S3Service s3Service;
     private final NotificationService notificationService;
     private final ModelMapper modelMapper;
+
     @Override
     public List<ServiceDto> getAllServices() {
         return serviceDao.findAll()
@@ -35,6 +34,7 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
+    @Transactional
     public ServiceDto addService(CreateServiceDto createServiceDto) {
         org.aldo.beautycenter.data.entities.Service service = modelMapper.map(createServiceDto, org.aldo.beautycenter.data.entities.Service.class);
         service.setImgUrl(s3Service.uploadFile(createServiceDto.getImage(), Constants.SERVICE_FOLDER, createServiceDto.getName()));
@@ -43,9 +43,12 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
+    @Transactional
     public String updateService(UpdateServiceDto updateServiceDto) {
-        org.aldo.beautycenter.data.entities.Service service = serviceDao.getReferenceById(updateServiceDto.getId());
-        modelMapper.map(updateServiceDto, org.aldo.beautycenter.data.entities.Service.class);
+        org.aldo.beautycenter.data.entities.Service service = serviceDao.findById(updateServiceDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Servizio non trovato"));
+
+        modelMapper.map(updateServiceDto, service);
         if (updateServiceDto.getImage() != null)
             s3Service.uploadFile(updateServiceDto.getImage(), Constants.SERVICE_FOLDER, service.getName());
         serviceDao.save(service);
@@ -61,17 +64,18 @@ public class ServiceServiceImpl implements ServiceService {
         String serviceName = service.getName();
 
         if (service.getOperators() != null) {
-            for (Operator operator : service.getOperators()) {
-                operator.getServices().remove(service);
-            }
+            service.getOperators().forEach(operator -> operator.getServices().remove(service));
             service.getOperators().clear();
         }
 
         if (service.getRooms() != null) {
-            for (Room room : service.getRooms()) {
-                room.getServices().remove(service);
-            }
+            service.getRooms().forEach(room -> room.getServices().remove(service));
             service.getRooms().clear();
+        }
+
+        if (service.getRooms() != null) {
+            service.getTools().forEach(tool -> tool.getServices().remove(service));
+            service.getTools().clear();
         }
 
         notificationService.sendNotificationBeforeDeletingBooking(service.getBookings());

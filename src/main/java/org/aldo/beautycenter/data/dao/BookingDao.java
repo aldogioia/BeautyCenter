@@ -17,10 +17,14 @@ import java.util.Optional;
 @Repository
 public interface BookingDao extends JpaRepository<Booking, String> {
     List<Booking> findAllByBookedForCustomer_IdAndDateIsAfter(String userId, LocalDate date);
+
     List<Booking> findAllByDateAndOperator_Id(LocalDate date, String operatorId);
-    List<Booking> findAllByRoom_Services_Id(String serviceId);
+
+    List<Booking> findAllByDate(LocalDate date);
+
     @Lock(LockModeType.PESSIMISTIC_READ)
     Boolean existsByDateAndTimeAndOperator_Id(LocalDate date, LocalTime time, String operatorId);
+
     @Query("""
     SELECT r FROM Room r
     JOIN r.services s

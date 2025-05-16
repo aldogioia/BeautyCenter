@@ -45,4 +45,9 @@ public class Service extends Auditable {
     @ManyToMany(mappedBy = "services", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Operator> operators;
+
+    @ManyToMany
+    @ToString.Exclude
+    @JoinTable(name = "service_tool", joinColumns = @JoinColumn(name = "service_id"), inverseJoinColumns = @JoinColumn(name = "tool_id"))
+    private List<Tool> tools;
 }

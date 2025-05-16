@@ -68,42 +68,47 @@ public class OperatorServiceImpl implements OperatorService {
         org.aldo.beautycenter.data.entities.Service service = serviceDao.findById(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException("Servizio non trovato"));
 
-        List<Booking> operatorBookings = bookingDao.findAllByDateAndOperator_Id(date, operatorId);
+        List<Booking> allBookings = bookingDao.findAllByDate(date);
 
-        List<Booking> roomBookings = bookingDao.findAllByRoom_Services_Id(serviceId);
+        List<Booking> operatorBookings = allBookings.stream()
+                .filter(booking -> booking.getOperator().getId().equals(operatorId))
+                .toList();
+
+        List<Booking> roomBookings = allBookings.stream()
+                .filter(booking -> booking.getRoom().getServices().stream()
+                        .anyMatch(s -> s.getId().equals(serviceId)))
+                .toList();
 
         Schedule schedule = scheduleExceptionDao.findByOperatorIdAndDate(operatorId, date)
                 .map(s -> (Schedule) s)
-                .orElseGet(() -> standardScheduleDao.findByOperatorIdAndDay(operatorId, date.getDayOfWeek()));
+                .orElseGet(() -> standardScheduleDao.findByOperatorIdAndDay(operatorId, date.getDayOfWeek())
+                        .orElseThrow(() -> new EntityNotFoundException("Nessun turno in questa data")));
 
         List<LocalTime> availableTimes = new ArrayList<>();
 
-        if (schedule.getMorningStart() != null) //la verifica che siano entrambe null o meno viene fatta nel Dto
-            availableTimes.addAll(
-                    getAvailableSlots(
-                            schedule.getMorningStart(),
-                            schedule.getMorningEnd(),
-                            service.getDuration(),
-                            operatorBookings,
-                            roomBookings
-                    )
-            );
+        if (schedule.getMorningStart() != null)
+            availableTimes.addAll(getAvailableSlots(
+                    schedule.getMorningStart(),
+                    schedule.getMorningEnd(),
+                    service,
+                    operatorBookings,
+                    roomBookings,
+                    allBookings
+            ));
 
-
-        if (schedule.getAfternoonStart() != null) //la verifica che siano entrambe null o meno viene fatta nel Dto
-            availableTimes.addAll(
-                getAvailableSlots(
-                        schedule.getAfternoonStart(),
-                        schedule.getAfternoonEnd(),
-                        service.getDuration(),
-                        operatorBookings,
-                        roomBookings
-                )
-            );
-
+        if (schedule.getAfternoonStart() != null)
+            availableTimes.addAll(getAvailableSlots(
+                    schedule.getAfternoonStart(),
+                    schedule.getAfternoonEnd(),
+                    service,
+                    operatorBookings,
+                    roomBookings,
+                    allBookings
+            ));
 
         return availableTimes;
     }
+
 
     @Override
     @Transactional
@@ -161,36 +166,68 @@ public class OperatorServiceImpl implements OperatorService {
         }
     }
 
-
-    private List<LocalTime> getAvailableSlots(LocalTime start, LocalTime end, Long duration, List<Booking> operatorBookings, List<Booking> roomBookings) {
+    //TODO rimettere a private
+    public List<LocalTime> getAvailableSlots(
+            LocalTime start,
+            LocalTime end,
+            org.aldo.beautycenter.data.entities.Service service,
+            List<Booking> operatorBookings,
+            List<Booking> roomBookings,
+            List<Booking> allBookings
+    ) {
         List<LocalTime> slots = new ArrayList<>();
         if (start == null || end == null) return slots;
 
-        for (LocalTime time = start; time.isBefore(end); time = time.plusMinutes(duration)) {
-            LocalTime slotStart = time;
-            LocalTime slotEnd = time.plusMinutes(duration);
+        final int resolution = 5; // minuti tra uno slot e l'altro
 
-            boolean isOperatorAvailable = operatorBookings.stream()
-                    .noneMatch(booking -> {
-                        LocalTime bookingStart = booking.getTime();
-                        LocalTime bookingEnd = bookingStart.plusMinutes(booking.getService().getDuration());
-                        return isOverlapping(bookingStart, bookingEnd, slotStart, slotEnd);
-                    });
+        for (LocalTime time = start; time.plusMinutes(service.getDuration()).isBefore(end) || time.plusMinutes(service.getDuration()).equals(end); time = time.plusMinutes(resolution)) {
+            LocalTime slotEnd = time.plusMinutes(service.getDuration());
 
-            boolean isRoomAvailable = roomBookings.stream()
-                    .noneMatch(booking -> {
-                        LocalTime bookingStart = booking.getTime();
-                        LocalTime bookingEnd = bookingStart.plusMinutes(booking.getService().getDuration());
-                        return isOverlapping(bookingStart, bookingEnd, slotStart, slotEnd);
-                    });
-
-            if (isOperatorAvailable && isRoomAvailable) slots.add(time);
+            if (isOperatorAvailable(time, slotEnd, operatorBookings) &&
+                    isRoomAvailable(time, slotEnd, roomBookings) &&
+                    isToolAvailable(time, slotEnd, service, allBookings)
+            ) {
+                slots.add(time);
+            }
         }
+
         return slots;
     }
+
+    private boolean isOperatorAvailable(LocalTime slotStart, LocalTime slotEnd, List<Booking> bookings) {
+        return bookings.stream().noneMatch(booking -> {
+            LocalTime bookingStart = booking.getTime();
+            LocalTime bookingEnd = bookingStart.plusMinutes(booking.getService().getDuration());
+            return isOverlapping(bookingStart, bookingEnd, slotStart, slotEnd);
+        });
+    }
+
+    private boolean isRoomAvailable(LocalTime slotStart, LocalTime slotEnd, List<Booking> roomBookings) {
+        // almeno UNA stanza che supporta quel servizio dev’essere libera
+        return roomBookings.stream().noneMatch(booking -> {
+            LocalTime bookingStart = booking.getTime();
+            LocalTime bookingEnd = bookingStart.plusMinutes(booking.getService().getDuration());
+            return isOverlapping(bookingStart, bookingEnd, slotStart, slotEnd);
+        });
+    }
+
+    private boolean isToolAvailable(LocalTime slotStart, LocalTime slotEnd, org.aldo.beautycenter.data.entities.Service service, List<Booking> allBookings) {
+        return service.getTools().stream().noneMatch(tool -> {
+            long count = allBookings.stream()
+                    .filter(booking -> {
+                        LocalTime bookingStart = booking.getTime();
+                        LocalTime bookingEnd = bookingStart.plusMinutes(booking.getService().getDuration());
+                        return isOverlapping(bookingStart, bookingEnd, slotStart, slotEnd)
+                                && booking.getService().getTools().contains(tool);
+                    })
+                    .count();
+
+            return count >= tool.getAvailability(); // non è disponibile
+        });
+    }
+
 
     private boolean isOverlapping(LocalTime existingStart, LocalTime existingEnd, LocalTime slotStart, LocalTime slotEnd) {
         return slotStart.isBefore(existingEnd) && existingStart.isBefore(slotEnd);
     }
-
 }
