@@ -1,6 +1,7 @@
 package org.aldo.beautycenter.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.create.CreateServiceDto;
 import org.aldo.beautycenter.data.dto.responses.ServiceDto;
@@ -50,7 +51,7 @@ public class ServiceController {
 
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpStatus> deleteService(@ValidServiceId @RequestParam String serviceId) {
+    public ResponseEntity<HttpStatus> deleteService(@NotNull @ValidServiceId @RequestParam String serviceId) {
         serviceService.deleteService(serviceId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

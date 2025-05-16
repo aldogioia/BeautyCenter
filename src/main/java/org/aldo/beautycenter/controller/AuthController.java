@@ -23,8 +23,8 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     public ResponseEntity<AuthResponseDto> login(
-            @RequestParam("email") String email,
-            @RequestParam("password") String password
+            @RequestParam String email,
+            @RequestParam String password
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)

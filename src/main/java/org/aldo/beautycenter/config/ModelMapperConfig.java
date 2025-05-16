@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.OperatorDao;
 import org.aldo.beautycenter.data.dao.ServiceDao;
+import org.aldo.beautycenter.data.dao.ToolDao;
 import org.aldo.beautycenter.data.dto.create.*;
 import org.aldo.beautycenter.data.dto.responses.BookingDto;
 import org.aldo.beautycenter.data.dto.responses.OperatorDto;
@@ -12,6 +13,7 @@ import org.aldo.beautycenter.data.dto.responses.ServiceDto;
 import org.aldo.beautycenter.data.dto.summaries.SummaryCustomerDto;
 import org.aldo.beautycenter.data.dto.summaries.SummaryOperatorDto;
 import org.aldo.beautycenter.data.dto.summaries.SummaryServiceDto;
+import org.aldo.beautycenter.data.dto.summaries.SummaryToolDto;
 import org.aldo.beautycenter.data.dto.updates.*;
 import org.aldo.beautycenter.data.entities.*;
 import org.aldo.beautycenter.data.enumerators.Role;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
 public class ModelMapperConfig {
     private final PasswordEncoder passwordEncoder;
     private final ServiceDao serviceDao;
+    private final ToolDao toolDao;
     private final OperatorDao operatorDao;
 
     @Bean
@@ -49,6 +52,16 @@ public class ModelMapperConfig {
             return ids.stream()
                     .map(id -> serviceDao.findById(id)
                             .orElseThrow(() -> new EntityNotFoundException("Servizio non trovato con ID: " + id)))
+                    .collect(Collectors.toList());
+        };
+
+        Converter<List<String>, List<Tool>> toolIdToToolConverter = ctx -> {
+            List<String> ids = ctx.getSource();
+            if (ids == null) return Collections.emptyList();
+
+            return ids.stream()
+                    .map(id -> toolDao.findById(id)
+                            .orElseThrow(() -> new EntityNotFoundException("Macchinario non trovato con ID: " + id)))
                     .collect(Collectors.toList());
         };
 
@@ -104,6 +117,7 @@ public class ModelMapperConfig {
             @Override
             protected void configure() {
                 skip().setImgUrl(null);
+                using(toolIdToToolConverter).map(source.getTools(), destination.getTools());
             }
         });
 
@@ -112,6 +126,18 @@ public class ModelMapperConfig {
             @Override
             protected void configure() {
                 skip().setImgUrl(null);
+                using(toolIdToToolConverter).map(source.getTools(), destination.getTools());
+            }
+        });
+
+        //mappatura per l'operatorDto
+        modelMapper.addMappings(new PropertyMap<Service, ServiceDto>() {
+            @Override
+            protected void configure() {
+                using(ctx -> ((Collection<?>) ctx.getSource()).stream()
+                        .map(tool -> modelMapper.map(tool, SummaryToolDto.class))
+                        .collect(Collectors.toList()))
+                        .map(source.getTools(), destination.getTools());
             }
         });
 
