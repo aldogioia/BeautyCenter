@@ -50,5 +50,16 @@ class ScheduleExceptionsService {
   }
 
 
-  // todo delete schedule;
+  Future<Response?> deleteScheduleException({required String scheduleId}) async {
+    try {
+      return await _dio.delete(
+        _path,
+        queryParameters: {
+          'scheduleExceptionsId': scheduleId
+        }
+      );
+    } on DioException catch(e) {
+      return e.response;
+    }
+  }
 }

@@ -5,8 +5,12 @@ import 'package:beauty_center_frontend/screen/main_screen/entities_management_sc
 import 'package:beauty_center_frontend/screen/main_screen/schedule_screen.dart';
 import 'package:beauty_center_frontend/screen/main_screen/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
+
+import '../../main.dart';
 import '../../model/enumerators/role.dart';
 
 class MainScaffold extends ConsumerStatefulWidget {
@@ -31,13 +35,39 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
     SettingsScreen()
   ];
 
-  int _currentIndex = 0;
+  late int _currentIndex;
+
+  Future<void> _initNotifications() async {
+    const ios = DarwinInitializationSettings();
+    const settings = InitializationSettings(iOS: ios);
+    await flutterLocalNotificationsPlugin.initialize(settings);
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    tz.initializeTimeZones();
+  }
 
   @override
   void initState() {
+    _currentIndex = 0;
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(appInitProvider);
+    });
+    _initNotifications();
+    /*
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(appInitProvider.future);
     });
+
+     */
     super.initState();
   }
 

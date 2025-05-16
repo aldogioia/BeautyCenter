@@ -15,6 +15,7 @@ class PasswordService {
         }
       );
     } on DioException catch(e){
+      print("Errore: $e");
       return e.response;
     }
   }

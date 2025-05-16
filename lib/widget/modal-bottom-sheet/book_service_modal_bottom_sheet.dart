@@ -21,6 +21,7 @@ class BookServiceModalBottomSheet extends ConsumerStatefulWidget {
   ConsumerState<BookServiceModalBottomSheet> createState() => _BookServiceModalBottomSheetState();
 }
 
+// todo fare in modo che se il ruolo è operatore, non devo poter scegliere l'operatore
 class _BookServiceModalBottomSheetState extends ConsumerState<BookServiceModalBottomSheet> {
   int _index = 1;
 

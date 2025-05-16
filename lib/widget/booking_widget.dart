@@ -111,7 +111,6 @@ class BookingWidget extends StatelessWidget {
                       Text(name, style: Theme.of(context).textTheme.bodySmall),
 
                       GestureDetector(
-                        // todo vedere se va bene mettere +39 in questo modo
                         onTap: () async => await _makePhoneCall(booking.customer != null ? "+39${booking.customer!.phoneNumber}" : "+39${booking.bookedForNumber}"),
                         child: Icon(Icons.phone_outlined, color: Theme.of(context).colorScheme.primary, size: 16),
                       )

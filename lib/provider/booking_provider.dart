@@ -100,6 +100,6 @@ class Booking extends _$Booking {
 
 
   void reset() {
-    state = state.copyWith(operatorBookings: []);
+    state = state.copyWith(operatorBookings: [], selectedOperator: SummaryOperatorDto.empty());
   }
 }

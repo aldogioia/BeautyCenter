@@ -1,19 +1,38 @@
 import 'package:beauty_center_frontend/handler/navigator_handler.dart';
 import 'package:beauty_center_frontend/screen/auth_checker.dart';
-import 'package:beauty_center_frontend/screen/main_screen/main_scaffold.dart';
-import 'package:beauty_center_frontend/screen/main_screen/schedule_screen.dart';
-import 'package:beauty_center_frontend/screen/start_screen.dart';
-import 'package:beauty_center_frontend/security/secure_storage.dart';
 import 'package:beauty_center_frontend/utils/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
+import 'handler/notification_handler.dart';
 import 'route_generator.dart';
 
-void main() {
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation('Europe/Rome'));
+
+  const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+  final iOSInit = DarwinInitializationSettings();
+
+  var initSettings = InitializationSettings(
+    android: androidInit,
+    iOS: iOSInit,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initSettings);
+
+  await NotificationHandler.handleNotificationPermissions();
   
   runApp(
     ProviderScope(
@@ -28,6 +47,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Europe/Rome'));
 
     return MaterialApp(
       locale: const Locale('it', 'IT'),

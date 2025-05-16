@@ -151,6 +151,7 @@ class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswo
     );
   }
 
+  // todo verificare il codice con la password insieme in un'unica schermata
 
   Widget _verificationCodeScreen(){
     return Column(

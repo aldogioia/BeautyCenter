@@ -1,5 +1,6 @@
 import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
 import 'package:beauty_center_frontend/provider/auth_provider.dart';
+import 'package:beauty_center_frontend/provider/global_provider.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/reset_password_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,6 +46,7 @@ class _LoginScreenState extends ConsumerState<LoginModalBottomSheet> {
       if(result != "") {
         SnackBarHandler.instance.showMessage(message: result);
       } else {
+        final _ = await ref.refresh(appInitProvider.future);
         navigator.pushNamedAndRemoveUntil("/main_scaffold", (route) => false);
       }
     }

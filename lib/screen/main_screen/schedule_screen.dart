@@ -2,6 +2,7 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:beauty_center_frontend/model/day_of_week.dart';
 import 'package:beauty_center_frontend/model/schedule_exceptions_dto.dart';
 import 'package:beauty_center_frontend/provider/schedule_exception_provider.dart';
+import 'package:beauty_center_frontend/widget/modal-bottom-sheet/book_service_modal_bottom_sheet.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/schedule_exceptions_modal_bottom_sheet.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/schedule_filter_modal_bottom_sheet.dart';
 import 'package:beauty_center_frontend/widget/schedule_exceptions_widget.dart';
@@ -10,9 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../handler/snack_bar_handler.dart';
-import '../../model/OperatorDto.dart';
 import '../../model/SummaryOperatorDto.dart';
+import '../../model/enumerators/role.dart';
 import '../../model/standard_schedule_dto.dart';
+import '../../provider/operator_provider.dart';
 import '../../provider/standard_schedule_provider.dart';
 import '../../utils/strings.dart';
 import '../../widget/modal-bottom-sheet/delete_modal_bottom_sheet.dart';
@@ -43,12 +45,48 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
         }
     );
 
-    final result = MapEntry(true, 'ok'); // todo await ref.read(scheduleProvider.notifier).deleteSchedule(scheduleId: scheduleId);
+    final result = await ref.read(scheduleExceptionProvider.notifier).deleteScheduleException(scheduleId: scheduleId);
 
     navigator.pop();
 
     if(result.key) navigator.pop(true);
     SnackBarHandler.instance.showMessage(message: result.value);
+  }
+
+
+  Widget _buildScheduleWidget({required ScheduleExceptionsDto schedule}){
+    if(ref.read(operatorProvider).role == Role.ROLE_ADMIN) {
+      return Dismissible(
+        key: Key(schedule.id),
+        background: Container(
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.only(left: 20),
+            child: CircleAvatar(
+              backgroundColor: Colors.red,
+              child: Icon(Icons.delete, color: Colors.white),
+            )
+        ),
+        direction: DismissDirection.endToStart,
+        confirmDismiss: (direction) async {
+          final result = await showModalBottomSheet<bool>(
+              context: context,
+              isScrollControlled: true,
+              transitionAnimationController: AnimationController(
+                vsync: Navigator.of(context),
+                duration: Duration(milliseconds: 500),
+              ),
+              builder: (context) => DeleteModalBottomSheet(
+                onTap: () async => await _onDelete(scheduleId: schedule.id),
+              )
+          );
+
+          return result ?? false;
+        },
+        child: ScheduleExceptionsWidget(schedule: schedule),
+      );
+    } else {
+      return ScheduleExceptionsWidget(schedule: schedule);
+    }
   }
 
 
@@ -59,6 +97,11 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
     final operatorStandardSchedules = ref.watch(standardScheduleProvider).operatorStandardSchedules;
     final operatorScheduleExceptions = ref.watch(scheduleExceptionProvider).operatorScheduleException;
 
+    final role = ref.read(operatorProvider).role;
+
+    _selectedOperator = ref.watch(scheduleExceptionProvider).selectedOperator;
+
+
     return Stack(
       children: [
         CustomScrollView(
@@ -66,15 +109,9 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
               SliverPersistentHeader(
                   pinned: true,
                   delegate: _HeaderDelegate(
-                      onSelect: (operator) => setState(() {
-                        _selectedOperator = SummaryOperatorDto(
-                            id: operator.id,
-                            name: operator.name,
-                            surname: operator.surname,
-                            imgUrl: operator.imgUrl
-                        );
-                      }),
-                    screenIndex: _selectedIndex
+                    title: _selectedIndex == 0 ? Strings.schedules : Strings.schedule_exception,
+                    screenIndex: _selectedIndex,
+                    role: role
                   )
               ),
 
@@ -105,7 +142,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
 
               SliverToBoxAdapter(child: const SizedBox(height: 25)),
 
-              if(_selectedOperator != null) ...[
+              if(_selectedOperator != null && ref.read(operatorProvider).role == Role.ROLE_ADMIN) ...[
                 SliverToBoxAdapter(
                     child: Padding(
                         padding: const EdgeInsets.all(10),
@@ -118,10 +155,10 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                         )
                     )
                 ),
-              ] else ...[
+              ] else if(_selectedOperator == null) ...[
                 SliverToBoxAdapter(
                     child: Text(
-                      Strings.no_operators_found,
+                      Strings.no_operators_found,   // todo lottie image
                       textAlign: TextAlign.center,
                     )
                 )
@@ -143,11 +180,14 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                             final StandardScheduleDto? schedule = matches.isNotEmpty ? matches.first : null;
                             return Column(
                                 children: [
-                                  ScheduleWidget(
-                                    schedule: schedule,
-                                    isNewSchedule: schedule == null,
-                                    day: schedule != null ? null : DayOfWeek.values[index],
-                                    operatorId: _selectedOperator!.id,
+                                  AbsorbPointer(
+                                    absorbing: ref.read(operatorProvider).role == Role.ROLE_OPERATOR,
+                                    child: ScheduleWidget(
+                                      schedule: schedule,
+                                      isNewSchedule: schedule == null,
+                                      day: schedule != null ? null : DayOfWeek.values[index],
+                                      operatorId: _selectedOperator!.id,
+                                    )
                                   ),
                                   if(index != DayOfWeek.values.length - 1) const SizedBox(height: 30)
                                 ]
@@ -160,7 +200,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
               ] else if(_selectedOperator != null) ...[
                 if(operatorScheduleExceptions.isEmpty) ...[
                   SliverFillRemaining(
-                    child: Center(child: Text(Strings.operator_does_not_have_schedule_exceptions),),
+                    child: Center(child: Text(Strings.operator_does_not_have_schedule_exceptions)), // todo lottie image
                   )
                 ] else ...[
                   SliverPadding(
@@ -173,34 +213,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                               final schedule = operatorScheduleExceptions[index];
                               return Column(
                                   children: [
-                                    Dismissible(
-                                        key: Key(schedule.id),
-                                        background: Container(
-                                            alignment: Alignment.centerRight,
-                                            padding: EdgeInsets.only(left: 20),
-                                            child: CircleAvatar(
-                                              backgroundColor: Colors.red,
-                                              child: Icon(Icons.delete, color: Colors.white),
-                                            )
-                                        ),
-                                        direction: DismissDirection.endToStart,
-                                        confirmDismiss: (direction) async {
-                                          final result = await showModalBottomSheet<bool>(
-                                              context: context,
-                                              isScrollControlled: true,
-                                              transitionAnimationController: AnimationController(
-                                                vsync: Navigator.of(context),
-                                                duration: Duration(milliseconds: 750),
-                                              ),
-                                              builder: (context) => DeleteModalBottomSheet(
-                                                onTap: () async => await _onDelete(scheduleId: schedule.id),
-                                              )
-                                          );
-
-                                          return result ?? false;
-                                        },
-                                        child: ScheduleExceptionsWidget(schedule: schedule),
-                                    ),
+                                    _buildScheduleWidget(schedule: schedule),
                                     if(index != DayOfWeek.values.length - 1) const SizedBox(height: 30)
                                   ]
                               );
@@ -215,8 +228,9 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
             ]
         ),
 
-        if(_selectedIndex == 1 && _selectedOperator != null) ...[
-          Positioned(
+        Visibility(
+          visible: !(_selectedIndex == 0 && ref.read(operatorProvider).role == Role.ROLE_ADMIN),
+          child: Positioned(
             bottom: 20,
             right: 20,
             child:  FloatingActionButton(
@@ -226,14 +240,21 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                 isScrollControlled: true,
                 transitionAnimationController: AnimationController(
                     vsync: Navigator.of(context),
-                    duration: Duration(milliseconds: 750)
+                    duration: Duration(milliseconds: 500)
                 ),
-                builder: (context) => ScheduleExceptionsModalBottomSheet(operatorId: _selectedOperator!.id,)
+                builder: (context) {
+                  if(_selectedIndex == 1 && _selectedOperator != null && ref.read(operatorProvider).role == Role.ROLE_ADMIN){
+                    return ScheduleExceptionsModalBottomSheet(operatorId: _selectedOperator!.id);
+                  } else if (ref.read(operatorProvider).role == Role.ROLE_OPERATOR) {
+                    return BookServiceModalBottomSheet();
+                  }
+                  return SizedBox();
+                }
               ),
               child: Icon(Icons.add)
             )
           )
-        ]
+        )
       ]
     );
   }
@@ -242,12 +263,14 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
 
 class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   _HeaderDelegate({
-    required this.onSelect,
-    required this.screenIndex
+    required this.screenIndex,
+    required this.role,
+    required this.title
   });
 
-  final void Function(OperatorDto) onSelect;
   final int screenIndex;
+  final String title;
+  final Role role;
 
   @override
   double get minExtent => 150;
@@ -256,8 +279,6 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    String title = screenIndex == 0 ? Strings.schedules : Strings.schedule_exception;
-
     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
@@ -273,23 +294,24 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                         Text(title, style: Theme.of(context).textTheme.headlineLarge),
                       ]),
 
-                      GestureDetector(
-                          onTap: () {
-                            showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                transitionAnimationController: AnimationController(
-                                    vsync: Navigator.of(context),
-                                    duration: Duration(milliseconds: 750)
-                                ),
-                                builder: (context) => ScheduleFilterModalBottomSheet(
-                                  onSelect: onSelect,
-                                  screenIndex: screenIndex,
-                                )
-                            );
-                          },
-                          child:  Icon(Icons.filter_list_outlined, size: 24)
-                      )
+                      if(role == Role.ROLE_ADMIN) ...[
+                        GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  transitionAnimationController: AnimationController(
+                                      vsync: Navigator.of(context),
+                                      duration: Duration(milliseconds: 750)
+                                  ),
+                                  builder: (context) => ScheduleFilterModalBottomSheet(
+                                    screenIndex: screenIndex,
+                                  )
+                              );
+                            },
+                            child:  Icon(Icons.filter_list_outlined, size: 24)
+                        )
+                      ]
                     ]
                 )
             )

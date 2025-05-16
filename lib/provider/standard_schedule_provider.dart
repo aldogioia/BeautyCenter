@@ -1,4 +1,5 @@
 import 'package:beauty_center_frontend/api/standard_schedule_service.dart';
+import 'package:beauty_center_frontend/provider/schedule_exception_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -30,7 +31,8 @@ class StandardSchedule extends _$StandardSchedule {
     return StandardScheduleProviderData();
   }
 
-  Future<MapEntry<bool, String>> getOperatorStandardSchedules({required String operatorId}) async {
+  Future<MapEntry<bool, String>> getOperatorStandardSchedules() async {
+    String operatorId = ref.read(scheduleExceptionProvider).selectedOperator.id;
     final response = await _standardScheduleService.getStandardSchedule(operatorId: operatorId);
 
     if(response == null) return MapEntry(false, Strings.connection_error);

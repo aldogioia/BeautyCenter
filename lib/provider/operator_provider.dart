@@ -204,6 +204,7 @@ class Operator extends _$Operator {
       state = state.copyWith(operator: OperatorDto.fromJson(response.data));
       return "";
     }
+    print("ERRORE: ${(response.data as Map<String, dynamic>)['message']}");
     return (response.data as Map<String, dynamic>)['message'];
   }
 

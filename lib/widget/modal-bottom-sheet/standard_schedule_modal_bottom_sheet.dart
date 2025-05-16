@@ -133,7 +133,6 @@ class _StandardScheduleModalBottomSheetState extends ConsumerState<StandardSched
   }
 
   Future<void> _save() async {
-    // todo controllare con aldo se vanno bene le validazioni
     String message = "";
     if(!InputValidator.validateStartAndEndScheduleTime(start: _morningStartTime, end: _morningEndTime) ||
         !InputValidator.validateStartAndEndScheduleTime(start: _afternoonStartTime, end: _afternoonEndTime)

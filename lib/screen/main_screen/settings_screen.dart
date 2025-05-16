@@ -1,7 +1,9 @@
 import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
 import 'package:beauty_center_frontend/provider/auth_provider.dart';
 import 'package:beauty_center_frontend/provider/operator_provider.dart';
+import 'package:beauty_center_frontend/security/secure_storage.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/delete_modal_bottom_sheet.dart';
+import 'package:beauty_center_frontend/widget/modal-bottom-sheet/notification_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -60,7 +62,7 @@ class SettingsScreen extends ConsumerWidget {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           spacing: 10,
                                           children: [
-                                            Icon(Icons.manage_accounts_rounded, color: Theme.of(context).primaryColor),
+                                            Icon(Icons.manage_accounts_rounded, color: Theme.of(context).colorScheme.primary),
                                             Text(Strings.personal_data)
                                           ]
                                       )
@@ -68,17 +70,36 @@ class SettingsScreen extends ConsumerWidget {
                               )
                             ],
 
-                            // todo serve controllare che role != Role.Empty ?
                             Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: GestureDetector(
-                                    onTap: (){},    // todo
+                                    onTap: () async {
+                                      final bool enabled = await SecureStorage.getNotificationsEnabled();
+                                      print("NOTIFICA INIZIALE: $enabled");
+
+                                      showModal(bool value) => showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          transitionAnimationController: AnimationController(
+                                              vsync: Navigator.of(context),
+                                              duration: Duration(milliseconds: 500)
+                                          ),
+                                          builder: (context) {
+                                            return NotificationModalBottomSheet(
+                                              enabled: value,
+                                            );
+                                          }
+                                      );
+
+                                      showModal(enabled);
+
+                                    },
                                     child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         spacing: 10,
                                         children: [
-                                          Icon(Icons.notifications_none_rounded, color: Theme.of(context).primaryColor),
+                                          Icon(Icons.notifications_none_rounded, color: Theme.of(context).colorScheme.primary),
                                           Text(Strings.notifications)
                                         ]
                                     )
@@ -103,7 +124,7 @@ class SettingsScreen extends ConsumerWidget {
                                           isScrollControlled: true,
                                           transitionAnimationController: AnimationController(
                                               vsync: Navigator.of(context),
-                                              duration: Duration(milliseconds: 750)
+                                              duration: Duration(milliseconds: 500)
                                           ),
                                           builder: (context) => DeleteModalBottomSheet(
                                             text: Strings.exit,

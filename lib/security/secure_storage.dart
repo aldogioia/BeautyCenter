@@ -4,6 +4,10 @@ class SecureStorage {
   static final _storage = FlutterSecureStorage();
 
 
+  static Future<void> saveNotificationsEnabled(bool enabled) async {
+    await _storage.write(key: 'notifications_enabled', value: enabled.toString());
+  }
+
   static Future<void> saveAccessToken(String token) async {
     await _storage.write(key: 'access_token', value: token);
   }
@@ -16,6 +20,18 @@ class SecureStorage {
     await _storage.write(key: 'user_id', value: userId);
   }
 
+
+  static Future<bool> getNotificationsEnabled() async {
+    final value = await _storage.read(key: 'notifications_enabled');
+    print("DA STORAGE: ${value == null ? true : value.toLowerCase() == 'true'}");
+    return value == null ? true : value.toLowerCase() == 'true';
+  }
+
+  static Future<bool?> getNullableNotificationsEnabled() async {
+    final value = await _storage.read(key: 'notifications_enabled');
+    print("DA STORAGE: ${value == null ? true : value.toLowerCase() == 'true'}");
+    return value == null ? null : value.toLowerCase() == 'true';
+  }
 
   static Future<String?> getAccessToken() async {
     return await _storage.read(key: 'access_token');

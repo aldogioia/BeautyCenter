@@ -48,6 +48,7 @@ class Strings {
   static const String rooms = "Stanze";
   static const String customers = "Utenti";
   static const String schedule_exception = "Cambi turno";
+  static const String receive_notifications = "Ricevi notifiche";
 
   static const String operator = "Operatore";
   static const String service = "Servizio";
@@ -138,6 +139,7 @@ class Strings {
   static const String room_delete_successfully = "Stanza eliminata con successo";
   static const String operator_delete_successfully = "Operatore eliminato con successo";
   static const String booking_deleted = "Appuntamento cancellato";
+  static const String schedule_deleted_correctly = "Cambio turno annulato";
 
   static const String bookings = "Appuntamenti";
 

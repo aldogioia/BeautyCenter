@@ -12,7 +12,6 @@ import '../../model/OperatorDto.dart';
 import '../../model/enumerators/role.dart';
 import '../../utils/strings.dart';
 
-// todo fare in modo che se il ruolo è operator, viene mostrato solo la scelta del giorno
 class BookingFilterModalBottomSheet extends ConsumerStatefulWidget {
   const BookingFilterModalBottomSheet({
     super.key,

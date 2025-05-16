@@ -13,11 +13,9 @@ import '../operator_widget.dart';
 class ScheduleFilterModalBottomSheet extends ConsumerStatefulWidget {
   const ScheduleFilterModalBottomSheet({
     super.key,
-    required this.onSelect,
     required this.screenIndex
   });
 
-  final void Function(OperatorDto) onSelect;
   final int screenIndex;
 
   @override
@@ -25,7 +23,7 @@ class ScheduleFilterModalBottomSheet extends ConsumerStatefulWidget {
 }
 
 class _ScheduleFilterModalBottomSheetState extends ConsumerState<ScheduleFilterModalBottomSheet> {
-  OperatorDto? _selectedOperator;
+  SummaryOperatorDto? _selectedOperator;
 
 
   Future<void> _setFilter() async {
@@ -43,14 +41,16 @@ class _ScheduleFilterModalBottomSheetState extends ConsumerState<ScheduleFilterM
         }
     );
 
-    result = await ref.read(standardScheduleProvider.notifier).getOperatorStandardSchedules(operatorId: _selectedOperator!.id);
-    result2 = await ref.read(scheduleExceptionProvider.notifier).getOperatorSchedulesException(operatorId: _selectedOperator!.id);
+    ref.read(scheduleExceptionProvider.notifier).updateSelectedOperator(operator: _selectedOperator!);
+
+    // todo fare la stessa cosa con gli standard schedule
+    result = await ref.read(standardScheduleProvider.notifier).getOperatorStandardSchedules();
+    result2 = await ref.read(scheduleExceptionProvider.notifier).getOperatorSchedulesException();
 
     navigator.pop();
 
     if(result.key && result2.key) {
       navigator.pop();
-      widget.onSelect(_selectedOperator!);
     }
     else {
       SnackBarHandler.instance.showMessage(message: result.value);
@@ -123,7 +123,12 @@ class _ScheduleFilterModalBottomSheetState extends ConsumerState<ScheduleFilterM
                                                 isSelected: _selectedOperator != null && _selectedOperator!.id == operator.id,
                                                 operator: summaryDto,
                                                 onTap: () => setState(() {
-                                                  _selectedOperator = operator;
+                                                  _selectedOperator = SummaryOperatorDto(
+                                                    id: operator.id,
+                                                    name: operator.name,
+                                                    surname: operator.surname,
+                                                    imgUrl: operator.imgUrl
+                                                  );
                                                 })
                                             );
                                           },

@@ -173,7 +173,6 @@ class _ScheduleExceptionsModalBottomSheetState extends ConsumerState<ScheduleExc
 
 
   Future<void> _save() async {
-    // todo vedere se vanno bene tutti i controlli
     if(_startDate == null) {
       SnackBarHandler.instance.showMessage(message: Strings.select_start_date);
     } else if(_startDate!.isBefore(DateTime.now())) {   // todo controllare dateTime.now + 1 giorno?
