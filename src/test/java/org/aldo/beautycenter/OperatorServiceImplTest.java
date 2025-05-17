@@ -3,7 +3,7 @@ package org.aldo.beautycenter;
 import org.aldo.beautycenter.data.entities.Booking;
 import org.aldo.beautycenter.data.entities.Service;
 import org.aldo.beautycenter.data.entities.Tool;
-import org.aldo.beautycenter.service.implemetations.OperatorServiceImpl;
+import org.aldo.beautycenter.service.implementations.OperatorServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

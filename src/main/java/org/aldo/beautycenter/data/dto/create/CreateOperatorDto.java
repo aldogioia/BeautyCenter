@@ -1,11 +1,8 @@
 package org.aldo.beautycenter.data.dto.create;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.aldo.beautycenter.security.customAnnotation.annotation.NotAlreadyUsed;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidPhoneNumber;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidMultipartExtension;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidServiceId;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,9 +23,10 @@ public class CreateOperatorDto {
     @Size(min = 3, max = 50, message = "Il cognome deve essere compreso tra 3 e 50 caratteri")
     private String surname;
 
-    @Email(message = "Inserisci un indirizzo email valido")
-    @NotAlreadyUsed
-    private String email;
+    @NotNull(message = "Il campo telefono è obligatorio")
+    @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Il numero di telefono deve contenere 10 numeri")
+    @ValidPhoneNumber
+    private String phoneNumber;
 
     private List<@ValidServiceId String> services;
 }

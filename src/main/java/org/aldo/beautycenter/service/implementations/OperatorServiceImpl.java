@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.service.implemetations;
+package org.aldo.beautycenter.service.implementations;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -123,10 +123,10 @@ public class OperatorServiceImpl implements OperatorService {
     @Override
     @Transactional
     public String updateOperator(UpdateOperatorDto updateOperatorDto) {
-        userDao.findByEmail(updateOperatorDto.getEmail())
+        userDao.findByPhoneNumber(updateOperatorDto.getPhoneNumber())
                 .ifPresent(user -> {
                     if (!user.getId().equals(updateOperatorDto.getId()))
-                        throw new EmailAlreadyUsed("Email già in uso");
+                        throw new EmailAlreadyUsed("Numero di telefono già in uso");
                 });
 
         Operator operator = operatorDao.getReferenceById(updateOperatorDto.getId());

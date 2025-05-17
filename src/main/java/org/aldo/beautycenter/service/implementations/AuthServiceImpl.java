@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.service.implemetations;
+package org.aldo.beautycenter.service.implementations;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,11 +31,11 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public AuthResponseDto signIn(String email, String password) {
+    public AuthResponseDto signIn(String phoneNumber, String password) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password));
+                new UsernamePasswordAuthenticationToken(phoneNumber, password));
 
-        User user = userDao.findByEmail(email)
+        User user = userDao.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
 
         AuthResponseDto authResponseDto = new AuthResponseDto();
@@ -60,8 +60,8 @@ public class AuthServiceImpl implements AuthService {
         }
 
         try {
-            String email = jwtHandler.getEmailFromToken(refreshToken);
-            var user = userDao.findByEmail(email)
+            String phoneNumber = jwtHandler.getPhoneNumberFromToken(refreshToken);
+            var user = userDao.findByPhoneNumber(phoneNumber)
                     .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
 
             return jwtHandler.generateAccessToken(user);
@@ -79,6 +79,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void signOut(HttpServletRequest request, String token, User user) {
+
+        //TODO
         /*user.getTokens().stream()
                 .filter(fcmToken -> fcmToken.getToken().equals(token))
                 .forEach(fcmToken -> fcmTokenDao.deleteByToken(token));*/

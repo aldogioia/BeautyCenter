@@ -23,8 +23,12 @@ public class PasswordController {
     private final PasswordService passwordService;
 
     @PostMapping("/request-reset")
-    public ResponseEntity<HttpStatus> requestResetPassword(@NotNull(message = "L'email è obbligatoria") @RequestParam String email) {
-        passwordService.requestChangePassword(email);
+    public ResponseEntity<HttpStatus> requestResetPassword(
+            @NotNull(message = "Il campo telefono è obligatorio")
+            @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Il numero di telefono deve contenere 10 numeri")
+            @RequestParam String phoneNumber
+    ) {
+        passwordService.requestChangePassword(phoneNumber);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();

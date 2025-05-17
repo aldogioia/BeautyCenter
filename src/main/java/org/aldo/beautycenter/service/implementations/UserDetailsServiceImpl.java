@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.service.implemetations;
+package org.aldo.beautycenter.service.implementations;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +18,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserDao userDao;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userDao.findByEmail(email)
+    public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
+        User user = userDao.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
         return new CustomUserDetails(user);
     }
-    public String getCurrentUserEmail(){
+    public String getCurrentUserPhoneNumber() {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return userDetails.getUsername();

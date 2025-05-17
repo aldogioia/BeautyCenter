@@ -2,7 +2,7 @@ package org.aldo.beautycenter.security.logging;
 
 import io.micrometer.common.lang.NonNullApi;
 import lombok.RequiredArgsConstructor;
-import org.aldo.beautycenter.service.implemetations.UserDetailsServiceImpl;
+import org.aldo.beautycenter.service.implementations.UserDetailsServiceImpl;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         try {
-            return Optional.of(userDetailsServiceImpl.getCurrentUserEmail());
+            return Optional.of(userDetailsServiceImpl.getCurrentUserPhoneNumber());
         } catch (Exception e) {
             return Optional.of("system");
         }

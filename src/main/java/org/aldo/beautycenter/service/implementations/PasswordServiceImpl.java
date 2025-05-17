@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.service.implemetations;
+package org.aldo.beautycenter.service.implementations;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -7,11 +7,10 @@ import org.aldo.beautycenter.data.dao.UserDao;
 import org.aldo.beautycenter.data.dto.updates.UpdatePasswordDto;
 import org.aldo.beautycenter.data.entities.PasswordToken;
 import org.aldo.beautycenter.data.entities.User;
-import org.aldo.beautycenter.security.exception.customException.EmailNotSentException;
 import org.aldo.beautycenter.security.exception.customException.PasswordNotMatchException;
 import org.aldo.beautycenter.security.exception.customException.TokenException;
-import org.aldo.beautycenter.service.interfaces.EmailService;
 import org.aldo.beautycenter.service.interfaces.PasswordService;
+import org.aldo.beautycenter.service.interfaces.WhatsAppSenderService;
 import org.aldo.beautycenter.utils.PasswordTokenGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,11 +25,12 @@ public class PasswordServiceImpl implements PasswordService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
     private final PasswordTokenDao passwordTokenDao;
-    private final EmailService emailService;
+    private final WhatsAppSenderService whatsAppSenderService;
+
 
     @Override
-    public void requestChangePassword(String email) {
-        User user = userDao.findByEmail(email)
+    public void requestChangePassword(String phoneNumber) {
+        User user = userDao.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
         passwordTokenDao.findByUser(user).ifPresent(passwordTokenDao::delete);
         sendResetPasswordEmail(user);
@@ -75,15 +75,6 @@ public class PasswordServiceImpl implements PasswordService {
 
         passwordTokenDao.save(passwordToken);
 
-        try {
-            emailService.sendEmail(
-                    user.getName(),
-                    user.getSurname(),
-                    user.getEmail(),
-                    token
-            );
-        } catch (Exception e) {
-            throw new EmailNotSentException("Errore nell'invio dell'email");
-        }
+        whatsAppSenderService.sendTokenRecoveryPassword(user, token);
     }
 }
