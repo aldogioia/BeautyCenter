@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.service.implemetations;
+package org.aldo.beautycenter.service.implementations;
 
 
 import com.google.firebase.messaging.*;

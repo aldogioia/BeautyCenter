@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.service.implemetations;
+package org.aldo.beautycenter.service.implementations;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

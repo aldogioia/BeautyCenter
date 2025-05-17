@@ -2,6 +2,7 @@ package org.aldo.beautycenter.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dto.responses.AuthResponseDto;
 import org.aldo.beautycenter.data.dto.create.CreateCustomerDto;
@@ -23,12 +24,12 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     public ResponseEntity<AuthResponseDto> login(
-            @RequestParam String email,
-            @RequestParam String password
+            @NotNull(message = "Il numero di telefono è obbligatorio") @RequestParam String phoneNumber,
+            @NotNull(message = "La password è obbligatoria") @RequestParam String password
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(authService.signIn(email, password));
+                .body(authService.signIn(phoneNumber, password));
     }
 
     @PostMapping("/sign-up")

@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.service.implemetations;
+package org.aldo.beautycenter.service.implementations;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public void updateCustomer(UpdateCustomerDto updateCustomerDto) {
-        userDao.findByEmail(updateCustomerDto.getEmail())
+        userDao.findByPhoneNumber(updateCustomerDto.getPhoneNumber())
                 .ifPresent(user -> {
                     if (user.getId().equals(updateCustomerDto.getId())) {
                         Customer customer = customerDao.getReferenceById(updateCustomerDto.getId());

@@ -12,8 +12,8 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = NotAlreadyUsedValidator.class)
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface NotAlreadyUsed {
-    String message() default "L'email è collegata ad un account già esistente";
+public @interface ValidPhoneNumber {
+    String message() default "Il numero di telefono è già associato ad un altro account";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

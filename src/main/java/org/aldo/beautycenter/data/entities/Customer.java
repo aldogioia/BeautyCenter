@@ -12,10 +12,6 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Customer extends User {
-
-    @Column(name = "phone_number", unique = true)
-    private String phoneNumber;
-
     @OneToMany(mappedBy = "bookedForCustomer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Booking> bookings;

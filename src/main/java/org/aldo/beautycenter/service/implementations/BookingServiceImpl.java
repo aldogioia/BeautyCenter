@@ -1,4 +1,4 @@
-package org.aldo.beautycenter.service.implemetations;
+package org.aldo.beautycenter.service.implementations;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -15,6 +15,7 @@ import org.aldo.beautycenter.security.exception.customException.BookingConflictE
 import org.aldo.beautycenter.security.exception.customException.BookingDeleteException;
 import org.aldo.beautycenter.service.interfaces.BookingService;
 import org.aldo.beautycenter.service.interfaces.NotificationService;
+import org.aldo.beautycenter.service.interfaces.WhatsAppSenderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class BookingServiceImpl implements BookingService {
     private final OperatorDao operatorDao;
     private final CustomerDao customerDao;
     private final ServiceDao serviceDao;
+    private final WhatsAppSenderService whatsAppSenderService;
     private final NotificationService notificationService;
     private final ModelMapper modelMapper;
 
@@ -83,6 +85,10 @@ public class BookingServiceImpl implements BookingService {
             booking.setRoom(room.get());
             bookingDao.save(booking);
 
+            if (createBookingDto.getBookedForNumber() != null) {
+                whatsAppSenderService.sendConfirmationBooking(booking);
+            }
+
             return modelMapper.map(booking, BookingDto.class);
         }
         catch (Exception e) {
@@ -99,12 +105,17 @@ public class BookingServiceImpl implements BookingService {
             final String title = "Appuntamento cancellato";
 
             if (user.getRole().equals(Role.ROLE_ADMIN)){
-                notificationService.sendNotificationToUser(
-                        booking.getBookedForCustomer(),
-                        title,
-                        "L'appuntamento " + booking.getService().getName() + "in data" + booking.getDate() + " è stato cancellato per un imprevisto"
-                );
-                bookingDao.deleteById(bookingId);
+                if (booking.getBookedForCustomer() != null) {
+                    notificationService.sendNotificationToUser(
+                            booking.getBookedForCustomer(),
+                            title,
+                            "L'appuntamento " + booking.getService().getName() + "in data" + booking.getDate() + " è stato cancellato per un imprevisto"
+                    );
+                }
+                else {
+                    whatsAppSenderService.sendCancelBooking(booking);
+                }
+                bookingDao.delete(booking);
             }
 
             if (user.getId().equals(booking.getBookedForCustomer().getId())) {
@@ -113,7 +124,7 @@ public class BookingServiceImpl implements BookingService {
                         title,
                         booking.getBookedForCustomer().getName() + booking.getBookedForCustomer().getSurname() + " ha cancellato l'appuntamento" + booking.getService().getName()
                 );
-                bookingDao.deleteById(bookingId);
+                bookingDao.delete(booking);
             }
         }
         catch (Exception e) {
