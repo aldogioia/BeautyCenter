@@ -4,7 +4,7 @@ class OperatorDto {
   final String id;
   final String name;
   final String surname;
-  final String email;
+  final String phoneNumber;
   final String imgUrl;
   final List<SummaryServiceDto> services;
 
@@ -12,7 +12,7 @@ class OperatorDto {
     required this.id,
     required this.name,
     required this.surname,
-    required this.email,
+    required this.phoneNumber,
     required this.imgUrl,
     required this.services
   });
@@ -22,7 +22,7 @@ class OperatorDto {
       id: "",
       name: "",
       surname: "",
-      email: "",
+      phoneNumber: "",
       imgUrl: "",
       services: []
     );
@@ -32,7 +32,7 @@ class OperatorDto {
     String? id,
     String? name,
     String? surname,
-    String? email,
+    String? phoneNumber,
     String? imgUrl,
     List<SummaryServiceDto>? services
   }) {
@@ -40,7 +40,7 @@ class OperatorDto {
       id: id ?? this.id,
       name: name ?? this.name,
       surname: surname ?? this.surname,
-      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
       imgUrl: imgUrl ?? this.imgUrl,
       services: services ?? this.services
     );
@@ -51,7 +51,7 @@ class OperatorDto {
       id: json['id'] as String,
       name: json['name'] as String,
       surname: json['surname'] as String,
-      email: json['email'] as String,
+      phoneNumber: json['phoneNumber'] as String,
       imgUrl: json['imgUrl'] as String,
       services: json['services'] != null
           ? (json['services'] as List<dynamic>)
@@ -66,7 +66,7 @@ class OperatorDto {
       'id': id,
       'name': name,
       'surname': surname,
-      'email': email,
+      'phoneNumber': phoneNumber,
       'imgUrl': imgUrl,
       'services': services.map((s) => s.toJson()).toList(),
     };

@@ -33,7 +33,7 @@ class _OperatorUpdateModalBottomSheetState extends ConsumerState<OperatorUpdateM
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _surnameController;
-  late TextEditingController _emailController;
+  late TextEditingController _phoneNumberController;
 
   bool _isUpdated = false;
   List<SummaryServiceDto> _selectedServices = [];
@@ -58,7 +58,7 @@ class _OperatorUpdateModalBottomSheetState extends ConsumerState<OperatorUpdateM
           _image != null ||
           _nameController.text != widget.operatorDto.name ||
           _surnameController.text != widget.operatorDto.surname ||
-          _emailController.text != widget.operatorDto.email;
+          _phoneNumberController.text != widget.operatorDto.phoneNumber;
     });
   }
 
@@ -84,7 +84,7 @@ class _OperatorUpdateModalBottomSheetState extends ConsumerState<OperatorUpdateM
           id: widget.operatorDto.id,
           name: _nameController.text,
           surname: _surnameController.text,
-          email: _emailController.text,
+          phoneNumber: _phoneNumberController.text,
           services: _selectedServices,
           image: _image
       );
@@ -101,7 +101,7 @@ class _OperatorUpdateModalBottomSheetState extends ConsumerState<OperatorUpdateM
     _selectedServices = List.from(widget.operatorDto.services);
     _nameController = TextEditingController(text: widget.operatorDto.name);
     _surnameController = TextEditingController(text: widget.operatorDto.surname);
-    _emailController = TextEditingController(text: widget.operatorDto.email);
+    _phoneNumberController = TextEditingController(text: widget.operatorDto.phoneNumber);
     super.initState();
   }
 
@@ -110,7 +110,7 @@ class _OperatorUpdateModalBottomSheetState extends ConsumerState<OperatorUpdateM
   void dispose() {
     _nameController.dispose();
     _surnameController.dispose();
-    _emailController.dispose();
+    _phoneNumberController.dispose();
     super.dispose();
   }
 
@@ -246,10 +246,11 @@ class _OperatorUpdateModalBottomSheetState extends ConsumerState<OperatorUpdateM
                                         const SizedBox(height: 10),
 
                                         TextFormField(
-                                          decoration: InputDecoration(labelText: Strings.email),
-                                          validator: (value) => InputValidator.validateEmail(value),
+                                          decoration: InputDecoration(labelText: Strings.mobile_phone),
+                                          validator: (value) => InputValidator.validatePhoneNumber(value),
+                                          keyboardType: TextInputType.number,
                                           onChanged: (value) => _checkUpdate(),
-                                          controller: _emailController,
+                                          controller: _phoneNumberController,
                                         ),
 
                                         const SizedBox(height: 25),

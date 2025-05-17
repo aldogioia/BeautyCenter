@@ -74,7 +74,7 @@ class Operator extends _$Operator {
     required String id,
     required String name,
     required String surname,
-    required String email,
+    required String phoneNumber,
     required List<SummaryServiceDto> services,
     required File? image
   }) async {
@@ -82,7 +82,7 @@ class Operator extends _$Operator {
       id: id,
       name: name,
       surname: surname,
-      email: email,
+      phoneNumber: phoneNumber,
       image: image,
       services: services.map((e) => e.id).toList()
     );
@@ -92,7 +92,7 @@ class Operator extends _$Operator {
       state = state.copyWith(
         operators: state.operators.map((e){
           if(e.id == id) {
-            return e.copyWith(id: id, name: name, surname: surname, email: email, services: services, imgUrl: response.data);
+            return e.copyWith(id: id, name: name, surname: surname, phoneNumber: phoneNumber, services: services, imgUrl: response.data);
           }
           return e;
         }).toList()
