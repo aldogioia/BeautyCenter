@@ -17,6 +17,6 @@ public class UpdateToolDto {
     private String name;
 
     @NotNull
-    @Min(1)
+    @Min(0)
     private Integer availability;
 }
