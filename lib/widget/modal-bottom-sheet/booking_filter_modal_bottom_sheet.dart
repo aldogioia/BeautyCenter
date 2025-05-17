@@ -1,5 +1,5 @@
 import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
-import 'package:beauty_center_frontend/model/SummaryOperatorDto.dart';
+import 'package:beauty_center_frontend/model/summary_operator_dto.dart';
 import 'package:beauty_center_frontend/provider/booking_provider.dart';
 import 'package:beauty_center_frontend/provider/operator_provider.dart';
 import 'package:beauty_center_frontend/utils/date_util.dart';

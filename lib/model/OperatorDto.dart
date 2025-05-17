@@ -1,4 +1,4 @@
-import 'SummaryServiceDto.dart';
+import 'summary_service_dto.dart';
 
 class OperatorDto {
   final String id;

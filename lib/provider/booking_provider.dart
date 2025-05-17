@@ -1,6 +1,6 @@
   import 'package:beauty_center_frontend/api/booking_service.dart';
 import 'package:beauty_center_frontend/model/BookingDto.dart';
-import 'package:beauty_center_frontend/model/SummaryOperatorDto.dart';
+import 'package:beauty_center_frontend/model/summary_operator_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

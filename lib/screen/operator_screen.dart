@@ -6,6 +6,7 @@ import 'package:beauty_center_frontend/widget/modal-bottom-sheet/operator_update
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 import '../utils/strings.dart';
 
@@ -54,8 +55,20 @@ class _OperatorsScreenState extends ConsumerState<OperatorsScreen> {
     }).toList();
 
 
-    if(operators.isEmpty) {
-      return SliverFillRemaining(child: Center(child: Text(Strings.no_operator_created)));
+    if(filteredOperators.isEmpty) {
+      return SliverFillRemaining(
+        child: Column(
+            spacing: 16,
+            children: [
+              const SizedBox(height: 32),
+              Lottie.asset(
+                  'assets/lottie/no_items.json',
+                  height: 200
+              ),
+              Center(child: Text(Strings.no_operator_founded, textAlign: TextAlign.center,))
+            ]
+        )
+      );
     }
     return SliverList.separated(
       itemBuilder: (context, index) {

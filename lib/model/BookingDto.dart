@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../utils/time_utils.dart';
 import 'ServiceDto.dart';
-import 'SummaryCustomerDto.dart';
-import 'SummaryOperatorDto.dart';
+import 'summary_customer_dto.dart';
+import 'summary_operator_dto.dart';
 
 class BookingDto {
   final String id;
@@ -40,20 +40,6 @@ class BookingDto {
       bookedForName: json['bookedForName'],
       bookedForNumber: json['bookedForNumber'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'service': service.toJson(),
-      'operator': operator.toJson(),
-      'bookedForCustomer': customer?.toJson(),
-      'room': room,
-      'date': date.toIso8601String(),
-      'time': TimeUtils.formatTimeOfDay(time),
-      'bookedForName': bookedForName,
-      'bookedForNumber': bookedForNumber
-    };
   }
 
   BookingDto copyWith({

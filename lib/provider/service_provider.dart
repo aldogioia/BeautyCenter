@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:beauty_center_frontend/api/service_service.dart';
+import 'package:beauty_center_frontend/model/summary_tool_dto.dart';
 import 'package:beauty_center_frontend/provider/operator_provider.dart';
 import 'package:beauty_center_frontend/provider/room_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -51,9 +52,17 @@ class Service extends _$Service {
     required String name,
     required int duration,
     required double price,
-    required File? image
+    required File? image,
+    required List<SummaryToolDto> tools
   }) async {
-    final response =  await _serviceService.updateService(id: id, name: name, price: price, duration: duration, image: image);
+    final response =  await _serviceService.updateService(
+      id: id,
+      name: name,
+      price: price,
+      duration: duration,
+      image: image,
+      tools: tools.map((tool) => tool.id).toList()
+    );
 
     if(response == null) return Strings.connection_error;
     if(response.statusCode == 200) {
@@ -80,9 +89,16 @@ class Service extends _$Service {
     required String name,
     required double price,
     required int duration,
-    required File? image
+    required File? image,
+    required List<SummaryToolDto> tools
   }) async {
-    final response = await _serviceService.createService(name: name, price: price, duration: duration, image: image);
+    final response = await _serviceService.createService(
+      name: name,
+      price: price,
+      duration: duration,
+      toolsId: tools.map((tool) => tool.id).toList(),
+      image: image
+    );
 
     if(response == null) return MapEntry(false, Strings.connection_error);
     if(response.statusCode == 201){

@@ -4,7 +4,7 @@ import 'package:beauty_center_frontend/model/schedule_exceptions_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../model/SummaryOperatorDto.dart';
+import '../model/summary_operator_dto.dart';
 import '../utils/strings.dart';
 
 part 'schedule_exception_provider.g.dart';

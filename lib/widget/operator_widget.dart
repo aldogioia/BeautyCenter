@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/SummaryOperatorDto.dart';
+import '../model/summary_operator_dto.dart';
 
 class OperatorWidget extends StatelessWidget {
   const OperatorWidget({

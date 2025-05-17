@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../handler/snack_bar_handler.dart';
 import '../../model/OperatorDto.dart';
-import '../../model/SummaryOperatorDto.dart';
+import '../../model/summary_operator_dto.dart';
 import '../../provider/operator_provider.dart';
 import '../../utils/strings.dart';
 import '../operator_widget.dart';
@@ -43,7 +43,6 @@ class _ScheduleFilterModalBottomSheetState extends ConsumerState<ScheduleFilterM
 
     ref.read(scheduleExceptionProvider.notifier).updateSelectedOperator(operator: _selectedOperator!);
 
-    // todo fare la stessa cosa con gli standard schedule
     result = await ref.read(standardScheduleProvider.notifier).getOperatorStandardSchedules();
     result2 = await ref.read(scheduleExceptionProvider.notifier).getOperatorSchedulesException();
 

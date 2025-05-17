@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
 import 'package:beauty_center_frontend/provider/operator_provider.dart';
-import 'package:beauty_center_frontend/widget/CustomImagePicker.dart';
+import 'package:beauty_center_frontend/widget/custom_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../security/input_validator.dart';
-import '../../model/SummaryServiceDto.dart';
+import '../../model/summary_service_dto.dart';
 import '../../utils/strings.dart';
 import '../custom_service_wrap.dart';
 

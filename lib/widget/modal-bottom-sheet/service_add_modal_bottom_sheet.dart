@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:beauty_center_frontend/model/summary_tool_dto.dart';
 import 'package:beauty_center_frontend/security/input_validator.dart';
 import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
 import 'package:beauty_center_frontend/provider/service_provider.dart';
-import 'package:beauty_center_frontend/widget/CustomImagePicker.dart';
+import 'package:beauty_center_frontend/widget/custom_image_picker.dart';
+import 'package:beauty_center_frontend/widget/custom_tool_wrap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,7 +27,15 @@ class _ServiceAddModalBottomSheetState extends ConsumerState<ServiceAddModalBott
 
   File? _image;
   bool _canAdd = false;
+  List<SummaryToolDto> _selectedTools = [];
 
+
+  void _onChipTap({required List<SummaryToolDto> tools}){
+    _selectedTools = List.from(tools);
+    _checkCanAdd();
+  }
+  
+  
   void _checkCanAdd(){
     setState(() {
       _canAdd = _nameController.text != "" && _priceController.text != "" && _durationController.text != ""
@@ -40,7 +50,8 @@ class _ServiceAddModalBottomSheetState extends ConsumerState<ServiceAddModalBott
         name: _nameController.text,
         price: double.tryParse(_priceController.text) ?? 0,
         duration: int.tryParse(_durationController.text) ?? 0,
-        image: _image
+        image: _image,
+        tools: _selectedTools
       );
 
       if(result.key) navigator.pop();
@@ -87,53 +98,63 @@ class _ServiceAddModalBottomSheetState extends ConsumerState<ServiceAddModalBott
 
                           const SizedBox(height: 25),
 
-                          Column(
-                              children: [
-                                Form(
-                                    key: _formKey,
-                                    child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          CustomImagePicker(
-                                              onImagePick: (image) {
-                                                _image = image;
-                                                _checkCanAdd();
-                                              },
-                                              height: 150
-                                          ),
+                          Form(
+                              key: _formKey,
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    CustomImagePicker(
+                                        onImagePick: (image) {
+                                          _image = image;
+                                          _checkCanAdd();
+                                        },
+                                        height: 150
+                                    ),
 
-                                          const SizedBox(height: 25),
+                                    const SizedBox(height: 25),
 
-                                          TextFormField(
-                                            decoration: InputDecoration(labelText: Strings.name),
-                                            validator: (value) => InputValidator.validateServiceName(value),
-                                            onChanged: (value) => _checkCanAdd(),
-                                            controller: _nameController,
-                                          ),
+                                    TextFormField(
+                                      decoration: InputDecoration(labelText: Strings.name),
+                                      validator: (value) => InputValidator.validateServiceName(value),
+                                      onChanged: (value) => _checkCanAdd(),
+                                      controller: _nameController,
+                                    ),
 
-                                          const SizedBox(height: 10),
+                                    const SizedBox(height: 10),
 
-                                          TextFormField(
-                                            decoration: InputDecoration(labelText: Strings.price_in_euro),
-                                            controller: _priceController,
-                                            keyboardType: TextInputType.number,
-                                            onChanged: (value) => _checkCanAdd(),
-                                            validator: (value) => InputValidator.validateServicePrice(value),
-                                          ),
+                                    TextFormField(
+                                      decoration: InputDecoration(labelText: Strings.price_in_euro),
+                                      controller: _priceController,
+                                      keyboardType: TextInputType.number,
+                                      onChanged: (value) => _checkCanAdd(),
+                                      validator: (value) => InputValidator.validateServicePrice(value),
+                                    ),
 
-                                          const SizedBox(height: 10),
+                                    const SizedBox(height: 10),
 
-                                          TextFormField(
-                                            decoration: InputDecoration(labelText: Strings.duration_in_minutes),
-                                            controller: _durationController,
-                                            keyboardType: TextInputType.number,
-                                            onChanged: (value) => _checkCanAdd(),
-                                            validator: (value) => InputValidator.validateServiceDuration(value),
-                                          )
-                                        ]
+                                    TextFormField(
+                                      decoration: InputDecoration(labelText: Strings.duration_in_minutes),
+                                      controller: _durationController,
+                                      keyboardType: TextInputType.number,
+                                      onChanged: (value) => _checkCanAdd(),
+                                      validator: (value) => InputValidator.validateServiceDuration(value),
+                                    ),
+
+                                    const SizedBox(height: 25),
+
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(Strings.tools, style: Theme.of(context).inputDecorationTheme.labelStyle),
+                                    ),
+
+                                    const SizedBox(height: 10),
+
+                                    CustomToolWrap(
+                                      onChipTap: (tools) => _onChipTap(tools: tools),
+                                      initialTools: _selectedTools
                                     )
-                                )
-                              ]
+                                  ]
+                              )
                           )
                         ]
                     )
@@ -142,6 +163,14 @@ class _ServiceAddModalBottomSheetState extends ConsumerState<ServiceAddModalBott
           )
         )
     );
-
+  }
+  
+  
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _priceController.dispose();
+    _durationController.dispose();
   }
 }

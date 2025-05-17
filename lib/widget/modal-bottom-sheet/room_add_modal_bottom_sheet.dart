@@ -1,6 +1,6 @@
 import 'package:beauty_center_frontend/security/input_validator.dart';
 import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
-import 'package:beauty_center_frontend/model/SummaryServiceDto.dart';
+import 'package:beauty_center_frontend/model/summary_service_dto.dart';
 import 'package:beauty_center_frontend/provider/room_provider.dart';
 import 'package:beauty_center_frontend/widget/custom_service_wrap.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +41,13 @@ class _RoomAddModalBottomSheetState extends ConsumerState<RoomAddModalBottomShee
       if(result.key) navigator.pop();
       SnackBarHandler.instance.showMessage(message: result.value);
     }
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
   }
 
   @override

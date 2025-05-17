@@ -4,6 +4,8 @@ import 'package:beauty_center_frontend/widget/row_item.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/room_update_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 
 import '../handler/snack_bar_handler.dart';
 import '../utils/strings.dart';
@@ -49,8 +51,20 @@ class _RoomsScreenState extends ConsumerState<RoomsScreen> {
         ? rooms
         : rooms.where((r) => r.name.toLowerCase().contains(_searchText)).toList();
 
-    if(rooms.isEmpty) {
-      return SliverFillRemaining(child: Center(child: Text(Strings.no_room_created)));
+    if(filteredRooms.isEmpty) {
+      return SliverFillRemaining(
+        child: Column(
+            spacing: 16,
+            children: [
+              const SizedBox(height: 32),
+              Lottie.asset(
+                  'assets/lottie/no_items.json',
+                  height: 200
+              ),
+              Center(child: Text(Strings.no_room_founded, textAlign: TextAlign.center,))
+            ]
+        )
+      );
     }
     return SliverList.separated(
         itemBuilder: (context, index) {
@@ -62,7 +76,7 @@ class _RoomsScreenState extends ConsumerState<RoomsScreen> {
                       child: TextFormField(
                         decoration: InputDecoration(
                           hintText: Strings.search,
-                          prefixIcon: Icon(Icons.search),
+                          prefixIcon: Icon(FontAwesomeIcons.magnifyingGlass),
                         ),
                         onChanged: (value){
                           setState(() => _searchText = value.toLowerCase());
@@ -84,7 +98,7 @@ class _RoomsScreenState extends ConsumerState<RoomsScreen> {
                     padding: EdgeInsets.only(left: 20),
                     child: CircleAvatar(
                       backgroundColor: Colors.red,
-                      child: Icon(Icons.delete, color: Colors.white),
+                      child: Icon(FontAwesomeIcons.trash, color: Colors.white),
                     )
                 ),
                 direction: DismissDirection.endToStart,
@@ -94,7 +108,7 @@ class _RoomsScreenState extends ConsumerState<RoomsScreen> {
                       isScrollControlled: true,
                       transitionAnimationController: AnimationController(
                         vsync: Navigator.of(context),
-                        duration: Duration(milliseconds: 750),
+                        duration: Duration(milliseconds: 500),
                       ),
                       builder: (context) => DeleteModalBottomSheet(
                         onTap: () async => await _onDelete(roomId: room.id),
@@ -104,7 +118,7 @@ class _RoomsScreenState extends ConsumerState<RoomsScreen> {
                   return result ?? false;
                 },
                   child: RowItem(
-                  icon: Icons.storefront,
+                  icon: FontAwesomeIcons.store,
                   text: room.name,
                   onTap: () {
                     showModalBottomSheet(
@@ -112,7 +126,7 @@ class _RoomsScreenState extends ConsumerState<RoomsScreen> {
                       isScrollControlled: true,
                       transitionAnimationController: AnimationController(
                         vsync: Navigator.of(context),
-                        duration: Duration(milliseconds: 750)
+                        duration: Duration(milliseconds: 500)
                       ),
                       builder: (context) => RoomUpdateModalBottomSheet(roomDto: room)
                     );

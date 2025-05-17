@@ -1,9 +1,10 @@
-import 'package:beauty_center_frontend/widget/modal-bottom-sheet/book_service_modal_bottom_sheet.dart';
+import 'package:beauty_center_frontend/screen/tool_screen.dart';
+import 'package:beauty_center_frontend/widget/modal-bottom-sheet/tool_add_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 import '../../category.dart';
 import '../../utils/strings.dart';
-import '../../widget/CustomChip.dart';
+import '../../widget/custom_chip.dart';
 import '../../widget/modal-bottom-sheet/operator_add_modal_bottom_sheet.dart';
 import '../../widget/modal-bottom-sheet/room_add_modal_bottom_sheet.dart';
 import '../../widget/modal-bottom-sheet/service_add_modal_bottom_sheet.dart';
@@ -66,6 +67,8 @@ class _EntitiesManagementScreenState extends State<EntitiesManagementScreen> {
             Category.Operatori => OperatorsScreen(),
 
             Category.Utenti => UsersScreen(),
+
+            Category.Macchinari => ToolScreen(),
           },
 
           SliverToBoxAdapter(child: const SizedBox(height: 80))
@@ -92,7 +95,8 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
       Category.Servizi => Strings.services,
       Category.Operatori => Strings.operators,
       Category.Stanze => Strings.rooms,
-      Category.Utenti => Strings.customers
+      Category.Utenti => Strings.customers,
+      Category.Macchinari => Strings.tools
     };
 
     return Column(
@@ -117,7 +121,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                               isScrollControlled: true,
                               transitionAnimationController: AnimationController(
                                 vsync: Navigator.of(context),
-                                duration: Duration(milliseconds: 750)
+                                duration: Duration(milliseconds: 500)
                               ),
                               builder: (context) => ServiceAddModalBottomSheet()
                             );
@@ -131,7 +135,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                                   isScrollControlled: true,
                                   transitionAnimationController: AnimationController(
                                       vsync: Navigator.of(context),
-                                      duration: Duration(milliseconds: 750)
+                                      duration: Duration(milliseconds: 500)
                                   ),
                                   builder: (context) => OperatorAddModalBottomSheet()
                               );
@@ -145,7 +149,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                                   isScrollControlled: true,
                                   transitionAnimationController: AnimationController(
                                       vsync: Navigator.of(context),
-                                      duration: Duration(milliseconds: 750)
+                                      duration: Duration(milliseconds: 500)
                                   ),
                                   builder: (context) => RoomAddModalBottomSheet()
                               );
@@ -159,11 +163,15 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                                   isScrollControlled: true,
                                   transitionAnimationController: AnimationController(
                                       vsync: Navigator.of(context),
-                                      duration: Duration(milliseconds: 750)
+                                      duration: Duration(milliseconds: 500)
                                   ),
-                                  builder: (context) => BookServiceModalBottomSheet()
+                                  builder: (context) => ToolAddModalBottomSheet()
                               );
                             },
+                          child: Text(Strings.add_tool, style: Theme.of(context).textTheme.labelMedium)
+                        ),
+                        PopupMenuItem(
+                            onTap: () => Navigator.pushNamed(context, "/book"),
                             child: Text(Strings.book_service, style: Theme.of(context).textTheme.labelMedium)
                         )
                       ],

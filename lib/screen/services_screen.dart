@@ -3,6 +3,7 @@ import 'package:beauty_center_frontend/widget/service_widget.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/service_update_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 import '../handler/snack_bar_handler.dart';
 import '../utils/strings.dart';
@@ -48,8 +49,20 @@ class _ServicesScreenState extends ConsumerState<ServicesScreen> {
         ? services
         : services.where((s) => s.name.toLowerCase().contains(_searchText)).toList();
 
-    if(services.isEmpty) {
-      return SliverFillRemaining(child: Center(child: Text(Strings.no_services_created)));
+    if(filteredServices.isEmpty) {
+      return SliverFillRemaining(
+        child: Column(
+            spacing: 16,
+            children: [
+              const SizedBox(height: 32),
+              Lottie.asset(
+                  'assets/lottie/no_items.json',
+                  height: 200
+              ),
+              Center(child: Text(Strings.no_services_founded, textAlign: TextAlign.center,))
+            ]
+        )
+      );
     }
     return SliverList.separated(
       itemBuilder: (context, index) {

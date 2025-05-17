@@ -15,7 +15,6 @@ class ResetPasswordModalBottomSheet extends ConsumerStatefulWidget {
 
 class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswordModalBottomSheet> {
   final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _verificationCodeFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _resetPasswordFormKey = GlobalKey<FormState>();
 
   final TextEditingController _emailController = TextEditingController();
@@ -61,34 +60,6 @@ class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswo
         SnackBarHandler.instance.showMessage(message: result.value);
       }
 
-    }
-  }
-
-
-  Future<void> _sendCode() async {
-    if(_verificationCodeFormKey.currentState?.validate() ?? false) {
-      final navigator = Navigator.of(context);
-      final String code = _codeController.text;
-
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-      );
-
-      final MapEntry<bool, String> result = MapEntry(true, "");   // todo fare chiamata
-
-      navigator.pop();
-
-      if(result.key) {
-        setState(() => _screenIndex = 2);
-      } else {
-        SnackBarHandler.instance.showMessage(message: Strings.code_verify_error);
-      }
     }
   }
 
@@ -151,38 +122,6 @@ class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswo
     );
   }
 
-  // todo verificare il codice con la password insieme in un'unica schermata
-
-  Widget _verificationCodeScreen(){
-    return Column(
-        spacing: 25,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(Strings.insert_verification_code),
-
-          Form(
-              key: _verificationCodeFormKey,
-              child: TextFormField(
-                validator: (value) => InputValidator.validateResetPasswordCode(value),
-                controller: _codeController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    labelText: Strings.verification_code,
-                    errorMaxLines: 10
-                ),
-              ),
-          ),
-
-          FilledButton(
-              onPressed: () async => await _sendCode(),
-              child: Text(Strings.verify)
-          )
-        ]
-    );
-  }
-
-
   Widget _resetPasswordScreen(){
     return Form(
         key: _resetPasswordFormKey,
@@ -193,6 +132,18 @@ class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswo
             Text(Strings.reset_your_password),
 
             const SizedBox(height: 25),
+
+            TextFormField(
+              validator: (value) => InputValidator.validateResetPasswordCode(value),
+              controller: _codeController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                  labelText: Strings.verification_code,
+                  errorMaxLines: 10
+              ),
+            ),
+
+            const SizedBox(height: 16),
 
             TextFormField(
                 obscureText: !_showPassword,
@@ -264,8 +215,7 @@ class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswo
                           Text(Strings.forgot_your_password, style: Theme.of(context).textTheme.headlineSmall),
 
                           if(_screenIndex == 0) _emailScreen(),
-                          if(_screenIndex == 1) _verificationCodeScreen(),
-                          if(_screenIndex == 2) _resetPasswordScreen()
+                          if(_screenIndex == 1) _resetPasswordScreen(),
                         ]
                     )
                 )

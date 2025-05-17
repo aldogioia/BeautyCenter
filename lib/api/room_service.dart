@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-import '../model/SummaryServiceDto.dart';
 import 'api_service.dart';
 
 class RoomService {

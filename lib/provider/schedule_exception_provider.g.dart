@@ -6,7 +6,7 @@ part of 'schedule_exception_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$scheduleExceptionHash() => r'90717c2cdff75f2e3c891135c014f6ed37d2fd68';
+String _$scheduleExceptionHash() => r'5b34f66bf574fcc268e9ba00267674b65f146878';
 
 /// See also [ScheduleException].
 @ProviderFor(ScheduleException)

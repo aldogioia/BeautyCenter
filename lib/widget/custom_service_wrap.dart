@@ -1,10 +1,10 @@
-import 'package:beauty_center_frontend/model/SummaryServiceDto.dart';
+import 'package:beauty_center_frontend/model/summary_service_dto.dart';
 import 'package:beauty_center_frontend/provider/service_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/ServiceDto.dart';
-import 'CustomChip.dart';
+import 'custom_chip.dart';
 
 class CustomServiceWrap extends ConsumerStatefulWidget {
   const CustomServiceWrap({
@@ -36,7 +36,6 @@ class _CustomServiceWrapState extends ConsumerState<CustomServiceWrap> {
       widget.onChipTap(_selectedServices);
     });
   }
-
 
   @override
   void initState() {

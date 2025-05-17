@@ -2,16 +2,16 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:beauty_center_frontend/model/day_of_week.dart';
 import 'package:beauty_center_frontend/model/schedule_exceptions_dto.dart';
 import 'package:beauty_center_frontend/provider/schedule_exception_provider.dart';
-import 'package:beauty_center_frontend/widget/modal-bottom-sheet/book_service_modal_bottom_sheet.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/schedule_exceptions_modal_bottom_sheet.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/schedule_filter_modal_bottom_sheet.dart';
 import 'package:beauty_center_frontend/widget/schedule_exceptions_widget.dart';
 import 'package:beauty_center_frontend/widget/schedule_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../handler/snack_bar_handler.dart';
-import '../../model/SummaryOperatorDto.dart';
+import '../../model/summary_operator_dto.dart';
 import '../../model/enumerators/role.dart';
 import '../../model/standard_schedule_dto.dart';
 import '../../provider/operator_provider.dart';
@@ -19,7 +19,6 @@ import '../../provider/standard_schedule_provider.dart';
 import '../../utils/strings.dart';
 import '../../widget/modal-bottom-sheet/delete_modal_bottom_sheet.dart';
 
-// todo gestire con il ruolo in modo che l'operatore possa vedere solo i suoi schedule
 class ScheduleScreen extends ConsumerStatefulWidget {
   const ScheduleScreen({super.key});
 
@@ -157,10 +156,20 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                 ),
               ] else if(_selectedOperator == null) ...[
                 SliverToBoxAdapter(
-                    child: Text(
-                      Strings.no_operators_found,   // todo lottie image
-                      textAlign: TextAlign.center,
-                    )
+                  child: Column(
+                      spacing: 16,
+                      children: [
+                        const SizedBox(height: 32),
+                        Lottie.asset(
+                            'assets/lottie/no_items.json',
+                            height: 200
+                        ),
+                        const Text(
+                          Strings.no_operators_found,
+                          textAlign: TextAlign.center,
+                        )
+                      ]
+                  )
                 )
               ],
 
@@ -200,7 +209,17 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
               ] else if(_selectedOperator != null) ...[
                 if(operatorScheduleExceptions.isEmpty) ...[
                   SliverFillRemaining(
-                    child: Center(child: Text(Strings.operator_does_not_have_schedule_exceptions)), // todo lottie image
+                    child: Column(
+                        spacing: 16,
+                        children: [
+                          const SizedBox(height: 32),
+                          Lottie.asset(
+                              'assets/lottie/no_items.json',
+                              height: 200
+                          ),
+                          Center(child: Text(Strings.operator_does_not_have_schedule_exceptions, textAlign: TextAlign.center,)),
+                        ]
+                    )
                   )
                 ] else ...[
                   SliverPadding(
@@ -235,22 +254,21 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
             right: 20,
             child:  FloatingActionButton(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-              onPressed: () => showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                transitionAnimationController: AnimationController(
-                    vsync: Navigator.of(context),
-                    duration: Duration(milliseconds: 500)
-                ),
-                builder: (context) {
-                  if(_selectedIndex == 1 && _selectedOperator != null && ref.read(operatorProvider).role == Role.ROLE_ADMIN){
-                    return ScheduleExceptionsModalBottomSheet(operatorId: _selectedOperator!.id);
-                  } else if (ref.read(operatorProvider).role == Role.ROLE_OPERATOR) {
-                    return BookServiceModalBottomSheet();
-                  }
-                  return SizedBox();
+              onPressed: () {
+                if(_selectedIndex == 1 && _selectedOperator != null && ref.read(operatorProvider).role == Role.ROLE_ADMIN){
+                  showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      transitionAnimationController: AnimationController(
+                          vsync: Navigator.of(context),
+                          duration: Duration(milliseconds: 500)
+                      ),
+                      builder: (context) => ScheduleExceptionsModalBottomSheet(operatorId: _selectedOperator!.id)
+                  );
+                } else if (ref.read(operatorProvider).role == Role.ROLE_OPERATOR) {
+                  Navigator.pushNamed(context, "/book");
                 }
-              ),
+              },
               child: Icon(Icons.add)
             )
           )

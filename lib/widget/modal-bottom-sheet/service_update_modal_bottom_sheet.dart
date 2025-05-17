@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
+import 'package:beauty_center_frontend/model/summary_tool_dto.dart';
+import 'package:beauty_center_frontend/widget/custom_tool_wrap.dart';
 import 'package:beauty_center_frontend/widget/service_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,6 +37,13 @@ class _ServiceUpdateModalBottomSheetState extends ConsumerState<ServiceUpdateMod
 
   bool _isUpdated = false;
   File? _image;
+  List<SummaryToolDto> _selectedTools = [];
+
+
+  void _onChipTap({required List<SummaryToolDto> tools}){
+    _selectedTools = List.from(tools);
+    _checkUpdate();
+  }
 
 
   Future<void> _pickImage() async {
@@ -52,7 +62,8 @@ class _ServiceUpdateModalBottomSheetState extends ConsumerState<ServiceUpdateMod
       _isUpdated = _serviceNameController.text != widget.serviceDto.name
           || _servicePriceController.text != widget.serviceDto.price.toStringAsFixed(2)
           || _serviceDurationController.text != widget.serviceDto.duration.toStringAsFixed(0)
-          || _image != null;
+          || _image != null
+          || !listEquals(_selectedTools, widget.serviceDto.tools);
     });
   }
 
@@ -74,7 +85,8 @@ class _ServiceUpdateModalBottomSheetState extends ConsumerState<ServiceUpdateMod
         name: _serviceNameController.text,
         duration: int.tryParse(_serviceDurationController.text) ?? 0,
         price: double.tryParse(_servicePriceController.text) ?? 0,
-        image: _image
+        image: _image,
+        tools: _selectedTools
       );
 
       navigator.pop();
@@ -85,6 +97,7 @@ class _ServiceUpdateModalBottomSheetState extends ConsumerState<ServiceUpdateMod
 
   @override
   void initState() {
+    _selectedTools = List.from(widget.serviceDto.tools);
     _serviceNameController.text = widget.serviceDto.name;
     _servicePriceController.text = widget.serviceDto.price.toStringAsFixed(2);
     _serviceDurationController.text = widget.serviceDto.duration.toStringAsFixed(0);
@@ -169,6 +182,17 @@ class _ServiceUpdateModalBottomSheetState extends ConsumerState<ServiceUpdateMod
                                         keyboardType: TextInputType.number,
                                         onChanged: (value) => _checkUpdate(),
                                         validator: (value) => InputValidator.validateServiceDuration(value),
+                                      ),
+
+                                      const SizedBox(height: 25),
+
+                                      Text(Strings.tools, style: Theme.of(context).inputDecorationTheme.labelStyle),
+
+                                      const SizedBox(height: 10),
+
+                                      CustomToolWrap(
+                                        onChipTap: (tools) => _onChipTap(tools: tools),
+                                        initialTools: _selectedTools
                                       )
                                     ]
                                 )
@@ -180,5 +204,15 @@ class _ServiceUpdateModalBottomSheetState extends ConsumerState<ServiceUpdateMod
             )
         )
     );
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _serviceNameController.dispose();
+    _serviceDurationController.dispose();
+    _servicePriceController.dispose();
+    _selectedTools = List.from(widget.serviceDto.tools);
   }
 }

@@ -7,7 +7,7 @@ import 'package:beauty_center_frontend/provider/schedule_exception_provider.dart
 import 'package:beauty_center_frontend/provider/standard_schedule_provider.dart';
 import 'package:beauty_center_frontend/security/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../model/SummaryOperatorDto.dart';
+import '../model/summary_operator_dto.dart';
 import '../model/enumerators/role.dart';
 import 'service_provider.dart';
 

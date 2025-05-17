@@ -87,11 +87,11 @@ class MyApp extends StatelessWidget {
           contentPadding: const EdgeInsets.all(10),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: AppColors.black.withOpacity(0.1)),
+            borderSide: BorderSide(color: AppColors.black.withAlpha((255 * 0.1).toInt())),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: AppColors.black.withOpacity(0.1)),
+            borderSide: BorderSide(color: AppColors.black.withAlpha((255 * 0.1).toInt())),
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
@@ -110,8 +110,8 @@ class MyApp extends StatelessWidget {
             borderSide: BorderSide(color: AppColors.red, width: 1.5),
           ),
           prefixIconColor: AppColors.black,
-          labelStyle: TextStyle(fontSize: 12, color: AppColors.black.withOpacity(0.5), fontWeight: FontWeight.normal),
-          hintStyle: TextStyle(fontSize: 12, color: AppColors.black.withOpacity(0.5), fontWeight: FontWeight.normal),
+          labelStyle: TextStyle(fontSize: 12, color: AppColors.black.withAlpha((255 * 0.5.toInt())), fontWeight: FontWeight.normal),
+          hintStyle: TextStyle(fontSize: 12, color: AppColors.black.withAlpha((255 * 0.5.toInt())), fontWeight: FontWeight.normal),
           errorStyle: TextStyle(fontSize: 12, color: AppColors.red, fontWeight: FontWeight.normal, overflow: TextOverflow.visible)
         ),
 
@@ -134,15 +134,15 @@ class MyApp extends StatelessWidget {
             contentPadding: const EdgeInsets.all(10),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: AppColors.white.withOpacity(0.1)),
+              borderSide: BorderSide(color: AppColors.white.withAlpha((255 * 0.1).toInt())),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: AppColors.white.withOpacity(0.1)),
+              borderSide: BorderSide(color: AppColors.white.withAlpha((255 * 0.1).toInt())),
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: AppColors.white.withOpacity(0.1)),
+              borderSide: BorderSide(color: AppColors.white.withAlpha((255 * 0.1).toInt())),
             ),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),

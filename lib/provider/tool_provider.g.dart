@@ -1,24 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'booking_provider.dart';
+part of 'tool_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookingHash() => r'aba8d38da24535bac1eb2e937bbb302480145922';
+String _$toolHash() => r'be1e836d747a987323c14f8ea494317cf861191d';
 
-/// See also [Booking].
-@ProviderFor(Booking)
-final bookingProvider = NotifierProvider<Booking, BookingProviderData>.internal(
-  Booking.new,
-  name: r'bookingProvider',
+/// See also [Tool].
+@ProviderFor(Tool)
+final toolProvider =
+    AutoDisposeNotifierProvider<Tool, ToolProviderData>.internal(
+  Tool.new,
+  name: r'toolProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$bookingHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$toolHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$Booking = Notifier<BookingProviderData>;
+typedef _$Tool = AutoDisposeNotifier<ToolProviderData>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

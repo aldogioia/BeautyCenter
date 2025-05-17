@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/room_service.dart';
-import '../model/RoomDto.dart';
-import '../model/SummaryServiceDto.dart';
+import '../model/room_dto.dart';
+import '../model/summary_service_dto.dart';
 import '../utils/strings.dart';
 
 

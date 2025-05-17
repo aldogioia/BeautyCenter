@@ -3,6 +3,7 @@ import 'package:beauty_center_frontend/widget/row_item.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/customer_update_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 import '../utils/strings.dart';
 
@@ -27,8 +28,20 @@ class _UsersScreenState extends ConsumerState<UsersScreen> {
           return fullName.contains(_searchText) || reversedFullName.contains(_searchText);
     }).toList();
 
-    if(customers.isEmpty) {
-      return SliverFillRemaining(child: Center(child: Text(Strings.no_customer)));
+    if(filteredCustomers.isEmpty) {
+      return SliverFillRemaining(
+        child: Column(
+            spacing: 16,
+            children: [
+              const SizedBox(height: 32),
+              Lottie.asset(
+                  'assets/lottie/no_items.json',
+                  height: 200
+              ),
+              Center(child: Text(Strings.no_customer, textAlign: TextAlign.center))
+            ]
+        )
+      );
     }
     return SliverList.separated(
         itemBuilder: (context, index) {

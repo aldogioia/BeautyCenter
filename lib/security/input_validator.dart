@@ -3,7 +3,7 @@ import 'package:beauty_center_frontend/utils/strings.dart';
 import 'package:flutter/material.dart';
 
 class InputValidator {
-  static String? _validateServiceOrRoomName(String? value, String errorText) {
+  static String? _validateServiceOrRoomOrToolName(String? value, String errorText) {
     if (value == null || value.isEmpty || value.length > 50) {
       return errorText;
     }
@@ -42,7 +42,7 @@ class InputValidator {
 
   // service
 
-  static String? validateServiceName(String? value) => _validateServiceOrRoomName(value, Strings.invalid_service_name);
+  static String? validateServiceName(String? value) => _validateServiceOrRoomOrToolName(value, Strings.invalid_service_name);
 
   static String? validateServiceDuration(String? value) {
     if (value == null || value.isEmpty || !RegExp(r'^\d+$').hasMatch(value)) {
@@ -74,9 +74,20 @@ class InputValidator {
 
   // room
 
-  static String? validateRoomName(String? value) => _validateServiceOrRoomName(value, Strings.invalid_room_name);
+  static String? validateRoomName(String? value) => _validateServiceOrRoomOrToolName(value, Strings.invalid_room_name);
 
 
+  // tool
+
+  static String? validateToolName(String? value) => _validateServiceOrRoomOrToolName(value, Strings.invalid_tool_name);
+
+  static String? validateToolAvailability(String? value) {
+    final parsed = int.tryParse(value ?? '');
+    if(parsed == null || parsed < 0) {
+      return Strings.invalid_tool_availability;
+    }
+    return null;
+  }
   // users
 
   static String? _validateNameOrSurname(String? value, String errorText) {
@@ -90,12 +101,18 @@ class InputValidator {
 
   static String? validateSurname(String? value) => _validateNameOrSurname(value, Strings.invalid_surname);
 
+
+  // password
+
   static String? validateResetPasswordCode(String? value) {
     if (value == null || value.isEmpty || !RegExp(r'^\d{5}$').hasMatch(value)) {
       return Strings.code_verify_validation_error;
     }
     return null;
   }
+
+
+  // schedule
 
   static bool validateStartAndEndScheduleTime({required TimeOfDay? start, required TimeOfDay? end}) {
     if (start == null && end == null) return true;

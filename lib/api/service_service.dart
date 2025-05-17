@@ -21,7 +21,8 @@ class ServiceService {
     required String name,
     required double price,
     required int duration,
-    required File? image
+    required File? image,
+    required List<String> tools
   }) async {
     try {
       FormData formData = FormData.fromMap({
@@ -29,6 +30,7 @@ class ServiceService {
         "name": name,
         "price": price.toString(),
         "duration": duration.toString(),
+        "tools": tools,
         if(image != null)
           "image": await MultipartFile.fromFile(image.path, filename: image.path.split('/').last),
       });
@@ -47,13 +49,15 @@ class ServiceService {
     required String name,
     required double price,
     required int duration,
-    required File? image
+    required File? image,
+    required List<String> toolsId
   }) async {
     try {
       FormData formData = FormData.fromMap({
         "name": name,
         "price": price,
         "duration": duration,
+        "tools": toolsId,
         if(image != null)
           "image": await MultipartFile.fromFile(image.path, filename: image.path.split('/').last),
       });

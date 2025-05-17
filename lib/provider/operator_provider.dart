@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:beauty_center_frontend/api/operator_service.dart';
 import 'package:beauty_center_frontend/model/OperatorDto.dart';
-import 'package:beauty_center_frontend/model/SummaryOperatorDto.dart';
-import 'package:beauty_center_frontend/model/SummaryServiceDto.dart';
+import 'package:beauty_center_frontend/model/summary_operator_dto.dart';
+import 'package:beauty_center_frontend/model/summary_service_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -204,7 +204,6 @@ class Operator extends _$Operator {
       state = state.copyWith(operator: OperatorDto.fromJson(response.data));
       return "";
     }
-    print("ERRORE: ${(response.data as Map<String, dynamic>)['message']}");
     return (response.data as Map<String, dynamic>)['message'];
   }
 
@@ -217,6 +216,12 @@ class Operator extends _$Operator {
 
           return operator.copyWith(services: removedServices);
         }).toList()
+    );
+  }
+
+  void clearTimes() {
+    state = state.copyWith(
+        availableTimes: []
     );
   }
 

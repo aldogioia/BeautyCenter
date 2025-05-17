@@ -19,6 +19,7 @@ class Strings {
   static const String search = "Cerca";
   static const String update = "Modifica";
   static const String room = "Stanza";
+  static const String tool = "Macchinario";
   static const String ok = "Ok";
   static const String cancel = "Annulla";
   static const String select = "Seleziona";
@@ -40,13 +41,15 @@ class Strings {
   static const String next = "Avanti";
   static const String remember_to_arrive_10_minutes_early = "Ricorda di arrivare con 10 minuti di anticipo per non rischiare di perdere l’appuntamento.";
   static const String select_service = "Seleziona un servizio";
-  static const String no_services_created = "Nessun servizio creato";
-  static const String no_operator_created = "Nessun operatore creato";
-  static const String no_room_created = "Nessuna stanza creata";
+  static const String no_services_founded = "Nessun servizio trovato";
+  static const String no_operator_founded = "Nessun operatore trovato";
+  static const String no_room_founded = "Nessuna stanza trovata";
+  static const String no_tool_founded = "Nessun macchinario trovato";
   static const String no_customer = "Nessun utente disponibile";
   static const String operators = "Operatori";
   static const String rooms = "Stanze";
   static const String customers = "Utenti";
+  static const String tools = "Macchinari";
   static const String schedule_exception = "Cambi turno";
   static const String receive_notifications = "Ricevi notifiche";
 
@@ -84,7 +87,7 @@ class Strings {
   static const String date = "Data";
   static const String date_must_be_after_today = "La data selezionata deve essere successiva alla data odierna";
   static const String back = "Indietro";
-  static const String verification_code = "Codice di verifica"; // todo mettere XXXXX ?
+  static const String verification_code = "Codice di verifica";
   static const String settings = "Impostazioni";
   static const String account = "Account";
   static const String access = "Accesso";
@@ -92,6 +95,8 @@ class Strings {
   static const String notifications = "Notifiche";
   static const String exit = "Esci";
   static const String delete_account = "Elimina account";
+  static const String no_hours = "Non ci sono orari disponibili";
+  static const String availability = "Disponibilità";
 
   // errori
   static const String insert_a_valid_email_address_error = "Inserisci un indirizzo email valido";
@@ -102,7 +107,9 @@ class Strings {
   static const String invalid_price = "Il prezzo deve essere almeno di un euro";
   static const String invalid_name = "Il nome deve contenere almeno 3 caratteri e massimo 50";
   static const String invalid_surname = "Il cognome deve contenere almeno 3 caratteri e massimo 50";
-  static const String invalid_room_name = "Il nome del servizio non può essere vuoto e può contenere massimo 50 caratteri";
+  static const String invalid_room_name = "Il nome della stanza non può essere vuoto e può contenere massimo 50 caratteri";
+  static const String invalid_tool_name = "Il nome del macchinario non può essere vuoto e può contenere massimo 50 caratteri";
+  static const String invalid_tool_availability = "Lad disponibilità di un macchinario deve essere maggiore o uguale a 0";
   static const String select_start_date = "Seleziona la data di inizio.";
   static const String start_and_end_times_error = "L'orario di inizio e fine di un turno devono essere inseriti entrambi o nessuno. La data di fine deve essere successiva a quella di inizio";
   static const String afternoon_schedule_before_morning_schedule_error = "Il turno di pomeriggio deve iniziare dopo la fine del turno della mattina";
@@ -121,6 +128,7 @@ class Strings {
   static const String operator_updated_successfully = "Operatore modificato con successo";
   static const String change = "Cambia";
   static const String schedule_updated_correctly = "Turno modificato correttamente";
+  static const String tool_updated_correctly = "Macchinario modificato correttamente";
 
   // create
   static const String service_create_successfully = "Servizio creato con successo";
@@ -129,8 +137,10 @@ class Strings {
   static const String add_service = "Aggiungi servizio";
   static const String add_operator = "Aggiungi operatore";
   static const String add_room = "Aggiungi stanza";
+  static const String add_tool = "Aggiung macchinario";
   static const String booking_created_successfully = "Prenotazione effettuata con successo";
   static const String schedule_created_correctly = "Turno creato correttamente";
+  static const String tool_created_correctly = "Macchinario creato correttamente";
 
   // delete
   static const String delete = "Elimina";
@@ -140,7 +150,9 @@ class Strings {
   static const String operator_delete_successfully = "Operatore eliminato con successo";
   static const String booking_deleted = "Appuntamento cancellato";
   static const String schedule_deleted_correctly = "Cambio turno annulato";
+  static const String tool_deleted_correctly = "Macchinario eliminato con successo";
 
   static const String bookings = "Appuntamenti";
 
+  static const String no_services_found = "Nessun servizio trovato";
 }
