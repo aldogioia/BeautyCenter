@@ -1,3 +1,4 @@
+import 'package:edone_customer/pages/custom_widgets/service_item.dart';
 import 'package:edone_customer/providers/customer_provider.dart';
 import 'package:edone_customer/utils/message_extractor.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../handler/notification_handler.dart';
-import '../../model/operator_dto.dart';
+import '../../model/service_dto.dart';
+import '../../model/summary_operator_dto.dart';
 import '../../navigation/navigator.dart';
 import '../../providers/booking_provider.dart';
 import '../../providers/operator_provider.dart';
@@ -17,13 +19,11 @@ import '../../utils/success_ovelay.dart';
 import 'operator_item.dart';
 
 class BookingStep extends ConsumerStatefulWidget {
-  final String serviceId;
-  final String serviceImage;
+  final ServiceDto service;
 
   const BookingStep({
     super.key,
-    required this.serviceId,
-    required this.serviceImage,
+    required this.service,
   });
 
   @override
@@ -32,7 +32,7 @@ class BookingStep extends ConsumerStatefulWidget {
 
 class _BookingStepState extends ConsumerState<BookingStep> {
   DateTime? _selectedDate;
-  OperatorDto? _selectedOperator;
+  SummaryOperatorDto? _selectedOperator;
   String? _selectedTime;
   bool loading = false;
 
@@ -41,7 +41,7 @@ class _BookingStepState extends ConsumerState<BookingStep> {
 
   @override
   void initState() {
-    ref.read(operatorProvider.notifier).getAllOperators(widget.serviceId);
+    ref.read(operatorProvider.notifier).getAllOperators(widget.service.id);
     super.initState();
   }
 
@@ -68,7 +68,7 @@ class _BookingStepState extends ConsumerState<BookingStep> {
     final result = await ref.read(bookingProvider.notifier).newBooking(
       customerId: customerId,
       operatorId: _selectedOperator!.id,
-      serviceId: widget.serviceId,
+      serviceId: widget.service.id,
       date: _selectedDate!,
       time: _selectedTime!,
     );
@@ -119,32 +119,11 @@ class _BookingStepState extends ConsumerState<BookingStep> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: 16,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Hero(
-                tag: widget.serviceId,
-                child: Image.network(
-                  widget.serviceImage,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 160,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      color: Colors.grey,
-                      height: 160,
-                      alignment: Alignment.center,
-                      child: const CircularProgressIndicator(),
-                    );
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey,
-                      height: 160,
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
-                    );
-                  },
+            Hero(
+              tag: widget.service.id,
+              child: Material(
+                child: ServiceItem(
+                  service: widget.service
                 )
               )
             ),
@@ -170,32 +149,33 @@ class _BookingStepState extends ConsumerState<BookingStep> {
                 child: _buildStep3(times),
               ),
             ),
-
-            Visibility(
-              visible: _selectedTime != null,
-              maintainState: true,
-              child: AnimatedOpacity(
-                opacity: _selectedTime != null ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 300),
-                child: FilledButton(
-                  onPressed: ( loading ? null : () async {
-                    setState(() {
-                      loading = true;
-                    });
-                    await _book();
-                  }),
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: loading
-                      ? Lottie.asset("assets/lottie/loading.json")
-                      : Text(Strings.book)
-                  )
-                ),
-              ),
-            ),
           ],
         ),
       ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: FilledButton(
+            onPressed: ( loading ? null : () async {
+              if (_selectedTime != null) {
+                setState(() {
+                  loading = true;
+                });
+                await _book();
+              }
+            }),
+            style: FilledButton.styleFrom(
+              backgroundColor: _selectedTime == null ? Colors.grey : null,
+            ),
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              child: loading
+                  ? Lottie.asset("assets/lottie/loading.json")
+                  : Text(Strings.book)
+            )
+          ),
+        )
+      )
     );
   }
 
@@ -228,7 +208,7 @@ class _BookingStepState extends ConsumerState<BookingStep> {
     );
   }
 
-  Widget _buildStep2(List<OperatorDto> operators) {
+  Widget _buildStep2(List<SummaryOperatorDto> operators) {
     if (operators.isEmpty) {
       return Center(child: Text(Strings.noOperators));
     }
@@ -261,7 +241,7 @@ class _BookingStepState extends ConsumerState<BookingStep> {
 
                   ref.read(operatorProvider.notifier).getAvailableTimes(
                     operatorId: _selectedOperator!.id,
-                    serviceId: widget.serviceId,
+                    serviceId: widget.service.id,
                     date: _selectedDate!,
                   );
 

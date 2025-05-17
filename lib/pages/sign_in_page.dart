@@ -19,7 +19,7 @@ class SignInPage extends ConsumerStatefulWidget {
 class _SignInPageState extends ConsumerState<SignInPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController(text: "aldo@gioia.com");
+  final TextEditingController _phoneNumberController = TextEditingController(text: "3792167877");
   final TextEditingController _passwordController = TextEditingController(text: "sonoCustomer1");
 
   bool loading = false;
@@ -30,11 +30,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         loading = true;
       });
 
-      final email = _emailController.text;
+      final phoneNumber = _phoneNumberController.text;
       final password = _passwordController.text;
 
       final result = await ref.read(authProvider.notifier).signIn(
-        email: email,
+        phoneNumber: phoneNumber,
         password: password,
       );
 
@@ -42,7 +42,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         SnackBarHandler.instance.showMessage(message: result);
       } else if (result.isEmpty) {
         final _ =  await ref.refresh(appInitProvider.future);
-        NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/scaffold", (route) => false);
       }
     }
   }
@@ -65,9 +64,9 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             children: [
               Text(Strings.good, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
               TextFormField(
-                controller: _emailController,
-                validator: InputValidator.validateEmail,
-                decoration: const InputDecoration(labelText: Strings.email),
+                controller: _phoneNumberController,
+                validator: InputValidator.validatePhoneNumber,
+                decoration: const InputDecoration(labelText: Strings.mobilePhone),
               ),
               TextFormField(
                 controller: _passwordController,
@@ -79,7 +78,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 onTap: () {
                   NavigatorService.navigatorKey.currentState?.pushNamed("/password-recovery");
                 },
-                child: Text(Strings.forgotPassword, style: TextStyle(color: Theme.of(context).primaryColor))
+                child: Text(Strings.forgotPassword, style: TextStyle(color: Theme.of(context).colorScheme.primary))
               ),
               FilledButton(
                 onPressed: ( loading ? null : () async {
@@ -87,6 +86,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   setState(() {
                     loading = false;
                   });
+                  NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/scaffold", (route) => false);
                 }),
                 child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),

@@ -1,6 +1,6 @@
 class Strings {
   //ip
-  static const String ip = "192.168.63.196";
+  static const String ip = "192.168.1.14";
 
   //Buttons
   static const String signIn = "Accedi";

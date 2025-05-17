@@ -1,6 +1,7 @@
 import 'package:edone_customer/pages/service_page.dart';
 import 'package:edone_customer/pages/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -64,6 +65,7 @@ class _ScaffoldPageState extends ConsumerState<ScaffoldPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(appInitProvider);
     });
+    FlutterNativeSplash.remove();
     _initNotifications();
   }
 
@@ -81,19 +83,20 @@ class _ScaffoldPageState extends ConsumerState<ScaffoldPage> {
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
         currentIndex: _selectedIndex,
+        selectedFontSize: 12,
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.spa),
-            label: "",
+            label: Strings.services,
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.bookBookmark),
-            label: "",
+            label: Strings.bookings,
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.gear),
-            label: "",
+            label: Strings.settings,
           ),
         ],
       ),

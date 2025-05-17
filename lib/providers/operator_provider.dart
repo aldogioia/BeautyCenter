@@ -1,18 +1,18 @@
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../api/operator_service.dart';
-import '../model/operator_dto.dart';
+import '../model/summary_operator_dto.dart';
 import '../utils/Strings.dart';
 
 part 'operator_provider.g.dart';
 
 
 class OperatorProviderState {
-  final List<OperatorDto> operators;
+  final List<SummaryOperatorDto> operators;
   final List<String> availableTimes;
 
   OperatorProviderState({
-    List<OperatorDto>? operators, List<String>? availableTimes
+    List<SummaryOperatorDto>? operators, List<String>? availableTimes
   }) : operators = operators ?? [], availableTimes = availableTimes ?? [];
 
   factory OperatorProviderState.empty() {
@@ -22,7 +22,7 @@ class OperatorProviderState {
     );
   }
 
-  OperatorProviderState copyWith({List<OperatorDto>? operators, List<String>? availableTimes}) {
+  OperatorProviderState copyWith({List<SummaryOperatorDto>? operators, List<String>? availableTimes}) {
     return OperatorProviderState(operators: operators ?? this.operators, availableTimes: availableTimes ?? this.availableTimes);
   }
 }
@@ -48,7 +48,7 @@ class Operator extends _$Operator {
       if (response.data.isEmpty) return Strings.noOperators;
 
       state = state.copyWith(
-        operators: (response.data as List).map((json) => OperatorDto.fromJson(json)).toList()
+        operators: (response.data as List).map((json) => SummaryOperatorDto.fromJson(json)).toList()
       );
 
       return "";

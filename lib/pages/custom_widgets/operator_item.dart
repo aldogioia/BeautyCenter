@@ -1,12 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../model/operator_dto.dart';
+import '../../model/summary_operator_dto.dart';
 
 
 class OperatorItem extends StatelessWidget {
   final bool isSelected;
-  final OperatorDto operator;
+  final SummaryOperatorDto operator;
   const OperatorItem({super.key, required this.isSelected, required this.operator});
 
   @override
@@ -19,30 +20,25 @@ class OperatorItem extends StatelessWidget {
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              Image.network(
-                operator.imgUrl,
+              CachedNetworkImage(
+                imageUrl: operator.imgUrl,
                 fit: BoxFit.cover,
                 width: 150,
                 height: 200,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    color: Colors.grey[200],
-                    width: 150,
-                    height: 200,
-                    alignment: Alignment.center,
-                    child: const CircularProgressIndicator(),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey[200],
-                    width: 150,
-                    height: 200,
-                    alignment: Alignment.center,
-                    child: const FaIcon(FontAwesomeIcons.solidFaceSadTear)
-                  );
-                },
+                placeholder: (context, url) => Container(
+                  color: Colors.grey[200],
+                  width: 150,
+                  height: 200,
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey[200],
+                  width: 150,
+                  height: 200,
+                  alignment: Alignment.center,
+                  child: const FaIcon(FontAwesomeIcons.solidFaceSadTear)
+                ),
               ),
               Positioned(
                 right: 0,

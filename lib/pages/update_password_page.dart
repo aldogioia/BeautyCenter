@@ -37,12 +37,18 @@ class _UpdatePasswordState extends ConsumerState<UpdatePasswordPage> {
         newPassword: _newPasswordController.text,
       );
 
+
+
       if (result.isNotEmpty) {
         SnackBarHandler.instance.showMessage(message: result);
       } else {
-        showSuccessOverlay();
         NavigatorService.navigatorKey.currentState?.pop();
+        showSuccessOverlay();
       }
+
+      setState(() {
+        loading = false;
+      });
     }
   }
 
@@ -93,9 +99,6 @@ class _UpdatePasswordState extends ConsumerState<UpdatePasswordPage> {
               FilledButton(
                   onPressed: (loading ? null : () async {
                     await _submitForm();
-                    setState(() {
-                      loading = false;
-                    });
                   }),
                   child: AnimatedSwitcher(
                       duration: Duration(milliseconds: 300),

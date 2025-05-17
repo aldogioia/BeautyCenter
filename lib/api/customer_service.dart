@@ -26,7 +26,6 @@ class CustomerService{
     required String name,
     required String surname,
     required String phoneNumber,
-    required String email,
   }) async {
     final userId = await SecureStorage.getUserId();
     try {
@@ -37,7 +36,6 @@ class CustomerService{
           'name': name,
           'surname': surname,
           'phoneNumber': phoneNumber,
-          'email': email,
         },
       );
     } on DioException catch (e) {

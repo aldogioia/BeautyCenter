@@ -1,3 +1,4 @@
+import 'package:edone_customer/model/service_dto.dart';
 import 'package:edone_customer/pages/custom_widgets/booking_step.dart';
 import 'package:edone_customer/pages/custom_widgets/customer_info.dart';
 import 'package:edone_customer/pages/password_recovery_page.dart';
@@ -33,10 +34,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => NewPasswordPage(token: arg));
 
       case "/booking":
-        final args = settings.arguments as Map<String, dynamic>;
+        final arg = settings.arguments as ServiceDto;
         return MaterialPageRoute(builder: (context) => BookingStep(
-            serviceId: args['serviceId'], serviceImage: args['serviceImage'])
-        );
+          service: arg,
+        ));
 
       case "/update-password":
         return MaterialPageRoute(builder: (context) => UpdatePasswordPage());

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edone_customer/model/booking_dto.dart';
 import 'package:edone_customer/utils/converter_month.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../utils/Strings.dart';
 
@@ -16,30 +18,25 @@ class BookingItem extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: Image.network(
-            booking.service.imgUrl,
+          child: CachedNetworkImage(
+            imageUrl: booking.service.imgUrl,
             fit: BoxFit.cover,
-            height: 80,
             width: 80,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Container(
-                color: Colors.grey[200],
-                height: 80,
-                width: 80,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                color: Colors.grey[200],
-                height: 80,
-                width: 80,
-                alignment: Alignment.center,
-                child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
-              );
-            },
+            height: 80,
+            placeholder: (context, url) => Container(
+              color: Colors.grey[200],
+              width: 80,
+              height: 80,
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(),
+            ),
+            errorWidget: (context, url, error) => Container(
+              color: Colors.grey[200],
+              width: 80,
+              height: 80,
+              alignment: Alignment.center,
+              child: const FaIcon(FontAwesomeIcons.solidFaceSadTear)
+            ),
           ),
         ),
         Flexible(
@@ -77,30 +74,25 @@ class BookingItem extends StatelessWidget {
                     Text("${booking.operator.name} ${booking.operator.surname}"),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: Image.network(
-                        booking.operator.imgUrl,
+                      child: CachedNetworkImage(
+                        imageUrl: booking.operator.imgUrl,
                         fit: BoxFit.cover,
                         height: 25,
                         width: 25,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            color: Colors.grey[200],
-                            height: 25,
-                            width: 25,
-                            alignment: Alignment.center,
-                            child: const CircularProgressIndicator(),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey[200],
-                            height: 25,
-                            width: 25,
-                            alignment: Alignment.center,
-                            child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
-                          );
-                        },
+                        placeholder: (context, url) => Container(
+                          color: Colors.grey[200],
+                          height: 25,
+                          width: 25,
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.grey[200],
+                          height: 25,
+                          width: 25,
+                          alignment: Alignment.center,
+                          child: const FaIcon(FontAwesomeIcons.solidFaceSadTear)
+                        ),
                       ),
                     ),
                   ]

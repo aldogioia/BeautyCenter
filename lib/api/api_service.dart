@@ -17,7 +17,7 @@ class ApiService {
       )
     );
 
-    dio.interceptors.add(DioInterceptor(dio));
+    dio.interceptors.add(DioInterceptor());
   }
 
   static ApiService get instance => _instance;

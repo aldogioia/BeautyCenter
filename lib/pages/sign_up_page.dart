@@ -23,7 +23,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool loading = false;
@@ -37,23 +36,25 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       final name = _nameController.text;
       final surname = _surnameController.text;
       final phoneNumber = _phoneController.text;
-      final email = _emailController.text;
       final password = _passwordController.text;
 
       final result = await ref.read(authProvider.notifier).signUp(
         name: name,
         surname: surname,
         phoneNumber: phoneNumber,
-        email: email,
         password: password
       );
 
       if (result.isNotEmpty){
         SnackBarHandler.instance.showMessage(message: MessageExtractor.extract(result));
       } else if (result.isEmpty) {
+        NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil('/start', (route) => false);
         showSuccessOverlay();
-        NavigatorService.navigatorKey.currentState?.pop();
       }
+
+      setState(() {
+        loading = false;
+      });
     }
   }
 
@@ -90,11 +91,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 decoration: const InputDecoration(labelText: Strings.mobilePhone),
               ),
               TextFormField(
-                controller: _emailController,
-                validator: InputValidator.validateEmail,
-                decoration: const InputDecoration(labelText: Strings.email),
-              ),
-              TextFormField(
                 controller: _passwordController,
                 validator: InputValidator.validatePassword,
                 obscureText: true,
@@ -103,9 +99,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               FilledButton(
                 onPressed: ( loading ? null : () async {
                   await _submitForm();
-                  setState(() {
-                    loading = true;
-                  });
                 }),
                 child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),

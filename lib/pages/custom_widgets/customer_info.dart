@@ -23,7 +23,6 @@ class _ProfilePageState extends ConsumerState<CustomerInfo> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
 
   late final CustomerDto _initialCustomer;
   bool _hasChanged = false;
@@ -37,20 +36,16 @@ class _ProfilePageState extends ConsumerState<CustomerInfo> {
     _nameController.text = _initialCustomer.name;
     _surnameController.text = _initialCustomer.surname;
     _phoneController.text = _initialCustomer.phoneNumber;
-    _emailController.text = _initialCustomer.email;
 
     _nameController.addListener(_checkIfChanged);
     _surnameController.addListener(_checkIfChanged);
     _phoneController.addListener(_checkIfChanged);
-    _emailController.addListener(_checkIfChanged);
   }
 
   void _checkIfChanged() {
     final changed = _nameController.text != _initialCustomer.name ||
         _surnameController.text != _initialCustomer.surname ||
-        _phoneController.text != _initialCustomer.phoneNumber ||
-        _emailController.text != _initialCustomer.email;
-
+        _phoneController.text != _initialCustomer.phoneNumber;
     if (changed != _hasChanged) {
       setState(() {
         _hasChanged = changed;
@@ -66,7 +61,6 @@ class _ProfilePageState extends ConsumerState<CustomerInfo> {
         name: _nameController.text,
         surname: _surnameController.text,
         phoneNumber: _phoneController.text,
-        email: _emailController.text,
       );
 
       if (result.isEmpty) {
@@ -110,11 +104,6 @@ class _ProfilePageState extends ConsumerState<CustomerInfo> {
                 controller: _phoneController,
                 validator: InputValidator.validatePhoneNumber,
                 decoration: const InputDecoration(labelText: Strings.mobilePhone),
-              ),
-              TextFormField(
-                controller: _emailController,
-                validator: InputValidator.validateEmail,
-                decoration: const InputDecoration(labelText: Strings.email),
               ),
               FilledButton(
                 onPressed: (loading ? null : () async {

@@ -48,13 +48,16 @@ class ServicePage extends ConsumerWidget {
             onTap: () {
               NavigatorService.navigatorKey.currentState?.pushNamed(
                 '/booking',
-                arguments: Map<String, dynamic>.from({
-                  'serviceId': service.id,
-                  'serviceImage': service.imgUrl
-                })
+                arguments: service
               );
             },
-            child: ServiceItem(service: service),
+            child: Hero(
+              tag: service.id,
+              child: Material(
+                color: Colors.transparent,
+                child: ServiceItem(service: service),
+              ),
+            ),
           );
         },
       ),

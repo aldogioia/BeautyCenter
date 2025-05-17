@@ -7,10 +7,9 @@ import '../utils/Strings.dart';
 import '../utils/secure_storage.dart';
 
 class DioInterceptor extends Interceptor {
-  final Dio _dio;
   final Dio _refreshDio = Dio();
 
-  DioInterceptor(this._dio);
+  DioInterceptor();
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {

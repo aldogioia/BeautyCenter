@@ -19,10 +19,10 @@ class Auth extends _$Auth {
   }
 
   Future<String> signIn({
-    required String email,
+    required String phoneNumber,
     required String password,
   }) async {
-    final response = await _authService.signIn(email: email, password: password);
+    final response = await _authService.signIn(phoneNumber: phoneNumber, password: password);
 
     if (response == null) {
       return Strings.connectionError;
@@ -64,14 +64,12 @@ class Auth extends _$Auth {
     required String name,
     required String surname,
     required String phoneNumber,
-    required String email,
     required String password,
   }) async {
     final response = await _authService.signUp(
       name: name,
       surname: surname,
       phoneNumber: phoneNumber,
-      email: email,
       password: password,
     );
 

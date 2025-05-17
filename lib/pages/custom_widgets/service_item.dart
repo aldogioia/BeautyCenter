@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../model/service_dto.dart';
 
@@ -13,31 +15,25 @@ class ServiceItem extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          Hero(
-            tag: service.id,
-            child: Image.network(
-              service.imgUrl,
-              fit: BoxFit.cover,
+          CachedNetworkImage(
+            imageUrl: service.imgUrl,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: 160,
+            placeholder: (context, url) => Container(
+              color: Colors.grey[200],
               width: double.infinity,
               height: 160,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Container(
-                  color: Colors.grey[200],
-                  height: 160,
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(),
-                );
-              },
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey[200],
-                  height: 160,
-                  alignment: Alignment.center,
-                  child: const Icon(Icons.broken_image, size: 40, color: Colors.white54),
-                );
-              },
-            )
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(),
+            ),
+            errorWidget: (context, url, error) => Container(
+              color: Colors.grey[200],
+              width: double.infinity,
+              height: 160,
+              alignment: Alignment.center,
+              child: const FaIcon(FontAwesomeIcons.solidFaceSadTear)
+            ),
           ),
           Positioned(
             right: 0,
@@ -59,25 +55,25 @@ class ServiceItem extends StatelessWidget {
             bottom: 10,
             left: 10,
             child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    service.name,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16
-                    ),
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  service.name,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16
                   ),
-                  Text(
-                    "${service.price}0€",
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                    ),
+                ),
+                Text(
+                  "${service.price}0€",
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16
                   ),
-                ]
+                ),
+              ]
             )
           ),
         ],

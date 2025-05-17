@@ -48,6 +48,8 @@ dependencies:
   font_awesome_flutter: ^10.8.0
   firebase_core: ^3.13.0
   firebase_messaging: ^15.2.5
+  flutter_native_splash: ^2.4.6
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -66,3 +68,15 @@ flutter:
   assets:
     - assets/images/
     - assets/lottie/
+
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+
+  color: "#52A875"
+  image: "assets/images/logo.png"
+
+  android_12:
+    color: "#52A875"
+    image: "assets/images/logo.png"

@@ -55,13 +55,11 @@ class Customer extends _$Customer{
     required String name,
     required String surname,
     required String phoneNumber,
-    required String email,
   }) async {
     final response = await _customerService.updateCustomer(
       name: name,
       surname: surname,
       phoneNumber: phoneNumber,
-      email: email,
     );
 
     if (response == null) return Strings.connectionError;
@@ -72,7 +70,6 @@ class Customer extends _$Customer{
           name: name,
           surname: surname,
           phoneNumber: phoneNumber,
-          email: email,
         ),
       );
       return "";

@@ -7,12 +7,12 @@ class AuthService {
   final Dio _dio = ApiService.instance.dio;
   final String _path = "/auth";
 
-  Future<Response?> signIn({required String email, required String password}) async {
+  Future<Response?> signIn({required String phoneNumber, required String password}) async {
     try {
       return await _dio.post(
         "$_path/sign-in",
         queryParameters: {
-          'email': email,
+          'phoneNumber': phoneNumber,
           'password': password
         },
       );
@@ -25,7 +25,6 @@ class AuthService {
     required String name,
     required String surname,
     required String phoneNumber,
-    required String email,
     required String password,
   }) async {
     try {
@@ -35,7 +34,6 @@ class AuthService {
           'name': name,
           'surname': surname,
           'phoneNumber': phoneNumber,
-          'email': email,
           'password': password,
         },
       );

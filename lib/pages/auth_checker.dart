@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:edone_customer/pages/scaffold_page.dart';
 import 'package:edone_customer/pages/start_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -46,6 +47,7 @@ class AuthChecker extends ConsumerWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError || snapshot.data == false) {
+          FlutterNativeSplash.remove();
           return const StartPage();
         } else {
           return const ScaffoldPage();
