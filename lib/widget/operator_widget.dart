@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../model/summary_operator_dto.dart';
 
@@ -68,7 +69,7 @@ class OperatorWidget extends StatelessWidget {
                   Positioned(
                       right: 5,
                       top: 5,
-                      child: Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
+                      child: Icon(FontAwesomeIcons.circleCheck, color: Theme.of(context).colorScheme.primary)
                   )
               ],
             )

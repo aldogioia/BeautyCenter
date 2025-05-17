@@ -14,7 +14,7 @@ class Strings {
   static const String confirm_email_forget_password = "Nessun problema, può capitare! Conferma la tua mail e ti invieremo un codice per recuperare la tua password.";
   static const String first_access = "Primo accesso? Imposta la password";
   static const String set_password_screen_text = "Ti verrà inviato il link per impostare la password all’email che inserirai. Assicurati di inserire la stessa email fornita all’amministratore.";
-  static const String send_email = "Invia email";
+  static const String send = "Invia";
   static const String hello = "Ciao, ";
   static const String search = "Cerca";
   static const String update = "Modifica";

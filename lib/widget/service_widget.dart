@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../model/ServiceDto.dart';
 
@@ -90,7 +91,7 @@ class ServiceWidget extends StatelessWidget {
                   child: GestureDetector(
                       onTap: onChangeImage,
                       child: CircleAvatar(
-                        child: Icon(Icons.change_circle_rounded, size: 16),
+                        child: Icon(FontAwesomeIcons.arrowsRotate, size: 16), // todo va bene?
                       )
                   )
               )

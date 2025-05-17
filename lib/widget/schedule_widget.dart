@@ -2,6 +2,7 @@ import 'package:beauty_center_frontend/model/day_of_week.dart';
 import 'package:beauty_center_frontend/model/standard_schedule_dto.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/standard_schedule_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils/strings.dart';
 
@@ -125,7 +126,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
               spacing: 10,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.add_circle_outline_rounded),
+                Icon(FontAwesomeIcons.circlePlus),
                 Text(DayOfWeek.getItalianName(widget.day!.name))
               ]
             )

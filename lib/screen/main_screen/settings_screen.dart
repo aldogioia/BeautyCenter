@@ -6,6 +6,7 @@ import 'package:beauty_center_frontend/widget/modal-bottom-sheet/delete_modal_bo
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/notification_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../model/enumerators/role.dart';
 import '../../utils/strings.dart';
@@ -62,7 +63,7 @@ class SettingsScreen extends ConsumerWidget {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           spacing: 10,
                                           children: [
-                                            Icon(Icons.manage_accounts_rounded, color: Theme.of(context).colorScheme.primary),
+                                            Icon(FontAwesomeIcons.circleUser, color: Theme.of(context).colorScheme.primary),
                                             Text(Strings.personal_data)
                                           ]
                                       )
@@ -99,7 +100,7 @@ class SettingsScreen extends ConsumerWidget {
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         spacing: 10,
                                         children: [
-                                          Icon(Icons.notifications_none_rounded, color: Theme.of(context).colorScheme.primary),
+                                          Icon(FontAwesomeIcons.bell, color: Theme.of(context).colorScheme.primary),
                                           Text(Strings.notifications)
                                         ]
                                     )
@@ -160,7 +161,7 @@ class SettingsScreen extends ConsumerWidget {
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         spacing: 10,
                                         children: [
-                                          Icon(Icons.logout, color: Colors.red),
+                                          Icon(FontAwesomeIcons.rightFromBracket, color: Colors.red),
                                           Text(Strings.exit, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red))
                                         ]
                                     )

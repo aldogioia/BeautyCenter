@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../handler/snack_bar_handler.dart';
 import '../model/BookingDto.dart';
@@ -112,7 +113,7 @@ class BookingWidget extends StatelessWidget {
 
                       GestureDetector(
                         onTap: () async => await _makePhoneCall(booking.customer != null ? "+39${booking.customer!.phoneNumber}" : "+39${booking.bookedForNumber}"),
-                        child: Icon(Icons.phone_outlined, color: Theme.of(context).colorScheme.primary, size: 16),
+                        child: Icon(FontAwesomeIcons.phone, color: Theme.of(context).colorScheme.primary, size: 16),
                       )
                     ]
                   )

@@ -6,16 +6,15 @@ class PasswordService {
   final Dio _dio = ApiService.instance.dio;
   final String _path = "/password";
 
-  Future<Response?> requestReset({required String email}) async {
+  Future<Response?> requestReset({required String phoneNumber}) async {
     try {
       return await _dio.post(
         "$_path/request-reset",
         queryParameters: {
-          'email' : email
+          'phoneNumber' : phoneNumber
         }
       );
     } on DioException catch(e){
-      print("Errore: $e");
       return e.response;
     }
   }

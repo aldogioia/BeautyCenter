@@ -3,6 +3,7 @@ import 'package:beauty_center_frontend/widget/row_item.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/customer_update_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 
 import '../utils/strings.dart';
@@ -53,7 +54,7 @@ class _UsersScreenState extends ConsumerState<UsersScreen> {
                       child: TextFormField(
                         decoration: InputDecoration(
                           hintText: Strings.search,
-                          prefixIcon: Icon(Icons.search),
+                          prefixIcon: Icon(FontAwesomeIcons.magnifyingGlass),
                         ),
                         onChanged: (value){
                           setState(() => _searchText = value.replaceAll(" ", "").toLowerCase());
@@ -69,7 +70,7 @@ class _UsersScreenState extends ConsumerState<UsersScreen> {
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child:  RowItem(
-                icon: Icons.account_circle_outlined,
+                icon: FontAwesomeIcons.circleUser,
                 text: "${customer.name} ${customer.surname}",
                 onTap: () {
                   showModalBottomSheet(

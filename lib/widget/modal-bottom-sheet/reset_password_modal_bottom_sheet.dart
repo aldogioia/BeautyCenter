@@ -17,7 +17,7 @@ class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswo
   final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _resetPasswordFormKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -35,10 +35,10 @@ class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswo
   }
 
 
-  Future<void> _sendEmail() async {
+  Future<void> _sendPhoneNumber() async {
     if(_emailFormKey.currentState?.validate() ?? false){
       final navigator = Navigator.of(context);
-      final String email = _emailController.text;
+      final String phoneNumber = _phoneNumberController.text;
 
       showDialog(
           context: context,
@@ -50,7 +50,7 @@ class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswo
           }
       );
 
-      final result = await ref.read(passwordProvider.notifier).requestEmail(email: email);
+      final result = await ref.read(passwordProvider.notifier).requestReset(phoneNumber: phoneNumber);
 
       navigator.pop();
 
@@ -104,19 +104,19 @@ class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswo
           Form(
               key: _emailFormKey,
               child: TextFormField(
-                  validator: (value) => InputValidator.validateEmail(value),
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) => InputValidator.validatePhoneNumber(value),
+                  controller: _phoneNumberController,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                      labelText: Strings.email,
+                      labelText: Strings.mobile_phone,
                       errorMaxLines: 10
                   )
               )
           ),
 
           FilledButton(
-              onPressed: () async => await _sendEmail(),
-              child: Text(Strings.send_email)
+              onPressed: () async => await _sendPhoneNumber(),
+              child: Text(Strings.send)
           )
         ]
     );
@@ -222,5 +222,15 @@ class _ResetPasswordEmailModalBottomSheetState extends ConsumerState<ResetPasswo
             )
         )
     );
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _codeController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _phoneNumberController.dispose();
   }
 }

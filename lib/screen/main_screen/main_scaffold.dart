@@ -7,6 +7,7 @@ import 'package:beauty_center_frontend/screen/main_screen/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 
@@ -85,23 +86,23 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
         items: [
           if(role == Role.ROLE_ADMIN) ...[
             BottomNavigationBarItem(
-                icon: Icon(Icons.brush),
+                icon: Icon(FontAwesomeIcons.paintbrush),
                 label: "gestione"
             )
           ],
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.checklist_rounded),
+            icon: Icon(FontAwesomeIcons.calendarCheck),
             label: "prenotazioni"
           ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.accessibility_sharp),
+            icon: Icon(FontAwesomeIcons.clock),
             label: "turni"
           ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
+            icon: Icon(FontAwesomeIcons.gear),
             label: "impostazioni"
           )
         ]

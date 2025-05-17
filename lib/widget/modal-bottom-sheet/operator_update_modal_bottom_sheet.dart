@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../handler/snack_bar_handler.dart';
@@ -207,7 +208,7 @@ class _OperatorUpdateModalBottomSheetState extends ConsumerState<OperatorUpdateM
                                                       child: GestureDetector(
                                                           onTap: () async => await _pickImage(),
                                                           child: CircleAvatar(
-                                                            child: Icon(Icons.change_circle_rounded, size: 16),
+                                                            child: Icon(FontAwesomeIcons.arrowsRotate, size: 16), // todo vedere se va bene
                                                           )
                                                       )
                                                   )

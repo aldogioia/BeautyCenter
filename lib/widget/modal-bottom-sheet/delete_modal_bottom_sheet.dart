@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../utils/strings.dart';
 
@@ -30,7 +30,7 @@ class DeleteModalBottomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(text != null ? text! : Strings.delete, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red)),
-                Icon(Icons.delete, color: Colors.red)
+                Icon(FontAwesomeIcons.trash, color: Colors.red)
               ]
             )
           ),
@@ -42,7 +42,7 @@ class DeleteModalBottomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(Strings.cancel),
-                Icon(Icons.cancel_rounded)
+                Icon(FontAwesomeIcons.circleXmark)
               ]
             )
           )

@@ -15,8 +15,8 @@ class Password extends _$Password {
   }
 
 
-  Future<MapEntry<bool, String>> requestEmail({required String email}) async {
-    final response = await _passwordService.requestReset(email: email);
+  Future<MapEntry<bool, String>> requestReset({required String phoneNumber}) async {
+    final response = await _passwordService.requestReset(phoneNumber: phoneNumber);
 
     if(response == null) return MapEntry(false, Strings.connection_error);
     if(response.statusCode == 204) return MapEntry(true, "");

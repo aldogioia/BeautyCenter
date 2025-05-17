@@ -8,6 +8,7 @@ import 'package:beauty_center_frontend/widget/schedule_exceptions_widget.dart';
 import 'package:beauty_center_frontend/widget/schedule_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../handler/snack_bar_handler.dart';
@@ -62,7 +63,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
             padding: EdgeInsets.only(left: 20),
             child: CircleAvatar(
               backgroundColor: Colors.red,
-              child: Icon(Icons.delete, color: Colors.white),
+              child: Icon(FontAwesomeIcons.trash, color: Colors.white),
             )
         ),
         direction: DismissDirection.endToStart,
@@ -269,7 +270,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                   Navigator.pushNamed(context, "/book");
                 }
               },
-              child: Icon(Icons.add)
+              child: Icon(FontAwesomeIcons.plus)
             )
           )
         )
@@ -327,7 +328,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                                   )
                               );
                             },
-                            child:  Icon(Icons.filter_list_outlined, size: 24)
+                            child:  Icon(FontAwesomeIcons.sliders, size: 24)
                         )
                       ]
                     ]

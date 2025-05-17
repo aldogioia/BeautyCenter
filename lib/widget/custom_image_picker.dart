@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CustomImagePicker extends FormField<File?> {
@@ -73,7 +74,7 @@ class _CustomImagePickerWidgetState extends State<_CustomImagePickerWidget> {
                   : null,
             ),
             child: _image == null
-                ? Center(child: CircleAvatar(child: Icon(Icons.add_circle_outline_rounded, size: 16)))
+                ? Center(child: CircleAvatar(child: Icon(FontAwesomeIcons.circlePlus, size: 16)))
                 : null,
           )
         ),

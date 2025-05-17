@@ -4,6 +4,7 @@ import 'package:beauty_center_frontend/widget/operator_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../model/CustomerDto.dart';
 import '../model/ServiceDto.dart';
@@ -16,7 +17,6 @@ import '../security/input_validator.dart';
 import '../utils/Strings.dart';
 
 
-// todo notifiche locali
 class BookingStep extends ConsumerStatefulWidget {
   const BookingStep({super.key});
 
@@ -259,7 +259,7 @@ class _BookingStepState extends ConsumerState<BookingStep> {
                               Positioned(
                                   right: 5,
                                   top: 5,
-                                  child: Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
+                                  child: Icon(FontAwesomeIcons.circleCheck, color: Theme.of(context).colorScheme.primary)
                               )
                           ]
                       )
@@ -504,7 +504,7 @@ class _BookingStepState extends ConsumerState<BookingStep> {
                                             color: Colors.transparent,
                                             shape: BoxShape.circle,
                                           ),
-                                          child: Icon(Icons.close, size: 24, color: Theme.of(context).colorScheme.primary,),
+                                          child: Icon(FontAwesomeIcons.xmark, size: 24, color: Theme.of(context).colorScheme.primary,),
                                         ),
                                       )
                                     )

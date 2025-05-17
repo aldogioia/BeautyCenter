@@ -1,6 +1,7 @@
 import 'package:beauty_center_frontend/screen/tool_screen.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/tool_add_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../category.dart';
 import '../../utils/strings.dart';
@@ -175,7 +176,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                             child: Text(Strings.book_service, style: Theme.of(context).textTheme.labelMedium)
                         )
                       ],
-                      child: Icon(Icons.add, size: 24),
+                      child: Icon(FontAwesomeIcons.plus, size: 24),
                     )
                   ]
               )

@@ -4,6 +4,7 @@ import 'package:beauty_center_frontend/widget/booking_widget.dart';
 import 'package:beauty_center_frontend/widget/modal-bottom-sheet/booking_filter_modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../handler/snack_bar_handler.dart';
@@ -152,7 +153,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                                           padding: EdgeInsets.only(left: 20),
                                           child: CircleAvatar(
                                             backgroundColor: Colors.red,
-                                            child: Icon(Icons.delete, color: Colors.white),
+                                            child: Icon(FontAwesomeIcons.trash, color: Colors.white),
                                           )
                                       ),
                                       direction: DismissDirection.endToStart,
@@ -212,7 +213,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 child:  FloatingActionButton(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                     onPressed: () => Navigator.pushNamed(context, "/book"),
-                    child: Icon(Icons.add)
+                    child: Icon(FontAwesomeIcons.plus)
                 )
             )
         )
@@ -262,7 +263,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                               builder: (context) => BookingFilterModalBottomSheet(onSelect: onSelect)
                           );
                         },
-                        child:  Icon(Icons.filter_list_outlined, size: 24)
+                        child:  Icon(FontAwesomeIcons.sliders, size: 24)
                     )
 
                   ]

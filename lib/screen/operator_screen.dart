@@ -6,6 +6,7 @@ import 'package:beauty_center_frontend/widget/modal-bottom-sheet/operator_update
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 
 import '../utils/strings.dart';
@@ -80,7 +81,7 @@ class _OperatorsScreenState extends ConsumerState<OperatorsScreen> {
                     child: TextFormField(
                       decoration: InputDecoration(
                         hintText: Strings.search,
-                        prefixIcon: Icon(Icons.search),
+                        prefixIcon: Icon(FontAwesomeIcons.magnifyingGlass),
                       ),
                       onChanged: (value) {
                         setState(() => _searchText = value.replaceAll(" ", "").toLowerCase());
@@ -102,7 +103,7 @@ class _OperatorsScreenState extends ConsumerState<OperatorsScreen> {
                 padding: EdgeInsets.only(left: 20),
                 child: CircleAvatar(
                   backgroundColor: Colors.red,
-                  child: Icon(Icons.delete, color: Colors.white),
+                  child: Icon(FontAwesomeIcons.trash, color: Colors.white),
                 )
               ),
               direction: DismissDirection.endToStart,
