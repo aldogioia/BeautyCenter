@@ -34,6 +34,12 @@ public class GlobalExceptionHandler {
         return createErrorResponse(req, e.getMessage());
     }
 
+    @ExceptionHandler(WhatsAppMessageException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorDto onWhatsAppMessageException(WebRequest req, WhatsAppMessageException e) {
+        return createErrorResponse(req, e.getMessage());
+    }
+
     @ExceptionHandler(TokenException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDto onValidatorException(WebRequest req, TokenException e) {
@@ -52,9 +58,9 @@ public class GlobalExceptionHandler {
         return createErrorResponse(req, e.getMessage());
     }
 
-    @ExceptionHandler(EmailAlreadyUsed.class)
+    @ExceptionHandler(NumberAlreadyUsed.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorDto onEmailAlreadyUsedException(WebRequest req, EmailAlreadyUsed e) {
+    public ErrorDto onEmailAlreadyUsedException(WebRequest req, NumberAlreadyUsed e) {
         return createErrorResponse(req, e.getMessage());
     }
 

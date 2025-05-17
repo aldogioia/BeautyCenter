@@ -11,7 +11,7 @@ import org.aldo.beautycenter.data.dto.updates.UpdateOperatorDto;
 import org.aldo.beautycenter.data.entities.Booking;
 import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.entities.Schedule;
-import org.aldo.beautycenter.security.exception.customException.EmailAlreadyUsed;
+import org.aldo.beautycenter.security.exception.customException.NumberAlreadyUsed;
 import org.aldo.beautycenter.security.exception.customException.S3DeleteException;
 import org.aldo.beautycenter.service.interfaces.NotificationService;
 import org.aldo.beautycenter.service.interfaces.OperatorService;
@@ -126,7 +126,7 @@ public class OperatorServiceImpl implements OperatorService {
         userDao.findByPhoneNumber(updateOperatorDto.getPhoneNumber())
                 .ifPresent(user -> {
                     if (!user.getId().equals(updateOperatorDto.getId()))
-                        throw new EmailAlreadyUsed("Numero di telefono già in uso");
+                        throw new NumberAlreadyUsed("Il numero di telefono è già associato ad un altro account");
                 });
 
         Operator operator = operatorDao.getReferenceById(updateOperatorDto.getId());
@@ -166,7 +166,6 @@ public class OperatorServiceImpl implements OperatorService {
         }
     }
 
-    //TODO rimettere a private
     public List<LocalTime> getAvailableSlots(
             LocalTime start,
             LocalTime end,
@@ -178,7 +177,7 @@ public class OperatorServiceImpl implements OperatorService {
         List<LocalTime> slots = new ArrayList<>();
         if (start == null || end == null) return slots;
 
-        final int resolution = 5; // minuti tra uno slot e l'altro
+        final int resolution = 5; //TODO penso vadano bene ma non ne sono sicurissimo
 
         for (LocalTime time = start; time.plusMinutes(service.getDuration()).isBefore(end) || time.plusMinutes(service.getDuration()).equals(end); time = time.plusMinutes(resolution)) {
             LocalTime slotEnd = time.plusMinutes(service.getDuration());
@@ -203,7 +202,6 @@ public class OperatorServiceImpl implements OperatorService {
     }
 
     private boolean isRoomAvailable(LocalTime slotStart, LocalTime slotEnd, List<Booking> roomBookings) {
-        // almeno UNA stanza che supporta quel servizio dev’essere libera
         return roomBookings.stream().noneMatch(booking -> {
             LocalTime bookingStart = booking.getTime();
             LocalTime bookingEnd = bookingStart.plusMinutes(booking.getService().getDuration());
@@ -222,7 +220,7 @@ public class OperatorServiceImpl implements OperatorService {
                     })
                     .count();
 
-            return count >= tool.getAvailability(); // non è disponibile
+            return count >= tool.getAvailability();
         });
     }
 
