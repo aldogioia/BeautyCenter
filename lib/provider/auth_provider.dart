@@ -23,8 +23,8 @@ class Auth extends _$Auth {
     return false;
   }
 
-  Future<String> login({required String email, required String password}) async {
-    final response = await _authService.login(email: email, password: password);
+  Future<String> login({required String phoneNumber, required String password}) async {
+    final response = await _authService.login(phoneNumber: phoneNumber, password: password);
     if(response == null) return Strings.connection_error;
     if(response.statusCode == 200) {
       final data = response.data as Map<String, dynamic>;

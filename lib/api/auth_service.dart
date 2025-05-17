@@ -1,19 +1,16 @@
 import 'package:beauty_center_frontend/api/api_service.dart';
 import 'package:dio/dio.dart';
 
-import '../security/secure_storage.dart';
-import '../utils/strings.dart';
-
 class AuthService {
   final Dio _dio = ApiService.instance.dio;
   final String _path = "/auth";
 
-  Future<Response?> login({required String email, required String password}) async {
+  Future<Response?> login({required String phoneNumber, required String password}) async {
     try {
       return await _dio.post(
           "$_path/sign-in",
           queryParameters: {
-            'email' : email,
+            'phoneNumber' : phoneNumber,
             'password' : password
           }
       );

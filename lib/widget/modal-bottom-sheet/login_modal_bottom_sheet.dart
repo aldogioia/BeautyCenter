@@ -19,14 +19,14 @@ class LoginModalBottomSheet extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginModalBottomSheet> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController(text: "fra@gmail.com");
+  final TextEditingController _phoneNumber = TextEditingController(text: "fra@gmail.com");  // todo svuotare
   final TextEditingController _passwordController = TextEditingController(text: "sonoAdmin1");
 
 
   Future<void> _submitForm() async {
     if(_formKey.currentState?.validate() ?? false){
       final navigator = Navigator.of(context);
-      String email = _emailController.text;
+      String phoneNumber = _phoneNumber.text;
       String password = _passwordController.text;
 
       showDialog(
@@ -39,7 +39,7 @@ class _LoginScreenState extends ConsumerState<LoginModalBottomSheet> {
         },
       );
 
-      String result = await ref.read(authProvider.notifier).login(email: email, password: password);
+      String result = await ref.read(authProvider.notifier).login(phoneNumber: phoneNumber, password: password);
 
       navigator.pop();
 
@@ -53,8 +53,7 @@ class _LoginScreenState extends ConsumerState<LoginModalBottomSheet> {
   }
 
   void _resetField(){
-    // todo vedere come fare, non mi resetta le text field
-    _emailController.clear();
+    _phoneNumber.clear();
     _passwordController.clear();
 
     _formKey.currentState?.reset();
@@ -85,10 +84,10 @@ class _LoginScreenState extends ConsumerState<LoginModalBottomSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormField(
-                        controller: _emailController,
-                        validator: (value) => InputValidator.validateEmail(value),
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(labelText: Strings.email)
+                        controller: _phoneNumber,
+                        validator: (value) => InputValidator.validatePhoneNumber(value),
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(labelText: Strings.mobile_phone)
                       ),
 
 
@@ -136,7 +135,7 @@ class _LoginScreenState extends ConsumerState<LoginModalBottomSheet> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _phoneNumber.dispose();
     _passwordController.dispose();
     _formKey.currentState?.dispose();
     super.dispose();
