@@ -1,8 +1,8 @@
 package org.aldo.beautycenter.security.exception.customException;
 
-public class EmailAlreadyUsed extends RuntimeException {
+public class NumberAlreadyUsed extends RuntimeException {
     private final String message;
-    public EmailAlreadyUsed(String message){
+    public NumberAlreadyUsed(String message){
         super(message);
         this.message = message;
     }

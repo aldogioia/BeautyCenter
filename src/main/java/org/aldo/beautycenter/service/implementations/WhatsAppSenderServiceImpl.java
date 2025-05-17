@@ -3,6 +3,7 @@ package org.aldo.beautycenter.service.implementations;
 import org.aldo.beautycenter.data.entities.Booking;
 import org.aldo.beautycenter.data.entities.User;
 import org.aldo.beautycenter.security.exception.customException.BookingGuestException;
+import org.aldo.beautycenter.security.exception.customException.WhatsAppMessageException;
 import org.aldo.beautycenter.service.interfaces.WhatsAppSenderService;
 import org.aldo.beautycenter.utils.Constants;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,7 +91,7 @@ public class WhatsAppSenderServiceImpl implements WhatsAppSenderService {
         //Preparo il body per la chiamata Rest
         Map<String, Object> body = new HashMap<>();
         body.put("messaging_product", "whatsapp");
-        body.put("to", recipientPhone);
+        body.put("to", recipientPhone.length() == 10 ? "39" + recipientPhone :  recipientPhone);
         body.put("type", "template");
         body.put("template", template);
 
@@ -99,7 +100,7 @@ public class WhatsAppSenderServiceImpl implements WhatsAppSenderService {
             ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
             System.out.println(response.getBody());
         } catch (Exception e) {
-            //TODO lanciare eccezione personalizzata
+            throw new WhatsAppMessageException("Errore durante l'invio del messaggio su WhatsApp");
         }
 
     }

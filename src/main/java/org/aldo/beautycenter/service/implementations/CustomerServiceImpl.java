@@ -8,7 +8,7 @@ import org.aldo.beautycenter.data.dto.create.CreateCustomerDto;
 import org.aldo.beautycenter.data.dto.responses.CustomerDto;
 import org.aldo.beautycenter.data.dto.updates.UpdateCustomerDto;
 import org.aldo.beautycenter.data.entities.Customer;
-import org.aldo.beautycenter.security.exception.customException.EmailAlreadyUsed;
+import org.aldo.beautycenter.security.exception.customException.NumberAlreadyUsed;
 import org.aldo.beautycenter.service.interfaces.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -51,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
                         modelMapper.map(updateCustomerDto, customer);
                         customerDao.save(customer);
                     }
-                    else throw new EmailAlreadyUsed("Email già in uso");
+                    else throw new NumberAlreadyUsed("Il numero di telefono è già associato ad un altro account");
                 });
     }
 
