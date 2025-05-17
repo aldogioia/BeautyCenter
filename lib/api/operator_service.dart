@@ -48,7 +48,7 @@ class OperatorService {
   Future<Response?> createOperator({
     required String name,
     required String surname,
-    required String email,
+    required String phoneNumber,
     required File? image,
     required List<String> services
   }) async {
@@ -56,7 +56,7 @@ class OperatorService {
       FormData formData = FormData.fromMap({
         "name": name,
         "surname": surname,
-        "email": email,
+        "phoneNumber": phoneNumber,
         "services": services,
         if(image != null)
           "image": await MultipartFile.fromFile(image.path, filename: image.path.split('/').last),

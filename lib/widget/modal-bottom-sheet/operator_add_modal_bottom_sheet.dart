@@ -23,7 +23,7 @@ class _OperatorAddModalBottomSheetState extends ConsumerState<OperatorAddModalBo
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   List<SummaryServiceDto> _selectedServices = [];
   bool _canAdd = false;
@@ -31,7 +31,7 @@ class _OperatorAddModalBottomSheetState extends ConsumerState<OperatorAddModalBo
 
   void _checkCanAdd(){
     setState(() {
-      _canAdd = _nameController.text != "" && _surnameController.text != "" && _emailController.text != ""
+      _canAdd = _nameController.text != "" && _surnameController.text != "" && _phoneNumberController.text != ""
           && _image != null;
     });
   }
@@ -57,7 +57,7 @@ class _OperatorAddModalBottomSheetState extends ConsumerState<OperatorAddModalBo
       final result = await ref.read(operatorProvider.notifier).createOperator(
         name: _nameController.text,
         surname: _surnameController.text,
-        email: _emailController.text,
+        phoneNumber: _phoneNumberController.text,
         image: _image,
         services: _selectedServices
       );
@@ -146,10 +146,10 @@ class _OperatorAddModalBottomSheetState extends ConsumerState<OperatorAddModalBo
                                     const SizedBox(height: 10),
 
                                     TextFormField(
-                                      controller: _emailController,
-                                      decoration: InputDecoration(labelText: Strings.email),
-                                      keyboardType: TextInputType.emailAddress,
-                                      validator: (value) => InputValidator.validateEmail(value),
+                                      controller: _phoneNumberController,
+                                      decoration: InputDecoration(labelText: Strings.mobile_phone),
+                                      keyboardType: TextInputType.number,
+                                      validator: (value) => InputValidator.validatePhoneNumber(value),
                                       onChanged: (value) => _checkCanAdd(),
                                     ),
 
@@ -176,5 +176,14 @@ class _OperatorAddModalBottomSheetState extends ConsumerState<OperatorAddModalBo
           )
         )
     );
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _surnameController.dispose();
+    _phoneNumberController.dispose();
   }
 }

@@ -106,14 +106,14 @@ class Operator extends _$Operator {
   Future<MapEntry<bool,String>> createOperator({
     required String name,
     required String surname,
-    required String email,
+    required String phoneNumber,
     required File? image,
     required List<SummaryServiceDto> services
   }) async {
     final response = await _operatorService.createOperator(
       name: name,
       surname: surname,
-      email: email,
+      phoneNumber: phoneNumber,
       image: image,
       services: services.map((e) => e.id).toList()
     );
