@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../api/customer_service.dart';
-import '../model/CustomerDto.dart';
+import '../model/customer_dto.dart';
 import '../utils/strings.dart';
 
 part 'customer_provider.g.dart';
@@ -45,14 +45,12 @@ class Customer extends _$Customer {
     required String id,
     required String name,
     required String surname,
-    required String email,
     required String phoneNumber
   }) async {
     final response = await _customerService.updateCustomer(
       id: id,
       name: name,
       surname: surname,
-      email: email,
       phoneNumber: phoneNumber
     );
 
@@ -64,7 +62,6 @@ class Customer extends _$Customer {
             return dto.copyWith(
               name: name,
               surname: surname,
-              email: email,
               phoneNumber: phoneNumber
             );
           }

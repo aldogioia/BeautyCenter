@@ -2,14 +2,12 @@ class CustomerDto {
   final String id;
   final String name;
   final String surname;
-  final String email;
   final String phoneNumber;
 
   CustomerDto({
     required this.id,
     required this.name,
     required this.surname,
-    required this.email,
     required this.phoneNumber,
   });
 
@@ -17,14 +15,12 @@ class CustomerDto {
     String? id,
     String? name,
     String? surname,
-    String? email,
     String? phoneNumber,
   }) {
     return CustomerDto(
       id: id ?? this.id,
       name: name ?? this.name,
       surname: surname ?? this.surname,
-      email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
     );
   }
@@ -34,7 +30,6 @@ class CustomerDto {
       id: json['id'] as String,
       name: json['name'] as String,
       surname: json['surname'] as String,
-      email: json['email'] as String,
       phoneNumber: json['phoneNumber'],
     );
   }
@@ -44,7 +39,6 @@ class CustomerDto {
       'id': id,
       'name': name,
       'surname': surname,
-      'email': email,
       'phoneNumber': phoneNumber,
     };
   }

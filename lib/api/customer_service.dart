@@ -19,7 +19,6 @@ class CustomerService {
     required String id,
     required String name,
     required String surname,
-    required String email,
     required String phoneNumber
   }) async {
     try {
@@ -27,7 +26,6 @@ class CustomerService {
         'id': id,
         'name': name,
         'surname': surname,
-        'email': email,
         'phoneNumber': phoneNumber
       };
       return await _dio.patch(_path, data: data);

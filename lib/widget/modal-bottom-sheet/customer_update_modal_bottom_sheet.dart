@@ -1,6 +1,6 @@
 import 'package:beauty_center_frontend/security/input_validator.dart';
 import 'package:beauty_center_frontend/handler/snack_bar_handler.dart';
-import 'package:beauty_center_frontend/model/CustomerDto.dart';
+import 'package:beauty_center_frontend/model/customer_dto.dart';
 import 'package:beauty_center_frontend/provider/customer_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,21 +23,18 @@ class CustomerUpdateModalBottomSheet extends ConsumerStatefulWidget {
 class _CustomerUpdateModalBottomSheetState extends ConsumerState<CustomerUpdateModalBottomSheet> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _telephoneNumberController = TextEditingController();
 
   bool _isUpdated = false;
 
   void _checkUpdate(){
     setState(() {
-      _isUpdated = _emailController.text != widget.customerDto.email ||
-          _telephoneNumberController.text != widget.customerDto.phoneNumber.toString();
+      _isUpdated = _telephoneNumberController.text != widget.customerDto.phoneNumber.toString();
     });
   }
 
   Future<void> _submitForm() async {
     if(_formKey.currentState?.validate() ?? false) {
-      final customer = widget.customerDto;
 
       final navigator = Navigator.of(context);
       showDialog(
@@ -54,7 +51,6 @@ class _CustomerUpdateModalBottomSheetState extends ConsumerState<CustomerUpdateM
         id: widget.customerDto.id,
         name: widget.customerDto.name,
         surname: widget.customerDto.surname,
-        email: _emailController.text,
         phoneNumber: _telephoneNumberController.text
       );
 
@@ -66,7 +62,6 @@ class _CustomerUpdateModalBottomSheetState extends ConsumerState<CustomerUpdateM
 
   @override
   void initState() {
-    _emailController.text = widget.customerDto.email;
     _telephoneNumberController.text = widget.customerDto.phoneNumber;
     super.initState();
   }
@@ -138,16 +133,6 @@ class _CustomerUpdateModalBottomSheetState extends ConsumerState<CustomerUpdateM
                                               validator: (value) => InputValidator.validatePhoneNumber(value),
                                               onChanged: (value) => _checkUpdate(),
                                               controller: _telephoneNumberController,
-                                            ),
-
-                                            const SizedBox(height: 10),
-
-                                            TextFormField(
-                                              decoration: InputDecoration(labelText: Strings.email),
-                                              keyboardType: TextInputType.emailAddress,
-                                              onChanged: (value) => _checkUpdate(),
-                                              validator: (value) => InputValidator.validateEmail(value),
-                                              controller: _emailController,
                                             )
                                           ]
                                       )
@@ -165,7 +150,6 @@ class _CustomerUpdateModalBottomSheetState extends ConsumerState<CustomerUpdateM
 
   @override
   void dispose() {
-    _emailController.dispose();
     _telephoneNumberController.dispose();
     super.dispose();
   }

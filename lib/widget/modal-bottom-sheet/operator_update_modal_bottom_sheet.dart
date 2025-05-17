@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../handler/snack_bar_handler.dart';
-import '../../model/OperatorDto.dart';
+import '../../model/operator_dto.dart';
 import '../../model/summary_service_dto.dart';
 import '../../provider/operator_provider.dart';
 import '../../security/input_validator.dart';

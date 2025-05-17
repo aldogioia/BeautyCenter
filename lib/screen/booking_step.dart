@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../model/CustomerDto.dart';
+import '../model/customer_dto.dart';
 import '../model/ServiceDto.dart';
 import '../model/summary_operator_dto.dart';
 import '../model/enumerators/role.dart';

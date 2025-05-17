@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../handler/snack_bar_handler.dart';
-import '../../model/OperatorDto.dart';
+import '../../model/operator_dto.dart';
 import '../../model/summary_operator_dto.dart';
 import '../../provider/operator_provider.dart';
 import '../../utils/strings.dart';

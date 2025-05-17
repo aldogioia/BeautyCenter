@@ -1,5 +1,4 @@
 import 'package:beauty_center_frontend/api/auth_service.dart';
-import 'package:beauty_center_frontend/main.dart';
 import 'package:beauty_center_frontend/provider/booking_provider.dart';
 import 'package:beauty_center_frontend/provider/customer_provider.dart';
 import 'package:beauty_center_frontend/provider/operator_provider.dart';
@@ -11,8 +10,6 @@ import 'package:beauty_center_frontend/security/secure_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../model/OperatorDto.dart';
-import '../model/enumerators/role.dart';
 import '../utils/strings.dart';
 
 part 'auth_provider.g.dart';

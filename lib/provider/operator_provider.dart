@@ -2,7 +2,7 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:beauty_center_frontend/api/operator_service.dart';
-import 'package:beauty_center_frontend/model/OperatorDto.dart';
+import 'package:beauty_center_frontend/model/operator_dto.dart';
 import 'package:beauty_center_frontend/model/summary_operator_dto.dart';
 import 'package:beauty_center_frontend/model/summary_service_dto.dart';
 import 'package:flutter/material.dart';

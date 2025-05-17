@@ -8,7 +8,7 @@ import 'package:beauty_center_frontend/widget/operator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../model/OperatorDto.dart';
+import '../../model/operator_dto.dart';
 import '../../model/enumerators/role.dart';
 import '../../utils/strings.dart';
 
