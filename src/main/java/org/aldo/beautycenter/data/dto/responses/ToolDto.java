@@ -6,5 +6,5 @@ import lombok.Data;
 public class ToolDto {
     private String id;
     private String name;
-    private String availability;
+    private Integer availability;
 }
