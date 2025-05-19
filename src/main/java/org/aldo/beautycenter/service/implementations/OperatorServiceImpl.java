@@ -11,6 +11,7 @@ import org.aldo.beautycenter.data.dto.updates.UpdateOperatorDto;
 import org.aldo.beautycenter.data.entities.Booking;
 import org.aldo.beautycenter.data.entities.Operator;
 import org.aldo.beautycenter.data.entities.Schedule;
+import org.aldo.beautycenter.security.exception.customException.PhoneNumberConflictException;
 import org.aldo.beautycenter.security.exception.customException.S3DeleteException;
 import org.aldo.beautycenter.service.interfaces.NotificationService;
 import org.aldo.beautycenter.service.interfaces.OperatorService;
@@ -30,6 +31,7 @@ public class OperatorServiceImpl implements OperatorService {
     private final OperatorDao operatorDao;
     private final BookingDao bookingDao;
     private final ServiceDao serviceDao;
+    private final UserDao userDao;
     private final S3Service s3Service;
     private final NotificationService notificationService;
     private final StandardScheduleDao standardScheduleDao;
@@ -123,6 +125,13 @@ public class OperatorServiceImpl implements OperatorService {
     public String updateOperator(UpdateOperatorDto updateOperatorDto) {
         Operator operator = operatorDao.findById(updateOperatorDto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Operatore non trovato"));
+
+        userDao.findByPhoneNumber(updateOperatorDto.getPhoneNumber()).ifPresent(
+                user -> {
+                    if (!user.getId().equals(updateOperatorDto.getId()))
+                        throw new PhoneNumberConflictException("Il numero di telefono è già associato ad un altro account");
+                }
+        );
 
         modelMapper.map(updateOperatorDto, operator);
 

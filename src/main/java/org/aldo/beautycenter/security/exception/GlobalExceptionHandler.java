@@ -106,6 +106,12 @@ public class GlobalExceptionHandler {
         return createErrorResponse(req, e.getMessage());
     }
 
+    @ExceptionHandler(PhoneNumberConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorDto onPhoneNumberConflictException(WebRequest req, PhoneNumberConflictException e) {
+        return createErrorResponse(req, e.getMessage());
+    }
+
     private ErrorDto createErrorResponse(WebRequest req, String message){
         HttpServletRequest httpServletRequest = (HttpServletRequest) req.resolveReference("request");
         assert httpServletRequest != null;
