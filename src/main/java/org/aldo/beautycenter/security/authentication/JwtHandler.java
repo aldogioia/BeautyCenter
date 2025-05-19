@@ -103,4 +103,13 @@ public class JwtHandler {
             throw new TokenException("Token non valido");
         }
     }
+
+    public static Date getExpiratioTime(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            return signedJWT.getJWTClaimsSet().getExpirationTime();
+        } catch (Exception e) {
+            throw new TokenException("Token non valido");
+        }
+    }
 }
