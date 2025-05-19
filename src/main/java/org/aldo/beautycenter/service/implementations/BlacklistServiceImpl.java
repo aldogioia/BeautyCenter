@@ -20,7 +20,7 @@ public class BlacklistServiceImpl implements BlacklistService {
     @Override
     public void addTokenToBlacklist(String token) {
         Blacklist blacklist = new Blacklist();
-        blacklist.setExpiration(JwtHandler.getExpiratioTime(token));
+        blacklist.setExpiration(JwtHandler.getExpirationTime(token));
         blacklist.setToken(token);
         blacklistDao.save(blacklist);
     }
