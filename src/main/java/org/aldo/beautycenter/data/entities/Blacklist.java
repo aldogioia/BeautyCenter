@@ -8,6 +8,8 @@ import org.aldo.beautycenter.security.logging.Auditable;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "blacklist")
 @Data
@@ -18,6 +20,9 @@ public class Blacklist extends Auditable {
     @Id
     @UuidGenerator
     private String id;
+
+    @Column(name = "expiration")
+    private Date expiration;
 
     @Column(name = "token", nullable = false)
     private String token;
