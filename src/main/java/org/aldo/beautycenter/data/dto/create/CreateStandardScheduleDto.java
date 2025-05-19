@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.aldo.beautycenter.data.dto.abstracts.ScheduleAbstract;
-import org.aldo.beautycenter.security.customAnnotation.annotation.NotAlreadySet;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidScheduleDay;
 
 import java.time.DayOfWeek;
 
@@ -12,6 +12,6 @@ import java.time.DayOfWeek;
 @EqualsAndHashCode(callSuper = true)
 public class CreateStandardScheduleDto extends ScheduleAbstract {
     @NotNull(message = "Il giorno della settimana è obbligatorio")
-    @NotAlreadySet
+    @ValidScheduleDay
     private DayOfWeek day;
 }

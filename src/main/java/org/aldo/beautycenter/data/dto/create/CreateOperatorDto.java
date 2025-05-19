@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Data
+@ValidPhoneNumber
 public class CreateOperatorDto {
     @NotNull(message = "Il campo immagine è obbligatorio")
     @ValidMultipartExtension
@@ -25,7 +26,6 @@ public class CreateOperatorDto {
 
     @NotNull(message = "Il campo telefono è obligatorio")
     @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Il numero di telefono deve contenere 10 numeri")
-    @ValidPhoneNumber
     private String phoneNumber;
 
     private List<@ValidServiceId String> services;

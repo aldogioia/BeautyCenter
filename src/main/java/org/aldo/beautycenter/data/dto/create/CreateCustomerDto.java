@@ -5,6 +5,7 @@ import lombok.Data;
 import org.aldo.beautycenter.security.customAnnotation.annotation.ValidPhoneNumber;
 
 @Data
+@ValidPhoneNumber
 public class CreateCustomerDto {
     @NotBlank(message = "Il campo nome non può essere vuoto")
     @Size(min = 3, max = 50, message = "Il nome deve essere compreso tra 3 e 50 caratteri")
@@ -16,7 +17,6 @@ public class CreateCustomerDto {
 
     @NotNull(message = "Il campo telefono è obligatorio")
     @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Il numero di telefono deve contenere 10 numeri")
-    @ValidPhoneNumber
     private String phoneNumber;
 
     @NotNull(message = "Il campo password è obligatorio")
