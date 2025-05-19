@@ -104,7 +104,7 @@ public class JwtHandler {
         }
     }
 
-    public static Date getExpiratioTime(String token) {
+    public static Date getExpirationTime(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
             return signedJWT.getJWTClaimsSet().getExpirationTime();
