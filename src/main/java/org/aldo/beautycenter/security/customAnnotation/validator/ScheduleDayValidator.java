@@ -4,12 +4,12 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.StandardScheduleDao;
-import org.aldo.beautycenter.security.customAnnotation.annotation.NotAlreadySet;
+import org.aldo.beautycenter.security.customAnnotation.annotation.ValidScheduleDay;
 
 import java.time.DayOfWeek;
 
 @RequiredArgsConstructor
-public class NotAlreadySetValidator implements ConstraintValidator<NotAlreadySet, DayOfWeek> {
+public class ScheduleDayValidator implements ConstraintValidator<ValidScheduleDay, DayOfWeek> {
     private final StandardScheduleDao standardScheduleDao;
 
     @Override

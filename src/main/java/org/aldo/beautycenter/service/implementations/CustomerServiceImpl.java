@@ -3,12 +3,10 @@ package org.aldo.beautycenter.service.implementations;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.CustomerDao;
-import org.aldo.beautycenter.data.dao.UserDao;
 import org.aldo.beautycenter.data.dto.create.CreateCustomerDto;
 import org.aldo.beautycenter.data.dto.responses.CustomerDto;
 import org.aldo.beautycenter.data.dto.updates.UpdateCustomerDto;
 import org.aldo.beautycenter.data.entities.Customer;
-import org.aldo.beautycenter.security.exception.customException.NumberAlreadyUsed;
 import org.aldo.beautycenter.service.interfaces.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerDao customerDao;
-    private final UserDao userDao;
     private final ModelMapper modelMapper;
 
     @Override
@@ -44,15 +41,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public void updateCustomer(UpdateCustomerDto updateCustomerDto) {
-        userDao.findByPhoneNumber(updateCustomerDto.getPhoneNumber())
-                .ifPresent(user -> {
-                    if (user.getId().equals(updateCustomerDto.getId())) {
-                        Customer customer = customerDao.getReferenceById(updateCustomerDto.getId());
-                        modelMapper.map(updateCustomerDto, customer);
-                        customerDao.save(customer);
-                    }
-                    else throw new NumberAlreadyUsed("Il numero di telefono è già associato ad un altro account");
-                });
+        Customer customer = customerDao.findById(updateCustomerDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
+
+        modelMapper.map(updateCustomerDto, customer);
+        customerDao.save(customer);
     }
 
     public void deleteCustomer(String Id) {
