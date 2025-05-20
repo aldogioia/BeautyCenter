@@ -106,6 +106,11 @@ public class OperatorServiceImpl implements OperatorService {
                     allBookings
             ));
 
+        if (date.isEqual(LocalDate.now()))
+            availableTimes = availableTimes.stream()
+                    .filter(time -> time.isAfter(LocalTime.now()))
+                    .toList();
+
         return availableTimes;
     }
 

@@ -28,11 +28,10 @@ public class ScheduleExceptionServiceImpl implements ScheduleExceptionService {
     @Override
     public ScheduleExceptionDto createScheduleException(CreateScheduleExceptionDto createScheduleExceptionDto) {
         ScheduleException scheduleException = modelMapper.map(createScheduleExceptionDto, ScheduleException.class);
-        System.out.println(
-            "Id: " + scheduleException.getId() +
-            "endDate: " + scheduleException.getEndDate() +
-            "startDate: " + scheduleException.getStartDate()
-        );
+
+        if (createScheduleExceptionDto.getEndDate() == null) {
+            scheduleException.setEndDate(scheduleException.getStartDate());
+        }
 
         scheduleExceptionDao.save(scheduleException);
 
