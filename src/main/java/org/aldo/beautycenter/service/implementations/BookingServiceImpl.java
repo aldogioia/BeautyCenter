@@ -97,6 +97,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public void deleteBooking(String bookingId, User user) {
         try{
             Booking booking = bookingDao.findById(bookingId)
@@ -117,8 +118,7 @@ public class BookingServiceImpl implements BookingService {
                 }
                 bookingDao.delete(booking);
             }
-
-            if (user.getId().equals(booking.getBookedForCustomer().getId())) {
+            else if (user.getId().equals(booking.getBookedForCustomer().getId())) {
                 notificationService.sendNotificationToUser(
                         booking.getBookedForCustomer(),
                         title,

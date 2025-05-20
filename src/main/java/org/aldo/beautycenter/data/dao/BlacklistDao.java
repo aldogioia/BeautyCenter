@@ -9,5 +9,5 @@ import java.util.Date;
 @Repository
 public interface BlacklistDao extends JpaRepository<Blacklist, String> {
     boolean existsByToken(String token);
-    void deleteByExpirationBefore(Date expiration);
+    void deleteAllByExpirationBefore(Date expiration);
 }

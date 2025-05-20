@@ -1,5 +1,6 @@
 package org.aldo.beautycenter.service.implementations;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.BlacklistDao;
 import org.aldo.beautycenter.data.entities.Blacklist;
@@ -31,7 +32,8 @@ public class BlacklistServiceImpl implements BlacklistService {
     }
 
     @Scheduled(cron = "0 0 3 * * *")
+    @Transactional
     public void cleanUp() {
-        blacklistDao.deleteByExpirationBefore(Date.from(Instant.now().truncatedTo(ChronoUnit.SECONDS)));
+        blacklistDao.deleteAllByExpirationBefore(Date.from(Instant.now().truncatedTo(ChronoUnit.SECONDS)));
     }
 }
