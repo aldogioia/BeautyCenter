@@ -1,16 +1,6 @@
 import '../utils/strings.dart';
 
 class InputValidator {
-
-  static String? validateEmail(String? value) {
-    if (value == null || value.isEmpty ||
-        !RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(
-            value)) {
-      return Strings.invalidEmail;
-    }
-    return null;
-  }
-
   static String? validatePassword(String? value) {
     if (value == null || value.isEmpty ||
         !RegExp(r'^(?=.*\d).{8,}$').hasMatch(

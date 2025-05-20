@@ -16,10 +16,10 @@ class PasswordRecoveryPage extends ConsumerStatefulWidget{
 }
 
 class _PasswordRecoveryState extends ConsumerState<PasswordRecoveryPage>{
-  final GlobalKey<FormState> _formKeyEmail = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyPhoneNumber = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyToken = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _tokenController = TextEditingController();
 
   bool loading = false;
@@ -41,12 +41,12 @@ class _PasswordRecoveryState extends ConsumerState<PasswordRecoveryPage>{
       }
     }
     else {
-      if (_formKeyEmail.currentState?.validate() ?? false) {
+      if (_formKeyPhoneNumber.currentState?.validate() ?? false) {
         setState(() {
           loading = true;
         });
 
-        final result = await ref.read(passwordProvider.notifier).sendEmail(email: _emailController.text);
+        final result = await ref.read(passwordProvider.notifier).sendPhoneNumber(phoneNumber: _phoneNumberController.text);
         if (result.isEmpty) {
           setState(() {
             isTokenVisible = true;
@@ -85,7 +85,7 @@ class _PasswordRecoveryState extends ConsumerState<PasswordRecoveryPage>{
                 duration: Duration(milliseconds: 300),
                 child: isTokenVisible
                     ? tokenForm()
-                    : emailForm()
+                    : phoneNumberForm()
               ),
               FilledButton(
                 onPressed: loading ? null : () async {
@@ -104,13 +104,13 @@ class _PasswordRecoveryState extends ConsumerState<PasswordRecoveryPage>{
     );
   }
 
-  Widget emailForm(){
+  Widget phoneNumberForm(){
     return Form(
-        key: _formKeyEmail,
+        key: _formKeyPhoneNumber,
         child: TextFormField(
-          controller: _emailController,
-          validator: InputValidator.validateEmail,
-          decoration: const InputDecoration(labelText: Strings.email),
+          controller: _phoneNumberController,
+          validator: InputValidator.validatePhoneNumber,
+          decoration: const InputDecoration(labelText: Strings.mobilePhone),
         )
     );
   }

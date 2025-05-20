@@ -74,35 +74,6 @@ class StartPage extends ConsumerWidget{
               child: const Text(Strings.signUp),
             ),
           ),
-
-          /*Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: FilledButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                  ),
-                  builder: (context) => SingleChildScrollView(
-                    padding: EdgeInsets.only(
-                      top: 16,
-                      left: 16,
-                      right: 16,
-                      bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-                    ),
-                    child: const SafeArea(child: SignUpModal()),
-                  ),
-                );
-              },
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Colors.white),
-                foregroundColor: WidgetStateProperty.all(Colors.black),
-              ),
-              child: const Text(Strings.signUp),
-            )
-          ),*/
         ],
       ),
     );

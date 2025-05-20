@@ -42,8 +42,8 @@ class DioInterceptor extends Interceptor {
       try {
         final newToken = await _refreshToken(refreshToken);
 
-        if (newToken != null) {
-          await SecureStorage.setAccessToken(newToken);
+        if (newToken != null && newToken.startsWith('Bearer ')) {
+          await SecureStorage.setAccessToken(newToken.substring(7));
         } else {
           _logout();
         }

@@ -15,10 +15,10 @@ class Password extends _$Password{
     return true;
   }
 
-  Future<String> sendEmail({
-    required String email,
+  Future<String> sendPhoneNumber({
+    required String phoneNumber,
   }) async {
-    final response = await _passwordService.sendEmail(email);
+    final response = await _passwordService.sendPhoneNumber(phoneNumber);
 
     if (response == null) {
       return Strings.connectionError;

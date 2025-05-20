@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import '../utils/secure_storage.dart';
 import 'api_service.dart';
 
@@ -46,14 +45,12 @@ class AuthService {
     final accessToken = await SecureStorage.getAccessToken();
     final refreshToken = await SecureStorage.getRefreshToken();
     if (refreshToken == null || accessToken == null) {
-      debugPrint("Token not found");
       return null;
     }
     try {
       return await _dio.post(
         "$_path/sign-out",
         options: Options(headers: {
-          'Authorization': accessToken,
           'X-Refresh-Token': refreshToken,
         }),
       );

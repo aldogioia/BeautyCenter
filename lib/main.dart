@@ -1,5 +1,6 @@
 import 'package:edone_customer/handler/firebase_handler.dart';
 import 'package:edone_customer/pages/auth_checker.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import 'firebase_options.dart';
 import 'handler/notification_handler.dart';
 import 'navigation/navigator.dart';
 import 'navigation/route_generator.dart';
@@ -21,6 +23,10 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   FirebaseMessaging.onBackgroundMessage(FirebaseHandler.firebaseMessagingBackgroundHandler);
 
   tz.initializeTimeZones();
@@ -28,15 +34,11 @@ void main() async {
 
   const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
   final iOSInit = DarwinInitializationSettings();
-
-  var initSettings = InitializationSettings(
-    android: androidInit,
-    iOS: iOSInit,
-  );
-
+  final initSettings = InitializationSettings(android: androidInit, iOS: iOSInit);
   await flutterLocalNotificationsPlugin.initialize(initSettings);
 
   await NotificationHandler.handleNotificationPermissions();
+  await FirebaseHandler.initFCM();
 
   runApp(const ProviderScope(child: MyApp()));
 }

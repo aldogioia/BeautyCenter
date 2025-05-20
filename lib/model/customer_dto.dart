@@ -15,7 +15,6 @@ class CustomerDto {
     String? id,
     String? name,
     String? surname,
-    String? email,
     String? phoneNumber,
   }) {
     return CustomerDto(

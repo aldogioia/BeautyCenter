@@ -42,6 +42,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         SnackBarHandler.instance.showMessage(message: result);
       } else if (result.isEmpty) {
         final _ =  await ref.refresh(appInitProvider.future);
+        NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/scaffold", (route) => false);
       }
     }
   }
@@ -86,7 +87,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   setState(() {
                     loading = false;
                   });
-                  NavigatorService.navigatorKey.currentState?.pushNamedAndRemoveUntil("/scaffold", (route) => false);
                 }),
                 child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),

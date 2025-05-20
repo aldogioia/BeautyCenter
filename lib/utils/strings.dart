@@ -26,7 +26,6 @@ class Strings {
   static const String name = "Nome";
   static const String surname = "Cognome";
   static const String mobilePhone = "Cellulare";
-  static const String email = "Email";
   static const String password = "Password";
   static const String newPassword = "Nuova password";
   static const String confirmPassword = "Conferma password";
@@ -50,8 +49,8 @@ class Strings {
   static const String good = "Che bello rivederti";
   static const String meetYou = "Che bello conoscerti";
   static const String forgotPassword = "Password dimenticata?";
-  static const String insertToken = "Inserisci il codice di 5 cifre che abbiamo inviato alla tua mail.";
-  static const String noProblem = "Nessun problema, può capitare! Conferma la tua mail e ti invieremo un codice per recuperare la tua password.";
+  static const String insertToken = "Inserisci il codice di 5 cifre che abbiamo ti inviato su WhatsApp.";
+  static const String noProblem = "Nessun problema, può capitare! Conferma il tua numero e ti invieremo un codice per recuperare la tua password.";
 
   //Social
   static const String facebook = "Facebook";
@@ -76,7 +75,6 @@ class Strings {
   static const String operator = "operatore";
 
   //InputErrors
-  static const String invalidEmail = "Inserisci un indirizzo email valido";
   static const String invalidPassword = "La password deve essere lunga tra 8 e 50 caratteri, contenere almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale.";
   static const String invalidNumber = "Il numero di telefono deve contenere 10 numeri";
   static const String invalidName = "Il nome deve contenere almeno 3 caratteri e massimo 50";
