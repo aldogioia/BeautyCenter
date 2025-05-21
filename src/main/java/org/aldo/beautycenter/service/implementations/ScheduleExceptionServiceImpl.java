@@ -1,5 +1,6 @@
 package org.aldo.beautycenter.service.implementations;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aldo.beautycenter.data.dao.ScheduleExceptionDao;
 import org.aldo.beautycenter.data.dto.create.CreateScheduleExceptionDto;
@@ -7,8 +8,10 @@ import org.aldo.beautycenter.data.dto.responses.ScheduleExceptionDto;
 import org.aldo.beautycenter.data.entities.ScheduleException;
 import org.aldo.beautycenter.service.interfaces.ScheduleExceptionService;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -52,5 +55,11 @@ public class ScheduleExceptionServiceImpl implements ScheduleExceptionService {
     @Override
     public void deleteScheduleException(String id) {
         scheduleExceptionDao.deleteById(id);
+    }
+
+    @Scheduled(cron = "0 0 3 * * *")
+    @Transactional
+    public void cleanUp() {
+        scheduleExceptionDao.deleteAllByEndDateBefore(LocalDate.now());
     }
 }

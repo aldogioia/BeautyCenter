@@ -26,17 +26,17 @@ public interface BookingDao extends JpaRepository<Booking, String> {
     Boolean existsByDateAndTimeAndOperator_Id(LocalDate date, LocalTime time, String operatorId);
 
     @Query("""
-    SELECT r FROM Room r
-    JOIN r.services s
-    WHERE s.id = :serviceId
-    AND NOT EXISTS (
-        SELECT b FROM Booking b
-        WHERE b.room = r
-        AND b.date = :date
-        AND b.time = :time
-    )
-    ORDER BY r.id ASC LIMIT 1
-""")
+        SELECT r FROM Room r
+        JOIN r.services s
+        WHERE s.id = :serviceId
+        AND NOT EXISTS (
+            SELECT b FROM Booking b
+            WHERE b.room = r
+            AND b.date = :date
+            AND b.time = :time
+        )
+        ORDER BY r.id ASC LIMIT 1
+    """)
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Room> findRoomAvailable(
             @Param("date") LocalDate date,
@@ -44,4 +44,5 @@ public interface BookingDao extends JpaRepository<Booking, String> {
             @Param("serviceId") String serviceId
     );
 
+    void deleteAllByDateBefore(LocalDate date);
 }

@@ -33,7 +33,7 @@ public class PasswordServiceImpl implements PasswordService {
         User user = userDao.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
         passwordTokenDao.findByUser(user).ifPresent(passwordTokenDao::delete);
-        sendResetPasswordEmail(user);
+        sendResetPasswordMessage(user);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class PasswordServiceImpl implements PasswordService {
         userDao.save(user);
     }
 
-    private void sendResetPasswordEmail(User user) {
+    private void sendResetPasswordMessage(User user) {
         Instant issued = Instant.now().truncatedTo(ChronoUnit.SECONDS);
         String token = PasswordTokenGenerator.generateToken();
 

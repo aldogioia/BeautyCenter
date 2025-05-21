@@ -17,6 +17,7 @@ import org.aldo.beautycenter.service.interfaces.BookingService;
 import org.aldo.beautycenter.service.interfaces.NotificationService;
 import org.aldo.beautycenter.service.interfaces.WhatsAppSenderService;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -130,5 +131,11 @@ public class BookingServiceImpl implements BookingService {
         catch (Exception e) {
             throw new BookingDeleteException(e.getMessage());
         }
+    }
+
+    @Scheduled(cron = "0 0 3 * * *")
+    @Transactional
+    public void cleanUp(){
+        bookingDao.deleteAllByDateBefore(LocalDate.now()); //TODO chiedere se hanno bisogno di uno storico o meno - attualmente non mostriamo i dati vecchi
     }
 }

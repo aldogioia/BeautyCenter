@@ -1,6 +1,5 @@
 package org.aldo.beautycenter.data.dto.create;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -21,7 +20,6 @@ public class CreateBookingDto {
     @FutureOrPresent(message = "La data non può essere nel passato")
     private LocalDate date;
 
-    @JsonFormat(pattern = "HH:mm")
     @NotNull(message = "L'orario è obbligatorio")
     private LocalTime time;
 

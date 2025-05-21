@@ -22,4 +22,5 @@ public interface ScheduleExceptionDao extends JpaRepository<ScheduleException, S
     )
     Optional<ScheduleException> findByOperatorIdAndDate(String operatorId, LocalDate date);
 
+    void deleteAllByEndDateBefore(LocalDate date);
 }
