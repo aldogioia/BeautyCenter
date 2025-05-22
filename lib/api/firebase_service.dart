@@ -7,21 +7,22 @@ import 'api_service.dart';
 
 class FirebaseService {
   final Dio _dio = ApiService.instance.dio;
-  final String _path = "/operator";
+  final String _path = "/notifications";
 
   Future<void> sendFCMToken({required String token}) async {
     final platform = Platform.isAndroid ? "android" : "ios";
-
+    print("SONO IN");
     try {
-      await _dio.post(
-        "$_path/notifications",
+      final response = await _dio.post(
+        _path,
         data: {
           "token": token,
           "platform": platform
         },
       );
+      print("RESPONSE: $response");
     } on DioException catch(e){
-      debugPrint(e.response.toString());
+      debugPrint("ERRRRROOOOOOREOEROFSIabvak: ${e.response.toString()}");
     }
   }
 }

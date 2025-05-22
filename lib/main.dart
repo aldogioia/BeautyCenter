@@ -18,6 +18,8 @@ import 'navigation/route_generator.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
+
+
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -25,6 +27,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
 
   FirebaseMessaging.onBackgroundMessage(FirebaseHandler.firebaseMessagingBackgroundHandler);
 
@@ -35,6 +38,9 @@ void main() async {
   final iOSInit = DarwinInitializationSettings();
   final initSettings = InitializationSettings(android: androidInit, iOS: iOSInit);
   await flutterLocalNotificationsPlugin.initialize(initSettings);
+
+  // todo vedere come gestire la cosa, così obblighiamo ad attivare i promemoria per l'applicazione
+  NotificationHandler.checkAndRequestExactAlarmPermission();
 
   await NotificationHandler.handleNotificationPermissions();
   await FirebaseHandler.initFCM();

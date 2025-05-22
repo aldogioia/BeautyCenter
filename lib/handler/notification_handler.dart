@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -7,6 +8,32 @@ import '../utils/secure_storage.dart';
 
 class NotificationHandler {
   static final _plugin = FlutterLocalNotificationsPlugin();
+
+  static final MethodChannel _channel = MethodChannel('com.example.exact_alarm/permission');
+
+  static Future<void> openExactAlarmSettings() async {
+    try {
+      await _channel.invokeMethod('requestExactAlarmPermission');
+    } on PlatformException catch (e) {
+      print("Errore nel richiedere il permesso: $e");
+    }
+  }
+
+  static void checkAndRequestExactAlarmPermission() async {
+    final plugin = FlutterLocalNotificationsPlugin();
+
+    bool allowed = await plugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.canScheduleExactNotifications() ??
+        false;
+
+    if (!allowed) {
+      await openExactAlarmSettings();
+    }
+  }
+
+
 
   static Future<void> handleNotificationPermissions() async {
     final iosPlugin = flutterLocalNotificationsPlugin

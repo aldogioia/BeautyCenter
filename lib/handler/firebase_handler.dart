@@ -20,12 +20,11 @@ class FirebaseHandler {
     await _messaging.requestPermission();
 
     final fcmToken = await _messaging.getToken();
+    print("TOKEN FCM: $fcmToken");
     if (fcmToken != null) {
-      final savedToken = await SecureStorage.getFCMToken();
-      if (fcmToken != savedToken) {
-        await FirebaseService().sendFCMToken(token: fcmToken);
-        await SecureStorage.setFCMToken(fcmToken);
-      }
+      print("TOKEN SECURE STORAGE FCM: $fcmToken");
+      await FirebaseService().sendFCMToken(token: fcmToken);
+      await SecureStorage.setFCMToken(fcmToken);
     }
 
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
