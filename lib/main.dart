@@ -16,8 +16,7 @@ import 'navigation/navigator.dart';
 import 'navigation/route_generator.dart';
 
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +39,7 @@ void main() async {
   await NotificationHandler.handleNotificationPermissions();
   await FirebaseHandler.initFCM();
 
+  FlutterNativeSplash.remove();
   runApp(const ProviderScope(child: MyApp()));
 }
 

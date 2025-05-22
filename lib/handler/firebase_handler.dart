@@ -9,9 +9,12 @@ class FirebaseHandler {
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   static Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    await Firebase.initializeApp();
+    try {
+      await Firebase.initializeApp();
+    } catch (_) {}
     showRemoteNotification(message);
   }
+
 
   static Future<void> initFCM() async {
     await _messaging.requestPermission();
@@ -35,9 +38,8 @@ class FirebaseHandler {
 
   static void showRemoteNotification(RemoteMessage message) async {
     final notification = message.notification;
-    final android = message.notification?.android;
 
-    if (notification != null && android != null) {
+    if (notification != null) {
       flutterLocalNotificationsPlugin.show(
         DateTime.now().millisecondsSinceEpoch ~/ 1000,
         notification.title,
@@ -50,6 +52,7 @@ class FirebaseHandler {
             importance: Importance.max,
             priority: Priority.high,
           ),
+          iOS: DarwinNotificationDetails(),
         ),
       );
     }
