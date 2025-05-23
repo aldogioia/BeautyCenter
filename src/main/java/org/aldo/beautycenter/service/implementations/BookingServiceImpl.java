@@ -111,7 +111,7 @@ public class BookingServiceImpl implements BookingService {
                     notificationService.sendNotificationToUser(
                             booking.getBookedForCustomer(),
                             title,
-                            "L'appuntamento " + booking.getService().getName() + "in data" + booking.getDate() + " è stato cancellato per un imprevisto"
+                            "L'appuntamento " + booking.getService().getName() + " in data " + booking.getDate() + " è stato cancellato per un imprevisto"
                     );
                 }
                 else {
@@ -123,7 +123,7 @@ public class BookingServiceImpl implements BookingService {
                 notificationService.sendNotificationToUser(
                         booking.getBookedForCustomer(),
                         title,
-                        booking.getBookedForCustomer().getName() + booking.getBookedForCustomer().getSurname() + " ha cancellato l'appuntamento" + booking.getService().getName()
+                        booking.getBookedForCustomer().getName() + " " + booking.getBookedForCustomer().getSurname() + " ha cancellato l'appuntamento " + booking.getService().getName() + "inicialmente previsto in data " + booking.getDate()
                 );
                 bookingDao.delete(booking);
             }

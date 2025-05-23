@@ -51,7 +51,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void sendNotificationBeforeDeletingBooking(List<Booking> bookings){
         bookings.forEach(booking -> {
             final String title = "Appuntamento cancellato";
-            final String body = "L'aoppuntamento "+ booking.getService().getName() + "è stato cancellato per disservizi";
+            final String body = "L'appuntamento "+ booking.getService().getName() + " è stato cancellato per disservizi";
 
             sendNotificationToUser(
                     booking.getBookedForCustomer(),
